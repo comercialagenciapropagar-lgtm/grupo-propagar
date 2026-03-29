@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diretrizes de Exibição de Preço — Máquina de Vendas</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+    :root {
+      --bg: #0d0f11;
+      --bg-card: #14171a;
+      --border: rgba(255,255,255,0.08);
+      --text: #e8eaed;
+      --text-secondary: #b0b5bb;
+      --text-faint: #6b7280;
+      --green: #34d399;
+      --green-dim: rgba(52,211,153,0.12);
+      --red: #f87171;
+      --red-dim: rgba(248,113,113,0.12);
+      --yellow: #fbbf24;
+      --yellow-dim: rgba(251,191,36,0.12);
+      --blue: #60a5fa;
+      --blue-dim: rgba(96,165,250,0.12);
+      --purple: #a78bfa;
+      --purple-dim: rgba(167,139,250,0.12);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.85;
+      font-size: 18px;
+    }
+
+    /* ——— HEADER ——— */
+    .header {
+      background: linear-gradient(135deg, #0d0f11 0%, #1a1f25 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 64px 32px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .header h1 span { color: var(--green); }
+
+    .header p {
+      color: var(--text-secondary);
+      font-size: 20px;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 24px;
+      font-size: 15px;
+      color: var(--text-faint);
+    }
+
+    /* ——— CONTAINER ——— */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 56px 28px 100px;
+    }
+
+    /* ——— SECTIONS ——— */
+    .section { margin-bottom: 64px; }
+
+    .section-title {
+      font-size: 30px;
+      font-weight: 900;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: 18px;
+      margin-bottom: 28px;
+    }
+
+    /* ——— BADGES ——— */
+    .badge {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 5px 16px;
+      border-radius: 999px;
+    }
+
+    .badge-green { background: var(--green-dim); color: var(--green); }
+    .badge-red { background: var(--red-dim); color: var(--red); }
+    .badge-yellow { background: var(--yellow-dim); color: var(--yellow); }
+
+    /* ——— CARDS ——— */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-bottom: 20px;
+    }
+
+    .card h3 {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .card p, .card li {
+      font-size: 17px;
+      color: var(--text-secondary);
+      line-height: 1.85;
+    }
+
+    .card ul { list-style: none; padding: 0; }
+
+    .card ul li {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .card ul li:last-child { border-bottom: none; }
+
+    .card ul li::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 10px;
+      flex-shrink: 0;
+    }
+
+    .list-green li::before { background: var(--green); }
+    .list-red li::before { background: var(--red); }
+    .list-yellow li::before { background: var(--yellow); }
+    .list-blue li::before { background: var(--blue); }
+
+    /* ——— TABLES ——— */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    th {
+      text-align: left;
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-faint);
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    .highlight-row td { background: rgba(52,211,153,0.04); }
+
+    /* ——— RULE NUMBERS ——— */
+    .rn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .rn-green { background: var(--green-dim); color: var(--green); }
+    .rn-red { background: var(--red-dim); color: var(--red); }
+    .rn-yellow { background: var(--yellow-dim); color: var(--yellow); }
+    .rn-blue { background: var(--blue-dim); color: var(--blue); }
+    .rn-purple { background: var(--purple-dim); color: var(--purple); }
+
+    /* ——— FLOW STEPS ——— */
+    .flow-steps { display: flex; flex-direction: column; }
+
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 18px 0;
+    }
+
+    .step-marker {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 19px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .step-content p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .connector {
+      width: 3px;
+      height: 14px;
+      background: var(--border);
+      margin-left: 22px;
+    }
+
+    /* ——— ALERTS ——— */
+    .alert {
+      border-left: 4px solid;
+      padding: 20px 24px;
+      border-radius: 0 12px 12px 0;
+      margin: 28px 0;
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
+    .alert-red { border-color: var(--red); background: var(--red-dim); color: var(--red); }
+    .alert-yellow { border-color: var(--yellow); background: var(--yellow-dim); color: var(--yellow); }
+    .alert-green { border-color: var(--green); background: var(--green-dim); color: var(--green); }
+
+    .alert strong { display: block; margin-bottom: 6px; font-size: 18px; }
+
+    /* ——— FUNNEL ——— */
+    .funnel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin: 32px 0;
+    }
+
+    .funnel-stage {
+      padding: 18px 28px;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .funnel-arrow {
+      font-size: 22px;
+      color: var(--text-faint);
+      line-height: 1;
+    }
+
+    /* ——— TOC ——— */
+    .toc {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-bottom: 48px;
+    }
+
+    .toc h2 {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-faint);
+      margin-bottom: 20px;
+    }
+
+    .toc ol { list-style: none; padding: 0; counter-reset: toc; }
+    .toc ol li { counter-increment: toc; padding: 8px 0; }
+
+    .toc ol li a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: color 0.15s;
+    }
+
+    .toc ol li a:hover { color: var(--green); }
+
+    .toc ol li a::before {
+      content: counter(toc, decimal-leading-zero);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--green);
+      width: 28px;
+    }
+
+    /* ——— GRID ——— */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+    @media (max-width: 700px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .header h1 { font-size: 30px; }
+      .section-title { font-size: 24px; }
+      body { font-size: 16px; }
+    }
+
+    /* ——— DIVIDER ——— */
+    .divider { height: 1px; background: var(--border); margin: 64px 0; }
+
+    /* ——— FOOTER ——— */
+    .footer {
+      text-align: center;
+      padding: 40px 28px;
+      border-top: 1px solid var(--border);
+      color: var(--text-faint);
+      font-size: 15px;
+    }
+
+    .footer span { color: var(--green); font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <div class="header">
+    <h1>Diretrizes de <span>Exibição de Preço</span><br>na Máquina de Vendas</h1>
+    <p>Guia completo para a equipe: quando, onde, como e para quem mostrar (ou esconder) preços em cada etapa do funil.</p>
+    <div class="meta">
+      <span>Versão 1.0</span>
+      <span>|</span>
+      <span>Março 2026</span>
+      <span>|</span>
+      <span>Uso interno</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ========== SUMÁRIO ========== -->
+    <nav class="toc">
+      <h2>Sumário</h2>
+      <ol>
+        <li><a href="#principio">Princípio — Preço é combustível, não decoração</a></li>
+        <li><a href="#maquina">A Máquina de Vendas e Suas Fases</a></li>
+        <li><a href="#quando-mostrar">Quando Mostrar o Preço</a></li>
+        <li><a href="#onde-mostrar">Onde Mostrar o Preço</a></li>
+        <li><a href="#quando-nao-mostrar">Quando NÃO Mostrar o Preço</a></li>
+        <li><a href="#para-quem-nao-mostrar">Para Quem NÃO Mostrar</a></li>
+        <li><a href="#fluxo-decisao">Fluxo de Decisão Rápido</a></li>
+        <li><a href="#ancoragem">Ancoragem e Apresentação do Investimento</a></li>
+        <li><a href="#objecoes">Objeções de Preço — Respostas Padrão</a></li>
+        <li><a href="#ansiedade">Síndrome da Ansiedade — Lead Quente ≠ Pular Processo</a></li>
+        <li><a href="#playbook-discovery">Playbook de Discovery — Script Obrigatório</a></li>
+        <li><a href="#casos-reais">Casos Reais — Aprenda Com os Erros</a></li>
+        <li><a href="#checklist">Checklist Final — Cole na Parede</a></li>
+      </ol>
+    </nav>
+
+    <!-- ========== 1. PRINCÍPIO ========== -->
+    <section class="section" id="principio">
+      <div class="section-title">
+        <span class="rn rn-green">1</span>
+        Princípio — Preço é Combustível, Não Decoração
+      </div>
+      <p class="section-subtitle">A base de toda decisão sobre preço na agência.</p>
+
+      <div class="card">
+        <h3>Nós construímos máquinas de vendas. Não vendemos preço.</h3>
+        <p style="font-size: 20px; color: var(--text); line-height: 2; margin-bottom: 20px;">
+          Uma máquina de vendas transforma investimento em receita previsível. O preço só aparece
+          <strong style="color: var(--green);">quando o lead entendeu que está perdendo dinheiro sem a máquina</strong>.
+          Mostrar preço antes disso é como mostrar o motor do carro antes do test drive —
+          <strong style="color: var(--red);">assusta e não convence</strong>.
+        </p>
+        <p style="font-size: 18px;">Três perguntas antes de revelar qualquer investimento:</p>
+        <ul class="list-green" style="margin-top: 16px;">
+          <li><strong>O lead sabe quanto está perdendo sem uma máquina de vendas?</strong> Se não sabe, preço não tem contexto.</li>
+          <li><strong>O lead já viu prova de resultado?</strong> Sem case, sem número, sem depoimento — preço vira "caro demais".</li>
+          <li><strong>O lead decide ou só pesquisa?</strong> Preço pra quem não assina cheque é munição distorcida.</li>
+        </ul>
+      </div>
+
+      <div class="alert alert-green">
+        <strong>Mantra da equipe:</strong>
+        "Primeiro a dor, depois o remédio. Primeiro o resultado, depois o investimento. Primeiro a máquina funcionando, depois o preço da engrenagem."
+      </div>
+    </section>
+
+    <!-- ========== 2. A MÁQUINA ========== -->
+    <section class="section" id="maquina">
+      <div class="section-title">
+        <span class="rn rn-purple">2</span>
+        A Máquina de Vendas e Suas Fases
+      </div>
+      <p class="section-subtitle">Cada fase tem uma regra diferente sobre preço. Isso é inegociável.</p>
+
+      <div class="funnel">
+        <div class="funnel-stage" style="width: 100%; background: var(--blue-dim); color: var(--blue);">
+          CAPTAÇÃO — Ads, conteúdo, social, SEO, indicação
+        </div>
+        <div class="funnel-arrow">&#9660;</div>
+        <div class="funnel-stage" style="width: 85%; background: var(--purple-dim); color: var(--purple);">
+          AQUECIMENTO — Lead magnet, webinar, diagnóstico gratuito, nutrição
+        </div>
+        <div class="funnel-arrow">&#9660;</div>
+        <div class="funnel-stage" style="width: 70%; background: var(--yellow-dim); color: var(--yellow);">
+          QUALIFICAÇÃO — Call de discovery, BANT, mapeamento de dor
+        </div>
+        <div class="funnel-arrow">&#9660;</div>
+        <div class="funnel-stage" style="width: 55%; background: var(--green-dim); color: var(--green);">
+          CONVERSÃO — Proposta ao vivo, ancoragem, fechamento
+        </div>
+        <div class="funnel-arrow">&#9660;</div>
+        <div class="funnel-stage" style="width: 42%; background: var(--red-dim); color: var(--red);">
+          EXPANSÃO — Onboarding, upsell, retenção, indicação
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Fase da Máquina</th>
+            <th style="text-align:center">Mostrar preço?</th>
+            <th>Por quê</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Captação</strong></td>
+            <td style="text-align:center; color: var(--red); font-weight: 800; font-size: 18px;">NUNCA</td>
+            <td>O lead ainda nem sabe que tem problema. Preço aqui é ruído — espanta.</td>
+          </tr>
+          <tr>
+            <td><strong>Aquecimento</strong></td>
+            <td style="text-align:center; color: var(--red); font-weight: 800; font-size: 18px;">NUNCA</td>
+            <td>O lead está aprendendo. Preço mata a curiosidade e joga ele pro Google comparar.</td>
+          </tr>
+          <tr>
+            <td><strong>Qualificação</strong></td>
+            <td style="text-align:center; color: var(--yellow); font-weight: 800; font-size: 18px;">FAIXA</td>
+            <td>Se o lead perguntar na call, dar faixa de investimento com ancoragem. Nunca valor fechado.</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><strong>Conversão</strong></td>
+            <td style="text-align:center; color: var(--green); font-weight: 800; font-size: 18px;">SIM</td>
+            <td>Proposta personalizada ao vivo. Investimento detalhado + escopo + ROI projetado.</td>
+          </tr>
+          <tr>
+            <td><strong>Expansão</strong></td>
+            <td style="text-align:center; color: var(--green); font-weight: 800; font-size: 18px;">SIM</td>
+            <td>Upsell e renovação com contexto de resultado já entregue pela máquina.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ========== 3. QUANDO MOSTRAR ========== -->
+    <section class="section" id="quando-mostrar">
+      <div class="section-title">
+        <span class="rn rn-green">3</span>
+        Quando Mostrar o Preço
+      </div>
+      <p class="section-subtitle">As únicas situações em que preço deve aparecer.</p>
+
+      <div class="card">
+        <h3><span class="badge badge-green">Mostrar</span> Proposta comercial personalizada</h3>
+        <ul class="list-green">
+          <li><strong>Após a call de discovery</strong> — O closer mapeou dor, objetivo, orçamento e urgência. A proposta é sob medida para aquela operação.</li>
+          <li><strong>Na call de proposta, ao vivo</strong> — Nunca enviar proposta fria por e-mail. Preço é apresentado pelo closer, com ancoragem e tratamento de objeção em tempo real.</li>
+          <li><strong>No contrato de fechamento</strong> — Valores detalhados, condições, escopo, SLA, cronograma de entrega da máquina de vendas.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="badge badge-green">Mostrar</span> Upsell para clientes ativos</h3>
+        <ul class="list-green">
+          <li><strong>Upgrade de operação</strong> — A máquina do cliente já roda e gera resultado. Hora de expandir: novo canal, novo funil, automação avançada. Preço com ROI incremental.</li>
+          <li><strong>Serviço complementar</strong> — Ex: cliente que contratou tráfego pago e agora precisa de CRM + automação de follow-up. "Próximo módulo da máquina".</li>
+          <li><strong>Renovação contratual</strong> — Retrospectiva de resultado + preço do próximo ciclo. "Entregamos X leads e Y vendas. A continuidade é..."</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="badge badge-yellow">Com cuidado</span> Faixa de investimento na call</h3>
+        <ul class="list-yellow">
+          <li><strong>Quando o lead pergunta diretamente</strong> — Não fugir. Usar faixa: "Clientes com esse perfil investem entre R$ X e R$ Y por mês, dependendo da máquina que a gente monta."</li>
+          <li><strong>Para qualificar orçamento (BANT)</strong> — Se suspeita que o lead não tem budget: "Para esse tipo de operação, o investimento fica na faixa de R$ X. Faz sentido?"</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== 4. ONDE MOSTRAR ========== -->
+    <section class="section" id="onde-mostrar">
+      <div class="section-title">
+        <span class="rn rn-blue">4</span>
+        Onde Mostrar o Preço
+      </div>
+      <p class="section-subtitle">Cada ponto de contato com a regra de preço correspondente.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Ponto de Contato</th>
+            <th>Fase</th>
+            <th style="text-align:center">Preço?</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Anúncios (Meta, Google)</strong></td>
+            <td>Captação</td>
+            <td style="text-align:center; color: var(--red); font-weight: 700;">Nunca</td>
+            <td>Falar de resultado e dor. CTA para landing ou lead magnet.</td>
+          </tr>
+          <tr>
+            <td><strong>Posts orgânicos</strong></td>
+            <td>Captação</td>
+            <td style="text-align:center; color: var(--red); font-weight: 700;">Nunca</td>
+            <td>Conteúdo de autoridade, cases, bastidores. Zero valores.</td>
+          </tr>
+          <tr>
+            <td><strong>Landing page</strong></td>
+            <td>Captação</td>
+            <td style="text-align:center; color: var(--red); font-weight: 700;">Nunca</td>
+            <td>Headline de resultado + prova social + CTA para call.</td>
+          </tr>
+          <tr>
+            <td><strong>Lead magnet</strong></td>
+            <td>Aquecimento</td>
+            <td style="text-align:center; color: var(--red); font-weight: 700;">Nunca</td>
+            <td>Entregar valor educacional. Zero menção a preço.</td>
+          </tr>
+          <tr>
+            <td><strong>Webinar / aula</strong></td>
+            <td>Aquecimento</td>
+            <td style="text-align:center; color: var(--yellow); font-weight: 700;">Só pitch*</td>
+            <td>*Só em webinar de venda com oferta ao final. Educacional = nunca.</td>
+          </tr>
+          <tr>
+            <td><strong>E-mails de nutrição</strong></td>
+            <td>Aquecimento</td>
+            <td style="text-align:center; color: var(--red); font-weight: 700;">Nunca</td>
+            <td>Cases, depoimentos, conteúdo. CTA sempre para call.</td>
+          </tr>
+          <tr>
+            <td><strong>WhatsApp (SDR)</strong></td>
+            <td>Aquec./Qualif.</td>
+            <td style="text-align:center; color: var(--red); font-weight: 700;">Nunca</td>
+            <td>Qualificar e agendar call. Preço? "Depende do escopo, por isso a call é importante."</td>
+          </tr>
+          <tr>
+            <td><strong>Call de discovery</strong></td>
+            <td>Qualificação</td>
+            <td style="text-align:center; color: var(--yellow); font-weight: 700;">Faixa</td>
+            <td>Faixa se perguntado. Nunca valor final. Objetivo: mapear escopo e agendar proposta.</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><strong>Call de proposta</strong></td>
+            <td>Conversão</td>
+            <td style="text-align:center; color: var(--green); font-weight: 700; font-size: 18px;">SIM</td>
+            <td>Proposta completa ao vivo. Investimento + entregáveis + ROI + cronograma.</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><strong>Proposta em PDF</strong></td>
+            <td>Conversão</td>
+            <td style="text-align:center; color: var(--green); font-weight: 700; font-size: 18px;">SIM</td>
+            <td>Enviada APÓS a call (nunca antes). Material de consulta, não primeiro contato.</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><strong>Contrato</strong></td>
+            <td>Conversão</td>
+            <td style="text-align:center; color: var(--green); font-weight: 700; font-size: 18px;">SIM</td>
+            <td>Valores formais, condições, multa, SLA. Documento jurídico.</td>
+          </tr>
+          <tr>
+            <td><strong>Site da agência</strong></td>
+            <td>Todas</td>
+            <td style="text-align:center; color: var(--red); font-weight: 700;">Nunca</td>
+            <td>Método, resultados, equipe, cases. CTA para call. Zero pricing.</td>
+          </tr>
+          <tr>
+            <td><strong>Página de "planos"</strong></td>
+            <td>—</td>
+            <td style="text-align:center; color: var(--red); font-weight: 700;">NÃO CRIAR</td>
+            <td>Não somos SaaS. Cada máquina é sob medida. Não existe tabela.</td>
+          </tr>
+          <tr>
+            <td><strong>Reunião de resultado</strong></td>
+            <td>Expansão</td>
+            <td style="text-align:center; color: var(--yellow); font-weight: 700;">Indiretamente</td>
+            <td>Mostrar ROI: "Você investe R$ X e gera R$ Y." Prepara terreno para upsell.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ========== 5. QUANDO NÃO MOSTRAR ========== -->
+    <section class="section" id="quando-nao-mostrar">
+      <div class="section-title">
+        <span class="rn rn-red">5</span>
+        Quando NÃO Mostrar o Preço
+      </div>
+      <p class="section-subtitle">Situações onde revelar preço sabota a máquina de vendas.</p>
+
+      <div class="card">
+        <h3><span class="badge badge-red">Proibido</span> Regras invioláveis</h3>
+        <ul class="list-red">
+          <li><strong>Antes da call de discovery</strong> — O lead não entende o escopo. Qualquer valor nesse momento será "caro" porque falta contexto. Sem exceção.</li>
+          <li><strong>Por texto (WhatsApp, DM, e-mail)</strong> — Preço por escrito sem contexto ao vivo é sentença de morte. O lead lê o número, congela e some.</li>
+          <li><strong>No site ou landing page</strong> — Zero "a partir de", zero tabela de preços, zero "consulte valores". CTA é sempre para agendar conversa.</li>
+          <li><strong>Em conteúdo orgânico</strong> — Posts, stories, reels: NUNCA mencionar valores dos serviços. Pode falar de ROI do mercado, nunca de preço da agência.</li>
+          <li><strong>Para quem não é o decisor</strong> — Se na call está falando com analista que vai "passar pro chefe", NÃO dê preço. Reagende com o decisor.</li>
+          <li><strong>Lead que pulou etapas</strong> — Veio direto pedir orçamento? Recuar no funil: "Antes de falar de investimento, preciso entender sua operação."</li>
+          <li><strong>Na primeira interação</strong> — Independente do canal. A primeira interação é sobre o lead, não sobre nós.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="badge badge-yellow">Cuidado</span> Situações de risco</h3>
+        <ul class="list-yellow">
+          <li><strong>Lead que insiste em preço antes da call</strong> — "Nossos projetos são sob medida. Na call de 30 min eu monto a faixa certinha." Se insistir demais, provavelmente é desqualificado.</li>
+          <li><strong>Indicação que já sabe o preço de outro cliente</strong> — Tratar como lead de fundo, mas fazer diagnóstico — escopo pode ser diferente.</li>
+          <li><strong>Proposta que "vazou"</strong> — Se o lead espalhou sua proposta, reavaliar. Propostas devem ter cláusula de confidencialidade.</li>
+          <li><strong>Cliente ameaçando cancelar</strong> — NÃO ofereça desconto. Mostre resultado entregue. Desconto treina comportamento de ameaça.</li>
+        </ul>
+      </div>
+
+      <div class="alert alert-red">
+        <strong>Regra #1:</strong>
+        Preço NUNCA é a primeira coisa que o lead vê ou ouve. Se o preço chegou antes do valor percebido, a venda já morreu.
+      </div>
+    </section>
+
+    <!-- ========== 6. PARA QUEM NÃO MOSTRAR ========== -->
+    <section class="section" id="para-quem-nao-mostrar">
+      <div class="section-title">
+        <span class="rn rn-red">6</span>
+        Para Quem NÃO Mostrar
+      </div>
+      <p class="section-subtitle">Nem todo mundo que entra no funil merece ver o preço.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Perfil</th>
+            <th style="text-align:center; width: 120px;">Ver preço?</th>
+            <th>Ação correta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Lead de captação</strong><br><span style="color: var(--text-faint); font-size: 14px;">baixou e-book, seguiu no IG</span></td>
+            <td style="text-align:center; color: var(--red); font-size: 22px;">&#10007;</td>
+            <td>Nutrir com conteúdo. Mover para aquecimento.</td>
+          </tr>
+          <tr>
+            <td><strong>Lead de aquecimento</strong><br><span style="color: var(--text-faint); font-size: 14px;">assistiu webinar, respondeu e-mail</span></td>
+            <td style="text-align:center; color: var(--red); font-size: 22px;">&#10007;</td>
+            <td>Qualificar e agendar call de discovery.</td>
+          </tr>
+          <tr>
+            <td><strong>Lead sem fit</strong><br><span style="color: var(--text-faint); font-size: 14px;">sem budget, sem perfil</span></td>
+            <td style="text-align:center; color: var(--red); font-size: 22px;">&#10007;</td>
+            <td>Desqualificar com elegância. Recomendar alternativa.</td>
+          </tr>
+          <tr>
+            <td><strong>Funcionário do lead</strong><br><span style="color: var(--text-faint); font-size: 14px;">analista, assistente — não decide</span></td>
+            <td style="text-align:center; color: var(--red); font-size: 22px;">&#10007;</td>
+            <td>"Para avançar, preciso do decisor na call."</td>
+          </tr>
+          <tr>
+            <td><strong>Concorrente / curioso</strong><br><span style="color: var(--text-faint); font-size: 14px;">só quer espionar</span></td>
+            <td style="text-align:center; color: var(--red); font-size: 22px;">&#10007;</td>
+            <td>Identificar e descartar do pipeline sem revelar nada.</td>
+          </tr>
+          <tr>
+            <td><strong>"Comprador de preço"</strong><br><span style="color: var(--text-faint); font-size: 14px;">só quer comparar orçamentos</span></td>
+            <td style="text-align:center; color: var(--red); font-size: 22px;">&#10007;</td>
+            <td>Tentar recuar pro processo. Se resistir, desqualificar.</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><strong>Decisor qualificado</strong><br><span style="color: var(--text-faint); font-size: 14px;">fez discovery, tem fit e budget</span></td>
+            <td style="text-align:center; color: var(--green); font-size: 22px;">&#10003;</td>
+            <td>Proposta completa na call de conversão. Este é o momento.</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><strong>Cliente ativo</strong><br><span style="color: var(--text-faint); font-size: 14px;">máquina rodando, gerando resultado</span></td>
+            <td style="text-align:center; color: var(--green); font-size: 22px;">&#10003;</td>
+            <td>Preço de upgrade com contexto de ROI já entregue.</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><strong>Indicação quente</strong><br><span style="color: var(--text-faint); font-size: 14px;">decisor, com fit, bem contextualizado</span></td>
+            <td style="text-align:center; color: var(--yellow); font-size: 22px;">~</td>
+            <td>Pode adiantar faixa. Mas ainda fazer discovery antes de proposta final.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="alert alert-yellow" style="margin-top: 28px;">
+        <strong>Regra do decisor:</strong>
+        Proposta com preço só é apresentada quando quem assina o cheque está na call. Se o lead diz "vou ver com meu sócio", a resposta é: "Perfeito, vamos agendar com ele presente."
+      </div>
+    </section>
+
+    <!-- ========== 7. FLUXO DE DECISÃO ========== -->
+    <section class="section" id="fluxo-decisao">
+      <div class="section-title">
+        <span class="rn rn-yellow">7</span>
+        Fluxo de Decisão Rápido
+      </div>
+      <p class="section-subtitle">Na dúvida "mostro o preço agora?", siga este fluxo.</p>
+
+      <div class="card">
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-marker" style="background: var(--blue-dim); color: var(--blue);">1</div>
+            <div class="step-content">
+              <h4>O lead já fez a call de discovery?</h4>
+              <p><strong>Não</strong> &rarr; <span style="color: var(--red); font-weight: 800; font-size: 18px;">NÃO MOSTRAR.</span> Agendar discovery primeiro.<br>
+              <strong>Sim</strong> &rarr; Próximo passo.</p>
+            </div>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step">
+            <div class="step-marker" style="background: var(--blue-dim); color: var(--blue);">2</div>
+            <div class="step-content">
+              <h4>O decisor está presente?</h4>
+              <p><strong>Não</strong> &rarr; <span style="color: var(--red); font-weight: 800; font-size: 18px;">NÃO MOSTRAR.</span> Reagendar com o decisor.<br>
+              <strong>Sim</strong> &rarr; Próximo passo.</p>
+            </div>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step">
+            <div class="step-marker" style="background: var(--blue-dim); color: var(--blue);">3</div>
+            <div class="step-content">
+              <h4>Você já apresentou: dor, custo da inação, solução, cases e ROI?</h4>
+              <p><strong>Não</strong> &rarr; <span style="color: var(--yellow); font-weight: 800; font-size: 18px;">PARE.</span> Construa valor antes.<br>
+              <strong>Sim</strong> &rarr; Próximo passo.</p>
+            </div>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step">
+            <div class="step-marker" style="background: var(--green-dim); color: var(--green);">4</div>
+            <div class="step-content">
+              <h4>O canal é ao vivo (call ou presencial)?</h4>
+              <p><strong>Sim</strong> &rarr; <span style="color: var(--green); font-weight: 800; font-size: 18px;">HORA DE MOSTRAR O INVESTIMENTO.</span><br>
+              <strong>Não</strong> &rarr; Enviar proposta só como follow-up DEPOIS de ter apresentado ao vivo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-green">
+        <strong>Fórmula resumida:</strong>
+        Discovery feita + Decisor presente + Valor construído + Canal ao vivo = Hora de revelar o investimento.
+      </div>
+    </section>
+
+    <!-- ========== 8. ANCORAGEM ========== -->
+    <section class="section" id="ancoragem">
+      <div class="section-title">
+        <span class="rn rn-purple">8</span>
+        Ancoragem e Apresentação do Investimento
+      </div>
+      <p class="section-subtitle">A ordem em que você apresenta determina como o lead percebe o preço.</p>
+
+      <div class="card">
+        <h3>Roteiro da call de proposta</h3>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-marker" style="background: var(--blue-dim); color: var(--blue);">1</div>
+            <div class="step-content">
+              <h4>Recapitular a dor</h4>
+              <p>"Você me disse que hoje [dor]. Isso está custando [impacto em R$ ou oportunidade perdida]."</p>
+            </div>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step">
+            <div class="step-marker" style="background: var(--blue-dim); color: var(--blue);">2</div>
+            <div class="step-content">
+              <h4>Custo da inação (âncora emocional)</h4>
+              <p>"Se nada mudar nos próximos 6 meses, você continua perdendo R$ [X] em vendas que não estão acontecendo." Ancorar no prejuízo, não no preço.</p>
+            </div>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step">
+            <div class="step-marker" style="background: var(--blue-dim); color: var(--blue);">3</div>
+            <div class="step-content">
+              <h4>Apresentar a máquina de vendas</h4>
+              <p>O que será construído, em quanto tempo, que resultado esperar. Cases parecidos com números reais. "Montamos essa mesma máquina para [cliente] e gerou [resultado]."</p>
+            </div>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step">
+            <div class="step-marker" style="background: var(--green-dim); color: var(--green);">4</div>
+            <div class="step-content">
+              <h4>Revelar o investimento (com ancoragem)</h4>
+              <p>Mostrar primeiro o pacote mais completo (âncora alta). Depois o recomendado. O lead escolhe <strong>"qual"</strong>, não <strong>"se"</strong>. Nunca apresentar uma opção só.</p>
+            </div>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step">
+            <div class="step-marker" style="background: var(--purple-dim); color: var(--purple);">5</div>
+            <div class="step-content">
+              <h4>Urgência ou escassez real</h4>
+              <p>"Tenho [X] vagas para onboarding este mês" ou "Essa condição vale até [data]." Só usar se for verdade.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 20px;">
+        <div class="card">
+          <h3 style="color: var(--green);">Faça</h3>
+          <ul class="list-green">
+            <li>Apresentar 2-3 opções de pacote (bom / melhor / máximo)</li>
+            <li>Começar pelo pacote mais completo (âncora alta)</li>
+            <li>Usar a palavra <strong>"investimento"</strong>, nunca "custo" ou "preço"</li>
+            <li>Contextualizar com ROI: "Para cada R$1, nossos clientes geram R$ X"</li>
+            <li>Mostrar investimento mensal E prazo mínimo</li>
+            <li>Oferecer bônus real para decisão rápida</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="color: var(--red);">Não faça</h3>
+          <ul class="list-red">
+            <li>Apresentar um preço só — sem opções = sem ancoragem</li>
+            <li>Pedir desculpas pelo valor ("Sei que parece alto, mas...")</li>
+            <li>Dar desconto espontâneo — desvaloriza a máquina</li>
+            <li>Enviar proposta sem ter apresentado ao vivo antes</li>
+            <li>Dizer "preço" ou "custo" — dizer <strong>"investimento"</strong></li>
+            <li>Competir por preço ("Somos mais baratos que X")</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 9. OBJEÇÕES ========== -->
+    <section class="section" id="objecoes">
+      <div class="section-title">
+        <span class="rn rn-yellow">9</span>
+        Objeções de Preço — Respostas Padrão
+      </div>
+      <p class="section-subtitle">Decore essas respostas. Treine em dupla. Nunca improvise na hora.</p>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 35%;">O que o lead diz</th>
+              <th>O que a equipe responde</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-size: 18px; font-weight: 700;">"Tá caro"</td>
+              <td>"Caro comparado a quê? [Pausa] Nossos clientes nesse perfil geram R$ [X] em Y meses. O investimento se paga em [Z] semanas. O que sai caro é ficar mais 6 meses sem uma máquina de vendas."</td>
+            </tr>
+            <tr>
+              <td style="font-size: 18px; font-weight: 700;">"Preciso pensar"</td>
+              <td>"Claro, é importante. O que exatamente você precisa avaliar? [Mapear a objeção real] — Posso te ajudar com isso agora?"</td>
+            </tr>
+            <tr>
+              <td style="font-size: 18px; font-weight: 700;">"Vou ver com meu sócio"</td>
+              <td>"Perfeito. Que tal agendarmos 15 min com ele? Assim respondo as dúvidas diretamente e não perde nada na tradução."</td>
+            </tr>
+            <tr>
+              <td style="font-size: 18px; font-weight: 700;">"A agência X cobra menos"</td>
+              <td>"A pergunta certa é: eles entregam a mesma máquina? Nossos clientes nos escolhem pelo ROI, não pelo preço. [Mostrar case comparativo]."</td>
+            </tr>
+            <tr>
+              <td style="font-size: 18px; font-weight: 700;">"Não tenho budget"</td>
+              <td>"Quando faz sentido retomar? Posso te colocar em fila prioritária para [mês]. Enquanto isso, vou te mandando conteúdo pra preparar o terreno."</td>
+            </tr>
+            <tr>
+              <td style="font-size: 18px; font-weight: 700;">"Manda a proposta por e-mail"</td>
+              <td>"Cada máquina é montada sob medida. Preciso de 30 min pra entender sua operação. Proposta genérica seria injusto com você."</td>
+            </tr>
+            <tr>
+              <td style="font-size: 18px; font-weight: 700;">"Qual o preço?"<br><span style="font-weight: 400; font-size: 14px;">(no WhatsApp/DM)</span></td>
+              <td>"Depende 100% do seu cenário. Cada máquina é diferente. Posso te encaixar numa call de 20 min essa semana? Saio de lá te passando exatamente o que faz sentido."</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== 10. SÍNDROME DA ANSIEDADE ========== -->
+    <section class="section" id="ansiedade">
+      <div class="section-title">
+        <span class="rn rn-red">10</span>
+        Síndrome da Ansiedade — Lead Quente ≠ Pular Processo
+      </div>
+      <p class="section-subtitle">O erro mais caro da agência: lead qualificado chega e a equipe manda preço por impulso.</p>
+
+      <div class="card">
+        <h3 style="color: var(--red);">O que está acontecendo (seja honesto)</h3>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-marker" style="background: var(--blue-dim); color: var(--blue);">1</div>
+            <div class="step-content">
+              <h4>Lead qualificado chega</h4>
+              <p>Preencheu o formulário, fatura bem, tem perfil. A equipe interpreta como <strong>"pronto pra comprar"</strong>.</p>
+            </div>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step">
+            <div class="step-marker" style="background: var(--yellow-dim); color: var(--yellow);">2</div>
+            <div class="step-content">
+              <h4>Ansiedade dispara</h4>
+              <p>"Se eu não mandar logo, ele vai pra outra agência." O medo de perder o lead vira pressa de fechar.</p>
+            </div>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step">
+            <div class="step-marker" style="background: var(--red-dim); color: var(--red);">3</div>
+            <div class="step-content">
+              <h4>Pula discovery, manda preço</h4>
+              <p>O closer manda proposta por WhatsApp/e-mail sem ter feito discovery. Cada um faz de um jeito. <strong>Inventa a roda toda vez.</strong></p>
+            </div>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step">
+            <div class="step-marker" style="background: var(--red-dim); color: var(--red);">4</div>
+            <div class="step-content">
+              <h4>Lead some ou vira "comprador de preço"</h4>
+              <p>Sem contexto de valor, o preço vira commodity. O lead compara com freelancer, agência genérica, ou simplesmente congela e não responde mais.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-red" style="margin-top: 24px;">
+          <strong>O resultado real:</strong>
+          Vocês transformam um lead de FUNDO de funil em lead de TOPO de novo. Porque sem contexto de valor, o preço não tem significado — e o lead volta a pesquisar do zero.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="color: var(--green);">A correção — 5 ações imediatas</h3>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 50px;">#</th>
+              <th>Ação</th>
+              <th>Como implementar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--green);">1</td>
+              <td><strong>Separar MQL de SQL</strong></td>
+              <td>
+                <strong>MQL</strong> = preencheu form, tem fit → <strong>agendar discovery</strong><br>
+                <strong>SQL</strong> = fez discovery, decisor confirmado, dor mapeada → <strong>agendar proposta</strong><br><br>
+                <span style="color: var(--green); font-weight: 700;">Preço só aparece no SQL. Ponto final.</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--green);">2</td>
+              <td><strong>Travar o processo com regra mecânica</strong></td>
+              <td>
+                Tirar a decisão da mão do closer. Criar checklist obrigatório no CRM:<br><br>
+                &#9744; Dor principal mapeada<br>
+                &#9744; Meta de faturamento identificada<br>
+                &#9744; Budget confirmado (faixa)<br>
+                &#9744; Decisor identificado e na próxima call<br>
+                &#9744; Urgência mapeada<br><br>
+                <span style="color: var(--red); font-weight: 700;">Se os 5 não estão preenchidos, NÃO gera proposta. Sem exceção.</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--green);">3</td>
+              <td><strong>Script de contenção</strong></td>
+              <td>
+                Quando a tentação bater, o closer tem UMA frase pronta:<br><br>
+                <em style="color: var(--text); font-size: 17px; line-height: 2;">"Ótimo que você chegou até aqui. Pra eu montar algo que realmente faça sentido pra sua operação — e não uma proposta genérica — preciso de 25 min com você. Posso te encaixar amanhã às 10h ou 14h?"</em><br><br>
+                Essa frase: valida o lead, justifica o processo e dá opção binária (não aberta).
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--green);">4</td>
+              <td><strong>Matar o "inventar a roda"</strong></td>
+              <td>
+                Se cada closer faz diferente, o problema é falta de playbook. Criar e usar:<br><br>
+                &#10003; <strong>Script de discovery</strong> — 8-10 perguntas obrigatórias, na ordem<br>
+                &#10003; <strong>Template de proposta</strong> — estrutura fixa, só personaliza os dados<br>
+                &#10003; <strong>Roteiro de call de proposta</strong> — os 5 passos de ancoragem<br><br>
+                <span style="color: var(--yellow); font-weight: 700;">Ninguém improvisa. A máquina de vendas da agência É o processo.</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--green);">5</td>
+              <td><strong>Mudar a métrica</strong></td>
+              <td>
+                <span style="color: var(--red); text-decoration: line-through;">Cobrar por propostas enviadas</span> → equipe manda proposta rápido (sem discovery)<br>
+                <span style="color: var(--green); font-weight: 700;">Cobrar por taxa de fechamento</span> → equipe segue o processo porque sabe que pular etapa mata a conversão<br><br>
+                Nova meta: <strong>"Quantas propostas com discovery completa você apresentou ao vivo?"</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>O que muda na prática — Antes vs Depois</h3>
+        <table>
+          <thead>
+            <tr>
+              <th style="color: var(--red);">O que a equipe faz hoje</th>
+              <th style="color: var(--green);">O que deveria fazer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Lead qualificado → manda preço</td>
+              <td style="font-weight: 700;">Lead qualificado → agenda discovery</td>
+            </tr>
+            <tr>
+              <td>Cada um faz do seu jeito</td>
+              <td style="font-weight: 700;">Playbook único, script obrigatório</td>
+            </tr>
+            <tr>
+              <td>Proposta por WhatsApp/e-mail</td>
+              <td style="font-weight: 700;">Proposta só ao vivo, após discovery</td>
+            </tr>
+            <tr>
+              <td>Cobrado por volume de propostas</td>
+              <td style="font-weight: 700;">Cobrado por taxa de fechamento</td>
+            </tr>
+            <tr>
+              <td>Ansiedade dita o ritmo</td>
+              <td style="font-weight: 700;">Processo dita o ritmo</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-green" style="font-size: 19px; line-height: 2;">
+        <strong style="font-size: 22px;">A verdade que dói:</strong>
+        A disciplina de segurar 48h e fazer o processo é o que separa agência que fecha 10% das propostas de agência que fecha 35%. A ansiedade mente — o processo entrega.
+      </div>
+    </section>
+
+    <!-- ========== 11. PLAYBOOK DE DISCOVERY ========== -->
+    <section class="section" id="playbook-discovery">
+      <div class="section-title">
+        <span class="rn rn-purple">11</span>
+        Playbook de Discovery — Script Obrigatório
+      </div>
+      <p class="section-subtitle">Essas perguntas são feitas na ordem, sem pular. É o que impede a equipe de inventar a roda.</p>
+
+      <div class="card">
+        <h3>As 10 perguntas da discovery (nessa ordem)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 50px;">#</th>
+              <th>Pergunta</th>
+              <th>O que você está mapeando</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--purple);">1</td>
+              <td style="font-size: 17px;"><em>"Me conta um pouco da sua operação hoje. O que vocês vendem, pra quem, e como?"</em></td>
+              <td>Contexto geral, ICP do lead, modelo de negócio</td>
+            </tr>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--purple);">2</td>
+              <td style="font-size: 17px;"><em>"Quanto vocês faturam hoje por mês?"</em></td>
+              <td>Porte, maturidade, capacidade de investimento</td>
+            </tr>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--purple);">3</td>
+              <td style="font-size: 17px;"><em>"Qual a meta de faturamento pros próximos 6-12 meses?"</em></td>
+              <td>Ambição, gap entre atual e desejado</td>
+            </tr>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--purple);">4</td>
+              <td style="font-size: 17px;"><em>"Hoje, como chegam os clientes até vocês? Qual é o canal principal?"</em></td>
+              <td>Maturidade de marketing, dependência de canal</td>
+            </tr>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--purple);">5</td>
+              <td style="font-size: 17px;"><em>"O que já tentaram fazer pra acelerar vendas e não funcionou?"</em></td>
+              <td>Frustrações, objeções latentes, experiências ruins com outras agências</td>
+            </tr>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--purple);">6</td>
+              <td style="font-size: 17px;"><em>"Qual é a maior dor hoje? O que te tira o sono sobre vendas?"</em></td>
+              <td><strong style="color: var(--red);">DOR PRINCIPAL</strong> — essa é a pergunta mais importante</td>
+            </tr>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--purple);">7</td>
+              <td style="font-size: 17px;"><em>"Se a gente resolvesse isso nos próximos 90 dias, que impacto teria no negócio?"</em></td>
+              <td>Valor percebido da solução, âncora de ROI</td>
+            </tr>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--purple);">8</td>
+              <td style="font-size: 17px;"><em>"Quem mais participa dessa decisão de investir em aceleração de vendas?"</em></td>
+              <td><strong style="color: var(--yellow);">DECISOR</strong> — mapear quem assina o cheque</td>
+            </tr>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--purple);">9</td>
+              <td style="font-size: 17px;"><em>"Vocês já têm uma faixa de investimento em mente pra isso?"</em></td>
+              <td><strong style="color: var(--yellow);">BUDGET</strong> — qualificação financeira</td>
+            </tr>
+            <tr>
+              <td style="font-size: 22px; font-weight: 900; color: var(--purple);">10</td>
+              <td style="font-size: 17px;"><em>"Qual a urgência? Precisa resolver isso pra ontem ou dá pra planejar com calma?"</em></td>
+              <td><strong style="color: var(--yellow);">URGÊNCIA</strong> — timing de fechamento</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Encerramento da discovery (script pronto)</h3>
+        <p style="font-size: 18px; color: var(--text); line-height: 2; padding: 12px 0;">
+          <em>"Perfeito, [nome]. Com tudo que você me contou, já consigo montar uma proposta sob medida pra sua operação. Vou preparar e a gente agenda uma call de 30 min pra eu te apresentar ao vivo — assim tiro todas as dúvidas na hora. Consigo te encaixar [dia] às [hora] ou [dia] às [hora]. Qual fica melhor?"</em>
+        </p>
+        <div class="alert alert-yellow" style="margin-top: 16px;">
+          <strong>Se o lead pedir o preço nesse momento:</strong>
+          "Clientes com o perfil da sua operação investem na faixa de R$ [X] a R$ [Y] por mês, dependendo do escopo que a gente definir na proposta. Mas quero te mostrar exatamente o que entra em cada pacote — por isso a call de proposta é importante."
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Régua de qualificação pós-discovery</h3>
+        <p style="margin-bottom: 16px;">Após a discovery, classifique o lead antes de montar a proposta:</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Classificação</th>
+              <th>Critério</th>
+              <th>Próximo passo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight-row">
+              <td style="font-weight: 800; color: var(--green); font-size: 18px;">SQL — QUENTE</td>
+              <td>Dor clara + budget ok + decisor mapeado + urgência</td>
+              <td style="font-weight: 700;">Proposta ao vivo em até 48h</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800; color: var(--yellow); font-size: 18px;">SQL — MORNO</td>
+              <td>Dor clara + budget ok, mas decisor ausente ou sem urgência</td>
+              <td style="font-weight: 700;">Reagendar com decisor antes de proposta</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800; color: var(--red); font-size: 18px;">DESQUALIFICADO</td>
+              <td>Sem budget, sem fit, ou sem dor real</td>
+              <td style="font-weight: 700;">Nutrir por e-mail. Não montar proposta.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="alert alert-red" style="margin-top: 20px;">
+          <strong>Regra de ouro:</strong>
+          Proposta só é montada para lead SQL QUENTE. Lead MORNO precisa de mais uma call. Lead DESQUALIFICADO volta pro nurturing. Montar proposta pra lead frio é desperdiçar a hora do closer.
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 12. CASOS REAIS ========== -->
+    <section class="section" id="casos-reais">
+      <div class="section-title">
+        <span class="rn rn-yellow">12</span>
+        Casos Reais — Aprenda Com os Erros
+      </div>
+      <p class="section-subtitle">Situações que aconteceram de verdade. Leia, internalize e não repita.</p>
+
+      <!-- CASO 1 -->
+      <div class="card" style="border-left: 4px solid var(--red);">
+        <h3>
+          <span class="badge badge-red">Caso 1</span>
+          Lead sem perfil, faturamento baixo — e mandamos o preço mais baixo
+        </h3>
+        <p style="font-size: 18px; color: var(--text); margin-bottom: 20px; line-height: 2;">
+          Lead chegou pelo formulário. Perfil bugado, sem postagens, faturamento baixo. A ansiedade bateu e mandamos o menor preço pra tentar fechar rápido.
+        </p>
+
+        <h3 style="color: var(--red); margin-top: 24px;">O que fizemos de errado</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Erro</th>
+              <th>Consequência</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mandou preço sem discovery</td>
+              <td>Sem contexto de valor, o preço virou número solto e perdeu todo poder de conversão.</td>
+            </tr>
+            <tr>
+              <td>Não verificou os sinais de desqualificação</td>
+              <td>Perfil bugado + sem postagem + faturamento baixo = 3 red flags ignoradas.</td>
+            </tr>
+            <tr>
+              <td>Mandou o preço MAIS BAIXO</td>
+              <td>Ancorou por baixo. Se voltar (ou indicar alguém), a referência de preço da agência é o pacote econômico.</td>
+            </tr>
+            <tr>
+              <td>Não teve processo, teve impulso</td>
+              <td>A ansiedade decidiu, não o playbook. Exatamente o padrão da Seção 10.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 style="color: var(--green); margin-top: 28px;">O que deveria ter feito</h3>
+        <ul class="list-green">
+          <li><strong>Verificar os sinais antes de qualquer coisa</strong> — Perfil bugado + sem postagem + faturamento baixo = não é SQL. É lead pra nutrir ou desqualificar.</li>
+          <li><strong>Usar o script de contenção</strong> — "Pra montar algo que faça sentido, preciso de 25 min com você." Se não aceitasse, era a prova de que não valia o tempo.</li>
+          <li><strong>Não mandar preço nenhum</strong> — Lead sem fit não vê investimento. Ponto.</li>
+        </ul>
+
+        <div class="alert alert-red" style="margin-top: 20px;">
+          <strong>Lição:</strong>
+          Preço baixo pra lead ruim não é estratégia — é desespero. E desespero tem custo: ancora a agência por baixo e atrai mais leads do mesmo perfil.
+        </div>
+      </div>
+
+      <!-- CASO 2 -->
+      <div class="card" style="border-left: 4px solid var(--yellow); margin-top: 28px;">
+        <h3>
+          <span class="badge badge-yellow">Caso 2</span>
+          Lead sem perfil que diz "tenho dinheiro" e quer que "faça tudo"
+        </h3>
+        <p style="font-size: 18px; color: var(--text); margin-bottom: 20px; line-height: 2;">
+          Lead com perfil bugado, sem postagens, faturamento baixo — mas diz que tem dinheiro e pergunta "quanto fica pra vocês fazerem tudo?"
+        </p>
+
+        <h3 style="color: var(--yellow); margin-top: 24px;">Por que "tenho dinheiro" não muda nada</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Sinal</th>
+              <th>O que significa de verdade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 700;">Perfil bugado</td>
+              <td>Não tem presença digital. Como construir máquina de vendas sem fundação?</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Sem postagens</td>
+              <td>Sem conteúdo, sem audiência, sem autoridade. Ponto zero.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Faturamento baixo</td>
+              <td>A máquina precisa de combustível (tráfego, equipe, estrutura). Faturamento baixo = combustível limitado.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">"Tenho dinheiro"</td>
+              <td>Declaração verbal sem prova. Não substitui discovery. Qualquer pessoa pode dizer isso.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">"Faz tudo pra mim"</td>
+              <td>Quer resultado sem participar. Perfil clássico de cliente que terceiriza culpa e dá churn em 60 dias.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 style="color: var(--green); margin-top: 28px;">O que responder</h3>
+        <p style="font-size: 18px; color: var(--text); line-height: 2; padding: 16px 0; border-left: 3px solid var(--green); padding-left: 20px; margin: 16px 0;">
+          <em>"Ótimo que você tem disposição pra investir. Mas antes de te passar qualquer valor, preciso ser honesta: pra montar uma máquina de vendas que realmente funcione, a gente precisa de uma base — e hoje, olhando seu perfil e sua operação, tem coisas que precisam ser resolvidas antes. Quero te ajudar de verdade, não te vender algo que não vai funcionar. Bora conversar 20 min pra eu entender seu cenário completo?"</em>
+        </p>
+
+        <h3 style="color: var(--blue); margin-top: 28px;">Os 3 cenários depois dessa resposta</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Cenário</th>
+              <th>O que acontece</th>
+              <th>Próximo passo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight-row">
+              <td style="font-weight: 800; color: var(--green); font-size: 17px;">Aceita a call</td>
+              <td>Faz a discovery. Se confirmar budget real e estiver disposta a construir a base (perfil, conteúdo, posicionamento) ANTES da máquina, pode ser projeto válido.</td>
+              <td style="font-weight: 700;">Redefinir escopo: estruturação + máquina. Preço é outro.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800; color: var(--yellow); font-size: 17px;">Insiste no preço sem call</td>
+              <td>Não aceita 20 min de conversa.</td>
+              <td style="font-weight: 700;">Responder: <em>"Se eu passo valor sem entender sua operação, ou é caro demais pro que precisa, ou barato demais pro que precisa ser feito. Os 20 min protegem o seu dinheiro."</em> Se insistir de novo, desqualificar.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800; color: var(--red); font-size: 17px;">Some</td>
+              <td>Prova de que "tenho dinheiro" era só conversa.</td>
+              <td style="font-weight: 700;">Seguir em frente. Não correr atrás.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="alert alert-yellow" style="margin-top: 20px;">
+          <strong>A analogia que fecha:</strong>
+          Você não instala motor turbo num carro sem roda. Mesmo que o cliente pague pelo motor. Aceitar esse projeto sem base = em 60 dias ela diz "paguei e não deu resultado". E vai estar certa.
+        </div>
+
+        <div class="alert alert-green" style="margin-top: 16px;">
+          <strong>O que separa agência séria de agência desesperada:</strong>
+          A coisa mais profissional que você pode fazer é dizer NÃO ou redefinir o escopo pra algo que realmente funciona pro lead. Cliente errado no preço errado é prejuízo — não faturamento.
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 13. CHECKLIST ========== -->
+    <section class="section" id="checklist">
+      <div class="section-title">
+        <span class="rn rn-green">13</span>
+        Checklist Final — Cole na Parede
+      </div>
+      <p class="section-subtitle">Valide toda interação comercial contra esta lista. Sem exceção.</p>
+
+      <div class="card">
+        <h3>Antes de revelar investimento para qualquer lead</h3>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 50px;">#</th>
+              <th>Verificação</th>
+              <th style="width: 80px; text-align: center;">OK?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-size: 20px; font-weight: 800;">1</td>
+              <td>O lead passou pela call de discovery?</td>
+              <td style="text-align: center; font-size: 22px;">&#9744;</td>
+            </tr>
+            <tr>
+              <td style="font-size: 20px; font-weight: 800;">2</td>
+              <td>O decisor (quem paga) está na call de proposta?</td>
+              <td style="text-align: center; font-size: 22px;">&#9744;</td>
+            </tr>
+            <tr>
+              <td style="font-size: 20px; font-weight: 800;">3</td>
+              <td>Você mapeou: dor, meta, urgência e faixa de budget?</td>
+              <td style="text-align: center; font-size: 22px;">&#9744;</td>
+            </tr>
+            <tr>
+              <td style="font-size: 20px; font-weight: 800;">4</td>
+              <td>O investimento será apresentado ao vivo (call/presencial)?</td>
+              <td style="text-align: center; font-size: 22px;">&#9744;</td>
+            </tr>
+            <tr>
+              <td style="font-size: 20px; font-weight: 800;">5</td>
+              <td>A proposta tem 2-3 opções de pacote (ancoragem)?</td>
+              <td style="text-align: center; font-size: 22px;">&#9744;</td>
+            </tr>
+            <tr>
+              <td style="font-size: 20px; font-weight: 800;">6</td>
+              <td>Você incluiu ROI projetado ou case com números reais?</td>
+              <td style="text-align: center; font-size: 22px;">&#9744;</td>
+            </tr>
+            <tr>
+              <td style="font-size: 20px; font-weight: 800;">7</td>
+              <td>O custo da inação foi apresentado ANTES do investimento?</td>
+              <td style="text-align: center; font-size: 22px;">&#9744;</td>
+            </tr>
+            <tr>
+              <td style="font-size: 20px; font-weight: 800;">8</td>
+              <td>Nenhum anúncio, post, LP ou e-mail menciona preço?</td>
+              <td style="text-align: center; font-size: 22px;">&#9744;</td>
+            </tr>
+            <tr>
+              <td style="font-size: 20px; font-weight: 800;">9</td>
+              <td>A palavra usada é "investimento" (nunca "preço" ou "custo")?</td>
+              <td style="text-align: center; font-size: 22px;">&#9744;</td>
+            </tr>
+            <tr>
+              <td style="font-size: 20px; font-weight: 800;">10</td>
+              <td>Se pediram preço fora de hora, você reconduziu pro processo?</td>
+              <td style="text-align: center; font-size: 22px;">&#9744;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-green" style="margin-top: 28px; font-size: 19px; line-height: 1.9;">
+        <strong style="font-size: 22px;">Resumo em uma frase:</strong>
+        Na agência de máquinas de vendas, investimento é privilégio do fundo do funil. Só vê o valor quem fez discovery, fala ao vivo com o closer e é quem decide. Todo o resto recebe valor, conteúdo e convite para call — nunca preço.
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ========== RESUMO VISUAL ========== -->
+    <section class="section">
+      <div class="section-title" style="justify-content: center; font-size: 28px;">Cola Rápida — Resumo Visual</div>
+      <div style="margin-top: 28px;">
+        <table>
+          <thead>
+            <tr>
+              <th style="font-size: 16px;">Fase da Máquina</th>
+              <th style="text-align: center; font-size: 16px;">Preço?</th>
+              <th style="font-size: 16px;">O que fazer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-size: 18px; font-weight: 700;">Captação</td>
+              <td style="text-align:center; font-size: 26px; color: var(--red);">&#10007;</td>
+              <td style="font-size: 17px;">Conteúdo + Autoridade + CTA para call</td>
+            </tr>
+            <tr>
+              <td style="font-size: 18px; font-weight: 700;">Aquecimento</td>
+              <td style="text-align:center; font-size: 26px; color: var(--red);">&#10007;</td>
+              <td style="font-size: 17px;">Educação + Nutrição + Qualificação</td>
+            </tr>
+            <tr>
+              <td style="font-size: 18px; font-weight: 700;">Qualificação</td>
+              <td style="text-align:center; font-size: 26px; color: var(--yellow);">~</td>
+              <td style="font-size: 17px;">Faixa de investimento se perguntado</td>
+            </tr>
+            <tr class="highlight-row">
+              <td style="font-size: 20px; font-weight: 900;">Conversão</td>
+              <td style="text-align:center; font-size: 26px; color: var(--green);">&#10003;</td>
+              <td style="font-size: 17px; font-weight: 700;">Proposta ao vivo + ROI + Ancoragem</td>
+            </tr>
+            <tr>
+              <td style="font-size: 18px; font-weight: 700;">Expansão</td>
+              <td style="text-align:center; font-size: 26px; color: var(--green);">&#10003;</td>
+              <td style="font-size: 17px;">Upsell com resultado da máquina entregue</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ========== FOOTER ========== -->
+  <div class="footer">
+    <p style="font-size: 16px;">Documento interno &mdash; <span>Agência de Aceleração &mdash; Máquinas de Vendas</span> &mdash; Março 2026</p>
+    <p style="margin-top: 8px;">Imprima. Distribua. Cobre da equipe. Dúvidas? Fale com o gestor comercial.</p>
+  </div>
+
+</body>
+</html>

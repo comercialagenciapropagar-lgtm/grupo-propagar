@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Posts — Roberta Peixoto | Renda de Casa</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 40px 20px;
+    }
+
+    .page-title {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    .page-sub {
+      text-align: center;
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 48px;
+    }
+
+    .post-section {
+      margin-bottom: 64px;
+      text-align: center;
+    }
+
+    .post-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #888;
+      margin-bottom: 16px;
+    }
+
+    .post-caption {
+      max-width: 500px;
+      margin: 20px auto 0;
+      text-align: left;
+      font-size: 13px;
+      color: #999;
+      line-height: 1.7;
+      padding: 16px 20px;
+      background: #111;
+      border-radius: 12px;
+      border: 1px solid #2a2a2a;
+    }
+
+    .post-caption strong { color: #ccc; }
+
+    /* ——— POST 1: FRASE IMPACTO ——— */
+    .post1 {
+      width: 1080px;
+      height: 1080px;
+      margin: 0 auto;
+      background: linear-gradient(145deg, #1c1917 0%, #292524 50%, #1c1917 100%);
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .post1::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: rgba(190, 24, 93, 0.06);
+    }
+
+    .post1::after {
+      content: '';
+      position: absolute;
+      bottom: -150px;
+      left: -150px;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: rgba(180, 83, 9, 0.05);
+    }
+
+    .post1 .top-line {
+      width: 40px;
+      height: 3px;
+      background: #be185d;
+      margin-bottom: 40px;
+    }
+
+    .post1 h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 64px;
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: #fafaf9;
+      max-width: 900px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .post1 h2 span { color: #be185d; }
+
+    .post1 .bottom-text {
+      margin-top: 40px;
+      font-size: 20px;
+      font-weight: 600;
+      color: #a8a29e;
+      text-align: center;
+      letter-spacing: 0.02em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .post1 .handle {
+      position: absolute;
+      bottom: 40px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #57534e;
+      letter-spacing: 0.02em;
+    }
+
+    /* ——— POST 2: CARROSSEL ——— */
+    .carousel {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .slide {
+      width: 1080px;
+      height: 1080px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Slide 1 - Capa */
+    .slide-1 {
+      background: linear-gradient(160deg, #fdf2f8 0%, #fce7f3 40%, #fff1f2 100%);
+    }
+
+    .slide-1 .badge {
+      background: #be185d;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 10px 24px;
+      border-radius: 999px;
+      margin-bottom: 36px;
+    }
+
+    .slide-1 h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 72px;
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.15;
+      color: #1c1917;
+      max-width: 900px;
+    }
+
+    .slide-1 h2 span { color: #be185d; }
+
+    .slide-1 .sub {
+      margin-top: 28px;
+      font-size: 22px;
+      color: #78716c;
+      text-align: center;
+      max-width: 700px;
+      line-height: 1.6;
+    }
+
+    .slide-1 .handle {
+      position: absolute;
+      bottom: 40px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #d6d3d1;
+    }
+
+    .slide-1 .swipe {
+      position: absolute;
+      bottom: 40px;
+      right: 60px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #be185d;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Slides 2-6 - Dicas */
+    .slide-tip {
+      background: #fafaf9;
+    }
+
+    .slide-tip .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 120px;
+      font-weight: 900;
+      color: rgba(190, 24, 93, 0.08);
+      position: absolute;
+      top: 40px;
+      left: 60px;
+      line-height: 1;
+    }
+
+    .slide-tip .content {
+      position: relative;
+      z-index: 1;
+      text-align: left;
+      max-width: 860px;
+      width: 100%;
+    }
+
+    .slide-tip .tip-label {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #be185d;
+      margin-bottom: 16px;
+    }
+
+    .slide-tip h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px;
+      font-weight: 900;
+      color: #1c1917;
+      line-height: 1.2;
+      margin-bottom: 24px;
+    }
+
+    .slide-tip p {
+      font-size: 26px;
+      color: #57534e;
+      line-height: 1.7;
+    }
+
+    .slide-tip .handle {
+      position: absolute;
+      bottom: 40px;
+      left: 60px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #d6d3d1;
+    }
+
+    .slide-tip .page {
+      position: absolute;
+      bottom: 40px;
+      right: 60px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #d6d3d1;
+    }
+
+    /* Slide CTA */
+    .slide-cta {
+      background: linear-gradient(145deg, #1c1917 0%, #292524 100%);
+    }
+
+    .slide-cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 56px;
+      font-weight: 900;
+      text-align: center;
+      color: #fafaf9;
+      line-height: 1.25;
+      max-width: 850px;
+      margin-bottom: 32px;
+    }
+
+    .slide-cta h2 span { color: #be185d; }
+
+    .slide-cta .cta-box {
+      background: #be185d;
+      color: #fff;
+      font-size: 24px;
+      font-weight: 800;
+      padding: 20px 48px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+
+    .slide-cta .sub {
+      font-size: 20px;
+      color: #78716c;
+      text-align: center;
+    }
+
+    .slide-cta .handle {
+      position: absolute;
+      bottom: 40px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #57534e;
+    }
+
+    /* ——— POST 3: FRASE EMOCIONAL ——— */
+    .post3 {
+      width: 1080px;
+      height: 1080px;
+      margin: 0 auto;
+      background: linear-gradient(160deg, #fdf2f8 0%, #fce7f3 30%, #fefce8 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px;
+      position: relative;
+    }
+
+    .post3 .quote-mark {
+      font-family: 'Playfair Display', serif;
+      font-size: 200px;
+      color: rgba(190, 24, 93, 0.08);
+      line-height: 1;
+      position: absolute;
+      top: 60px;
+      left: 80px;
+    }
+
+    .post3 h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 56px;
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.35;
+      color: #1c1917;
+      max-width: 880px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .post3 h2 span { color: #be185d; }
+
+    .post3 .author {
+      margin-top: 36px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #a8a29e;
+      position: relative;
+      z-index: 1;
+    }
+
+    .post3 .line {
+      width: 40px;
+      height: 3px;
+      background: #be185d;
+      margin-top: 32px;
+    }
+
+    .post3 .handle {
+      position: absolute;
+      bottom: 40px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #d6d3d1;
+    }
+
+    /* ——— INSTRUÇÕES ——— */
+    .instructions {
+      max-width: 600px;
+      margin: 48px auto 0;
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 16px;
+      padding: 28px;
+    }
+
+    .instructions h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: #ccc;
+      margin-bottom: 12px;
+    }
+
+    .instructions ol {
+      padding-left: 20px;
+    }
+
+    .instructions li {
+      font-size: 14px;
+      color: #888;
+      padding: 4px 0;
+      line-height: 1.6;
+    }
+
+    /* Scale for screen viewing */
+    .scale-wrapper {
+      transform: scale(0.45);
+      transform-origin: top center;
+      margin-bottom: -580px;
+    }
+
+    .scale-wrapper-carousel {
+      transform: scale(0.35);
+      transform-origin: top center;
+      margin-bottom: -2800px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-title">Posts Instagram — Roberta Peixoto</div>
+  <div class="page-sub">Pilar: Renda de Casa &nbsp;|&nbsp; Abrir cada post em tela cheia &rarr; Print &rarr; PNG pronto</div>
+
+  <!-- ========================================== -->
+  <!-- POST 1: FRASE DE IMPACTO                   -->
+  <!-- ========================================== -->
+  <div class="post-section">
+    <div class="post-label">Post 1 — Frase de impacto (1080x1080)</div>
+
+    <div class="scale-wrapper">
+      <div class="post1" id="post1">
+        <div class="top-line"></div>
+        <h2>Eu larguei um <span>emprego público</span> pra ficar com meus filhos.<br>Hoje ganho mais — <span>de casa.</span></h2>
+        <p class="bottom-text">A estabilidade de verdade é estar presente.</p>
+        <div class="handle">@arobertapeixoto</div>
+      </div>
+    </div>
+
+    <div class="post-caption">
+      <strong>Legenda sugerida:</strong><br><br>
+      Todo mundo falou que eu era louca.<br><br>
+      "Largar concurso? Com 4 filhos?"<br><br>
+      Sabe o que era loucura de verdade? Chegar em casa todo dia tarde demais pra dar boa noite. Perder primeiro passo, primeira palavra, primeira risada — tudo por um contracheque.<br><br>
+      Eu não troquei estabilidade por risco. Eu troquei estabilidade FALSA por liberdade REAL.<br><br>
+      Hoje eu trabalho de casa, nos meus horários, e tomo café da manhã com meus 4 todos os dias.<br><br>
+      Se você é mãe e sente que existe um caminho diferente — existe. E eu posso te mostrar.<br><br>
+      Comenta "EU QUERO" que eu te mando no direct como comecei.<br><br>
+      <span style="color: #be185d;">#mãeemcasa #rendadecasa #maternidadereal #mãequetrabalha #trabalhodecasa #mãede4</span>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- POST 2: CARROSSEL 7 SLIDES                 -->
+  <!-- ========================================== -->
+  <div class="post-section">
+    <div class="post-label">Post 2 — Carrossel: 5 formas de renda de casa (7 slides, 1080x1080 cada)</div>
+
+    <div class="scale-wrapper-carousel">
+      <div class="carousel">
+
+        <!-- Slide 1: Capa -->
+        <div class="slide slide-1">
+          <div class="badge">Salva esse post</div>
+          <h2>5 formas de ganhar <span>renda extra</span> sem sair de casa</h2>
+          <p class="sub">Pra mãe que tem pouco tempo e muita vontade.</p>
+          <div class="handle">@arobertapeixoto</div>
+          <div class="swipe">Arrasta &rarr;</div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide slide-tip">
+          <div class="num">01</div>
+          <div class="content">
+            <div class="tip-label">Forma 1</div>
+            <h3>Revenda de produtos pelo WhatsApp</h3>
+            <p>Você não precisa de loja, não precisa de estoque grande. Começa com o celular, uma lista de contatos e produtos que você acredita. Muita mãe começa aqui e fatura R$ 2-5 mil/mês em poucos meses.</p>
+          </div>
+          <div class="handle">@arobertapeixoto</div>
+          <div class="page">1/5</div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide slide-tip">
+          <div class="num">02</div>
+          <div class="content">
+            <div class="tip-label">Forma 2</div>
+            <h3>Prestação de serviço digital</h3>
+            <p>Sabe mexer em redes sociais? Sabe organizar? Sabe escrever? Empresas pagam pra você fazer isso de casa. Assistente virtual, social media, atendimento ao cliente — tudo pelo computador ou celular.</p>
+          </div>
+          <div class="handle">@arobertapeixoto</div>
+          <div class="page">2/5</div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide slide-tip">
+          <div class="num">03</div>
+          <div class="content">
+            <div class="tip-label">Forma 3</div>
+            <h3>Afiliação de produtos digitais</h3>
+            <p>Você indica cursos e produtos de outras pessoas e ganha comissão por cada venda. Não precisa criar nada, não precisa aparecer. Só precisa de estratégia e constância. Ideal pra quem tem pouco tempo.</p>
+          </div>
+          <div class="handle">@arobertapeixoto</div>
+          <div class="page">3/5</div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="slide slide-tip">
+          <div class="num">04</div>
+          <div class="content">
+            <div class="tip-label">Forma 4</div>
+            <h3>Criação de conteúdo no Instagram</h3>
+            <p>Você é mãe e tem história. Isso já é conteúdo. Começa contando sua rotina, compartilhando o que aprende, e vai construindo audiência. Com o tempo, vêm parcerias, publis e até produtos próprios.</p>
+          </div>
+          <div class="handle">@arobertapeixoto</div>
+          <div class="page">4/5</div>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="slide slide-tip">
+          <div class="num">05</div>
+          <div class="content">
+            <div class="tip-label">Forma 5</div>
+            <h3>Produção artesanal / sob encomenda</h3>
+            <p>Bolo, doce, costura, papelaria, laço de cabelo, vela artesanal. Se você faz algo com as mãos, o Instagram e o WhatsApp são sua vitrine. Muita mãe fatura alto com produção caseira.</p>
+          </div>
+          <div class="handle">@arobertapeixoto</div>
+          <div class="page">5/5</div>
+        </div>
+
+        <!-- Slide 7: CTA -->
+        <div class="slide slide-cta">
+          <h2>Quer o passo a passo pra <span>começar essa semana?</span></h2>
+          <div class="cta-box">Comenta "QUERO" que eu te mando</div>
+          <p class="sub">Preparei um guia gratuito pra você que é mãe e quer começar de casa.</p>
+          <div class="handle">@arobertapeixoto</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="post-caption">
+      <strong>Legenda sugerida:</strong><br><br>
+      Eu não sabia por onde começar. Tinha 4 filhos, tinha largado o concurso, e precisava de renda.<br><br>
+      Testei várias coisas. Errei bastante. Mas encontrei caminhos que funcionam pra mãe que tem pouco tempo e muita vontade.<br><br>
+      Salvei as 5 formas que eu mais vejo funcionando pra mães que estão começando. Arrasta pra ver todas.<br><br>
+      E se você quer o passo a passo pra começar ainda essa semana, comenta "QUERO" que eu te mando no direct.<br><br>
+      Marca aquela amiga que precisa ver isso.<br><br>
+      <span style="color: #be185d;">#rendaextra #trabalhodecasa #mãeempreendedora #mãeemcasa #rendadecasa #maternidadereal</span>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- POST 3: FRASE EMOCIONAL                    -->
+  <!-- ========================================== -->
+  <div class="post-section">
+    <div class="post-label">Post 3 — Frase emocional (1080x1080)</div>
+
+    <div class="scale-wrapper">
+      <div class="post3" id="post3">
+        <div class="quote-mark">"</div>
+        <h2>Ser mãe presente não deveria significar ser mãe <span>sem dinheiro.</span></h2>
+        <p class="author">Roberta Peixoto &mdash; mãe de 4, ex-concursada, trabalhando de casa</p>
+        <div class="line"></div>
+        <div class="handle">@arobertapeixoto</div>
+      </div>
+    </div>
+
+    <div class="post-caption">
+      <strong>Legenda sugerida:</strong><br><br>
+      Eu cansei de ouvir que tinha que escolher.<br><br>
+      "Ou você trabalha e garante o dinheiro, ou fica em casa e depende de alguém."<br><br>
+      Como se a única forma de ter renda fosse sair de casa às 7h e voltar às 19h. Como se ser mãe presente fosse um luxo que só rica pode ter.<br><br>
+      Não é.<br><br>
+      Eu sou mãe de 4. Larguei meu concurso. Trabalho de casa. E construí uma renda que me dá liberdade pra ESCOLHER estar presente.<br><br>
+      Se você acredita que existe um caminho do meio — existe. E eu tô aqui pra te mostrar.<br><br>
+      Me segue pra mais conteúdo real sobre maternidade + renda de casa.<br><br>
+      <span style="color: #be185d;">#maternidadereal #mãeemcasa #rendadecasa #mãequetrabalha #fé #família</span>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- INSTRUÇÕES                                  -->
+  <!-- ========================================== -->
+  <div class="instructions">
+    <h3>Como transformar em PNG</h3>
+    <ol>
+      <li>Abra este arquivo no navegador (Chrome ou Safari)</li>
+      <li>Clique com o botão direito no post desejado &rarr; <strong>Inspecionar</strong></li>
+      <li>No painel de DevTools, encontre o elemento do post (ex: <code>.post1</code>, <code>.slide-1</code>, <code>.post3</code>)</li>
+      <li>Clique direito no elemento &rarr; <strong>"Capture node screenshot"</strong> (Chrome) ou <strong>"Screenshot Node"</strong> (Firefox)</li>
+      <li>O PNG será salvo em 1080x1080 — pronto pro Instagram</li>
+      <li><strong>Alternativa rápida:</strong> Remova a classe <code>scale-wrapper</code> do HTML, dê zoom out no navegador até o post caber na tela, e tire print</li>
+    </ol>
+  </div>
+
+</body>
+</html>

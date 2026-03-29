@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cobrai.app — Sistema de Cobranca Inteligente</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0f1117;
+      --bg-card: #1a1d27;
+      --bg-card-hover: #21242f;
+      --bg-sidebar: #141620;
+      --border: rgba(255,255,255,0.06);
+      --border-light: rgba(255,255,255,0.1);
+      --text: #e8e8ed;
+      --text-sec: #9ca3af;
+      --text-faint: #5b5e6b;
+      --green: #34d399;
+      --green-bg: rgba(52,211,153,0.1);
+      --green-border: rgba(52,211,153,0.25);
+      --yellow: #fbbf24;
+      --yellow-bg: rgba(251,191,36,0.1);
+      --yellow-border: rgba(251,191,36,0.25);
+      --red: #f87171;
+      --red-bg: rgba(248,113,113,0.1);
+      --red-border: rgba(248,113,113,0.25);
+      --purple: #a78bfa;
+      --purple-bg: rgba(167,139,250,0.1);
+      --purple-border: rgba(167,139,250,0.25);
+      --blue: #60a5fa;
+      --blue-bg: rgba(96,165,250,0.1);
+      --blue-border: rgba(96,165,250,0.25);
+      --gold: #f59e0b;
+      --gold-bg: rgba(245,158,11,0.1);
+      --gold-border: rgba(245,158,11,0.25);
+      --sidebar-w: 240px;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    html { font-size: 14px; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: var(--sidebar-w);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 28px 24px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    .sidebar-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      color: var(--text-sec);
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+    .nav-item.active { background: rgba(52,211,153,0.08); color: var(--green); }
+    .nav-item.active .nav-icon { color: var(--green); }
+    .nav-icon { font-size: 1.15rem; width: 22px; text-align: center; }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: var(--text-sec);
+    }
+
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--text-faint);
+      position: relative;
+    }
+
+    .status-dot.online {
+      background: var(--green);
+      box-shadow: 0 0 8px rgba(52,211,153,0.5);
+    }
+
+    .status-dot.online::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 1.5px solid var(--green);
+      animation: pulse-ring 2s ease-out infinite;
+    }
+
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.6; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+
+    /* ===== MAIN ===== */
+    .main {
+      margin-left: var(--sidebar-w);
+      min-height: 100vh;
+    }
+
+    .header {
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15,17,23,0.8);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-left h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .header-date {
+      font-size: 0.85rem;
+      color: var(--text-sec);
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #34d399, #22c55e);
+      color: #064e3b;
+    }
+
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border-light);
+    }
+
+    .btn-secondary:hover { background: var(--bg-card-hover); }
+
+    .dropdown-wrapper { position: relative; }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      min-width: 200px;
+      display: none;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+      z-index: 200;
+      overflow: hidden;
+    }
+
+    .dropdown-menu.show { display: block; }
+
+    .dropdown-item {
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      color: var(--text-sec);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .dropdown-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+
+    .content { padding: 28px 32px; }
+
+    /* ===== SECTIONS (toggle visibility) ===== */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ===== ROW 1 - BIG FINANCIAL CARDS ===== */
+    .fin-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .fin-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s;
+    }
+
+    .fin-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
+
+    .fin-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .fin-card.green-accent::before { background: linear-gradient(90deg, var(--green), #22c55e); }
+    .fin-card.blue-accent::before { background: linear-gradient(90deg, var(--blue), #3b82f6); }
+    .fin-card.purple-accent::before { background: linear-gradient(90deg, var(--purple), #8b5cf6); }
+
+    .fin-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .fin-card-left { flex: 1; }
+
+    .fin-card-label {
+      font-size: 0.82rem;
+      color: var(--text-sec);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .fin-card-value {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1;
+    }
+
+    .fin-card-value.green { color: var(--green); }
+    .fin-card-value.blue { color: var(--blue); }
+    .fin-card-value.purple { color: var(--purple); }
+
+    .fin-card-sub {
+      font-size: 0.82rem;
+      color: var(--text-faint);
+      margin-top: 10px;
+      font-weight: 500;
+    }
+
+    .fin-card-sub span { color: var(--text-sec); font-weight: 600; }
+
+    /* Progress Ring */
+    .progress-ring-wrapper {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+      margin-left: 16px;
+    }
+
+    .progress-ring-wrapper svg { transform: rotate(-90deg); }
+
+    .progress-ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--green);
+    }
+
+    /* ===== ROW 2 - MAIN CHART ===== */
+    .main-chart-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: all 0.25s;
+    }
+
+    .main-chart-card:hover { border-color: var(--border-light); }
+
+    .main-chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .main-chart-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .main-chart-legend {
+      display: flex;
+      gap: 20px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--text-sec);
+      font-weight: 500;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    .legend-dot.bar-expected { background: rgba(96,165,250,0.6); }
+    .legend-dot.line-received { background: var(--green); border-radius: 50%; }
+
+    .main-chart-container {
+      position: relative;
+      height: 300px;
+    }
+
+    /* ===== ROW 3 - THREE COLUMNS ===== */
+    .row3-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .row3-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all 0.25s;
+    }
+
+    .row3-card:hover { border-color: var(--border-light); }
+
+    .row3-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: -0.2px;
+    }
+
+    /* Donut */
+    .donut-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+    }
+
+    .donut-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .donut-center-value {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -2px;
+    }
+
+    .donut-center-label {
+      font-size: 0.75rem;
+      color: var(--text-sec);
+      font-weight: 500;
+    }
+
+    /* Gauge */
+    .gauge-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .gauge-container {
+      position: relative;
+      width: 180px;
+      height: 100px;
+      margin-bottom: 8px;
+    }
+
+    .gauge-value {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -2px;
+      text-align: center;
+      line-height: 1;
+    }
+
+    .gauge-value.green { color: var(--green); }
+    .gauge-value.yellow { color: var(--yellow); }
+    .gauge-value.red { color: var(--red); }
+
+    .gauge-label {
+      font-size: 0.82rem;
+      color: var(--text-faint);
+      text-align: center;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    .gauge-label span { font-weight: 600; }
+
+    /* Resumo Mes */
+    .resumo-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .resumo-item:last-of-type { border-bottom: none; }
+
+    .resumo-label {
+      font-size: 0.88rem;
+      color: var(--text-sec);
+      font-weight: 500;
+    }
+
+    .resumo-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .resumo-value.green { color: var(--green); }
+    .resumo-value.yellow { color: var(--yellow); }
+    .resumo-value.white { color: var(--text); }
+
+    .resumo-progress {
+      margin-top: 16px;
+    }
+
+    .progress-bar-bg {
+      height: 8px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 10px;
+      transition: width 1s ease;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      margin-top: 8px;
+    }
+
+    /* ===== TABLE ===== */
+    .table-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 24px;
+      transition: all 0.25s;
+    }
+
+    .table-card:hover { border-color: var(--border-light); }
+
+    .table-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .table-title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .table-count {
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      background: rgba(255,255,255,0.04);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead th {
+      padding: 12px 20px;
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr {
+      transition: background 0.15s;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+    tbody td {
+      padding: 14px 20px;
+      font-size: 0.88rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .badge-pago { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .badge-pendente { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+    .badge-atrasado { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+
+    .msg-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+
+    .msg-badge {
+      font-size: 0.68rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--blue-bg);
+      color: var(--blue);
+      border: 1px solid var(--blue-border);
+      font-weight: 500;
+    }
+
+    .mini-progress {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mini-progress-bar {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 10px;
+      overflow: hidden;
+      min-width: 80px;
+    }
+
+    .mini-progress-fill {
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.8s ease;
+    }
+
+    .mini-progress-text {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-sec);
+      white-space: nowrap;
+    }
+
+    /* ===== ROW 5 - TWO COLUMNS ===== */
+    .row5-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    /* ===== CLIENTES BONS ===== */
+    .clients-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .client-card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .client-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), #d97706);
+    }
+
+    .client-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+
+    .circular-progress {
+      position: relative;
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 12px;
+    }
+
+    .circular-progress svg { transform: rotate(-90deg); }
+
+    .circular-progress-value {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .client-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 3px;
+    }
+
+    .client-detail {
+      font-size: 0.78rem;
+      color: var(--text-sec);
+      margin-bottom: 2px;
+    }
+
+    .client-valor {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-top: 8px;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-faint);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    .empty-state-text {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .empty-state-sub {
+      font-size: 0.82rem;
+      margin-top: 6px;
+      color: var(--text-faint);
+    }
+
+    /* ===== SECTION HEADER ===== */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .section-header h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .section-header .accent-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ===== ANIMATED VALUE ===== */
+    .anim-value { transition: opacity 0.3s; }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.12); }
+
+    /* ===== MOBILE MENU ===== */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px) {
+      .fin-cards-grid { grid-template-columns: 1fr 1fr; }
+      .row3-grid { grid-template-columns: 1fr; }
+      .row5-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); box-shadow: 0 0 40px rgba(0,0,0,0.5); }
+      .main { margin-left: 0; }
+      .content { padding: 20px 16px; }
+      .header { padding: 16px; }
+      .fin-cards-grid { grid-template-columns: 1fr; }
+      .mobile-menu-btn { display: block; }
+      .header-left { display: flex; align-items: center; gap: 12px; }
+    }
+
+    @media (max-width: 480px) {
+      .header-actions { gap: 6px; }
+      .btn { padding: 8px 12px; font-size: 0.8rem; }
+    }
+
+    /* ===== SHIMMER / LOADING ===== */
+    .shimmer {
+      background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">Cobrai.app</div>
+      <div class="sidebar-subtitle">Sistema de Cobranca</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" data-section="dashboard" onclick="switchSection('dashboard')">
+        <span class="nav-icon">&#9632;</span> Dashboard
+      </div>
+      <div class="nav-item" data-section="cobrancas" onclick="switchSection('cobrancas')">
+        <span class="nav-icon">&#9993;</span> Cobrancas
+      </div>
+      <div class="nav-item" data-section="clientes-bons" onclick="switchSection('clientes-bons')">
+        <span class="nav-icon">&#9733;</span> Clientes Bons
+      </div>
+      <div class="nav-item" data-section="fila-humana" onclick="switchSection('fila-humana')">
+        <span class="nav-icon">&#9998;</span> Fila Humana
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="status-indicator">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Verificando...</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-left">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">&#9776;</button>
+        <div>
+          <h1>Dashboard</h1>
+          <div class="header-date" id="headerDate"></div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" onclick="gerarCobrancas()">
+          &#9889; Gerar Cobrancas
+        </button>
+        <div class="dropdown-wrapper">
+          <button class="btn btn-secondary" onclick="toggleDropdown(event)">
+            &#9993; Disparar Mensagem &#9660;
+          </button>
+          <div class="dropdown-menu" id="msgDropdown">
+            <div class="dropdown-item" onclick="dispararMensagem('cobranca_1')">Cobranca 1 - Lembrete</div>
+            <div class="dropdown-item" onclick="dispararMensagem('cobranca_2')">Cobranca 2 - Reforco</div>
+            <div class="dropdown-item" onclick="dispararMensagem('cobranca_3')">Cobranca 3 - Urgente</div>
+            <div class="dropdown-item" onclick="dispararMensagem('cobranca_4')">Cobranca 4 - Final</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ===================== DASHBOARD SECTION ===================== -->
+      <div class="section active" id="sec-dashboard">
+
+        <!-- ROW 1 - Big Financial Cards -->
+        <div class="fin-cards-grid">
+          <!-- Recebido Hoje -->
+          <div class="fin-card green-accent">
+            <div class="fin-card-header">
+              <div class="fin-card-left">
+                <div class="fin-card-label">Recebido Hoje</div>
+                <div class="fin-card-value green anim-value" id="finRecebidoHoje">R$ --</div>
+                <div class="fin-card-sub">de <span id="finEsperadoHoje">R$ --</span> esperado</div>
+              </div>
+              <div class="progress-ring-wrapper" id="ringRecebido">
+                <svg width="80" height="80" viewBox="0 0 80 80">
+                  <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/>
+                  <circle id="ringRecebidoCircle" cx="40" cy="40" r="34" fill="none" stroke="var(--green)" stroke-width="6" stroke-linecap="round" stroke-dasharray="213.63" stroke-dashoffset="213.63"/>
+                </svg>
+                <div class="progress-ring-center" id="ringRecebidoPct">0%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Media Diaria -->
+          <div class="fin-card blue-accent">
+            <div class="fin-card-left">
+              <div class="fin-card-label">Media Diaria</div>
+              <div class="fin-card-value blue anim-value" id="finMediaDiaria">R$ --</div>
+              <div class="fin-card-sub">baseado em <span id="finDiasPassados">--</span> dias</div>
+            </div>
+          </div>
+
+          <!-- MRR Mensal -->
+          <div class="fin-card purple-accent">
+            <div class="fin-card-left">
+              <div class="fin-card-label">MRR Mensal</div>
+              <div class="fin-card-value purple anim-value" id="finMRR">R$ --</div>
+              <div class="fin-card-sub">Receita Recorrente Mensal</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 2 - Main Chart -->
+        <div class="main-chart-card">
+          <div class="main-chart-header">
+            <div class="main-chart-title">Recebimentos do Mes</div>
+            <div class="main-chart-legend">
+              <div class="legend-item"><div class="legend-dot bar-expected"></div> Esperado</div>
+              <div class="legend-item"><div class="legend-dot line-received"></div> Recebido</div>
+            </div>
+          </div>
+          <div class="main-chart-container">
+            <canvas id="mainChart"></canvas>
+          </div>
+        </div>
+
+        <!-- ROW 3 - Three columns -->
+        <div class="row3-grid">
+          <!-- LEFT: Donut Status Hoje -->
+          <div class="row3-card">
+            <div class="row3-title">Status Hoje</div>
+            <div class="donut-container">
+              <canvas id="donutChart"></canvas>
+              <div class="donut-center">
+                <div class="donut-center-value" id="donutTotal">0</div>
+                <div class="donut-center-label">total</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CENTER: Taxa de Adimplencia -->
+          <div class="row3-card">
+            <div class="row3-title">Taxa de Adimplencia</div>
+            <div class="gauge-wrapper">
+              <div class="gauge-container">
+                <canvas id="gaugeChart"></canvas>
+              </div>
+              <div class="gauge-value" id="gaugeValue">--<span style="font-size:1.4rem">%</span></div>
+              <div class="gauge-label">Projecao: <span id="gaugeProjecao">R$ --</span></div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Resumo do Mes -->
+          <div class="row3-card">
+            <div class="row3-title">Resumo do Mes</div>
+            <div class="resumo-item">
+              <div class="resumo-label">Recebido</div>
+              <div class="resumo-value green" id="resumoRecebido">R$ --</div>
+            </div>
+            <div class="resumo-item">
+              <div class="resumo-label">Esperado</div>
+              <div class="resumo-value white" id="resumoEsperado">R$ --</div>
+            </div>
+            <div class="resumo-item">
+              <div class="resumo-label">Faltam</div>
+              <div class="resumo-value yellow" id="resumoFaltam">R$ --</div>
+            </div>
+            <div class="resumo-progress">
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="resumoProgressFill" style="width:0%"></div>
+              </div>
+              <div class="progress-label">
+                <span id="resumoProgressPct">0%</span>
+                <span>recebido do esperado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 4 - Cobrancas de Hoje Table -->
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">Cobrancas de Hoje</div>
+            <div class="table-count" id="tableCount">0 registros</div>
+          </div>
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Parcela</th>
+                  <th>Valor</th>
+                  <th>Status</th>
+                  <th>Mensagens Enviadas</th>
+                  <th>Progresso</th>
+                </tr>
+              </thead>
+              <tbody id="cobrancasBody">
+                <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-faint)">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ROW 5 - Two columns -->
+        <div class="row5-grid">
+          <!-- LEFT: Clientes Bons -->
+          <div>
+            <div class="section-header">
+              <h2>&#9733; Clientes Bons / Upsell</h2>
+              <div class="accent-line"></div>
+            </div>
+            <div class="clients-grid" id="clientesBonsGrid">
+              <div class="empty-state" style="grid-column:1/-1">
+                <div class="empty-state-icon">&#9733;</div>
+                <div class="empty-state-text">Carregando...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Fila Humana -->
+          <div>
+            <div class="section-header">
+              <h2>&#9998; Fila Humana</h2>
+              <div class="accent-line"></div>
+            </div>
+            <div class="table-card" style="margin-bottom:0">
+              <div style="overflow-x:auto">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Cliente</th>
+                      <th>Motivo</th>
+                      <th>Prioridade</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="filaBodyDash">
+                    <tr><td colspan="4" style="text-align:center;padding:40px;color:var(--text-faint)">Carregando...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ===================== COBRANCAS SECTION ===================== -->
+      <div class="section" id="sec-cobrancas">
+        <div class="section-header">
+          <h2>&#9993; Todas as Cobrancas</h2>
+          <div class="accent-line"></div>
+        </div>
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">Lista Completa</div>
+            <div class="table-count" id="tableCountFull">0 registros</div>
+          </div>
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>WhatsApp</th>
+                  <th>Parcela</th>
+                  <th>Valor</th>
+                  <th>Status</th>
+                  <th>Mensagens</th>
+                  <th>Progresso</th>
+                </tr>
+              </thead>
+              <tbody id="cobrancasFullBody">
+                <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-faint)">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== CLIENTES BONS SECTION ===================== -->
+      <div class="section" id="sec-clientes-bons">
+        <div class="section-header">
+          <h2>&#9733; Clientes Bons / Upsell</h2>
+          <div class="accent-line"></div>
+        </div>
+        <div class="clients-grid" id="clientesBonsGridFull">
+          <div class="empty-state" style="grid-column:1/-1">
+            <div class="empty-state-icon">&#9733;</div>
+            <div class="empty-state-text">Carregando...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== FILA HUMANA SECTION ===================== -->
+      <div class="section" id="sec-fila-humana">
+        <div class="section-header">
+          <h2>&#9998; Fila Humana</h2>
+          <div class="accent-line"></div>
+        </div>
+        <div class="table-card">
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Motivo</th>
+                  <th>Prioridade</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="filaBody">
+                <tr><td colspan="4" style="text-align:center;padding:40px;color:var(--text-faint)">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+
+  <script>
+    // ===== STATE =====
+    let donutChart = null;
+    let mainChart = null;
+    let gaugeChart = null;
+    let dashboardData = null;
+    let metricasData = null;
+
+    // ===== UTILS =====
+    function formatBRL(value) {
+      return 'R$ ' + Number(value || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatDate() {
+      const now = new Date();
+      const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const date = now.toLocaleDateString('pt-BR', opts);
+      const time = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      return date.charAt(0).toUpperCase() + date.slice(1) + ' - ' + time;
+    }
+
+    function progressColor(pct) {
+      if (pct >= 80) return 'var(--green)';
+      if (pct >= 50) return 'var(--yellow)';
+      return 'var(--red)';
+    }
+
+    function gaugeColor(pct) {
+      if (pct >= 80) return 'green';
+      if (pct >= 60) return 'yellow';
+      return 'red';
+    }
+
+    function gaugeColorHex(pct) {
+      if (pct >= 80) return '#34d399';
+      if (pct >= 60) return '#fbbf24';
+      return '#f87171';
+    }
+
+    // ===== NAVIGATION =====
+    function switchSection(name) {
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+      var sec = document.getElementById('sec-' + name);
+      if (sec) sec.classList.add('active');
+      var nav = document.querySelector('.nav-item[data-section="' + name + '"]');
+      if (nav) nav.classList.add('active');
+      document.querySelector('.header-left h1').textContent =
+        name === 'dashboard' ? 'Dashboard' :
+        name === 'cobrancas' ? 'Cobrancas' :
+        name === 'clientes-bons' ? 'Clientes Bons' : 'Fila Humana';
+      document.getElementById('sidebar').classList.remove('open');
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    // ===== DROPDOWN =====
+    function toggleDropdown(e) {
+      e.stopPropagation();
+      document.getElementById('msgDropdown').classList.toggle('show');
+    }
+
+    document.addEventListener('click', function() {
+      document.getElementById('msgDropdown').classList.remove('show');
+    });
+
+    // ===== ACTIONS =====
+    async function gerarCobrancas() {
+      try {
+        var res = await fetch('/api/gerar-cobrancas', { method: 'POST' });
+        var data = await res.json();
+        alert('Cobrancas geradas com sucesso!');
+        loadAll();
+      } catch (e) {
+        alert('Erro ao gerar cobrancas: ' + e.message);
+      }
+    }
+
+    async function dispararMensagem(tipo) {
+      document.getElementById('msgDropdown').classList.remove('show');
+      try {
+        var res = await fetch('/api/disparar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tipo: tipo })
+        });
+        var data = await res.json();
+        alert('Mensagens do tipo "' + tipo + '" disparadas!');
+        loadAll();
+      } catch (e) {
+        alert('Erro ao disparar mensagens: ' + e.message);
+      }
+    }
+
+    // ===== CHARTS =====
+    var chartTooltipDefaults = {
+      backgroundColor: '#1a1d27',
+      titleColor: '#e8e8ed',
+      bodyColor: '#9ca3af',
+      borderColor: 'rgba(255,255,255,0.1)',
+      borderWidth: 1,
+      cornerRadius: 8,
+      padding: 12,
+      titleFont: { family: 'Inter', weight: 600 },
+      bodyFont: { family: 'Inter' }
+    };
+
+    // -- Donut Chart (Status Hoje) --
+    function renderDonutChart(pagos, pendentes, atrasados) {
+      var total = pagos + pendentes + atrasados;
+      document.getElementById('donutTotal').textContent = total;
+
+      var ctx = document.getElementById('donutChart').getContext('2d');
+
+      var chartData = (total === 0)
+        ? { data: [1], colors: ['rgba(255,255,255,0.05)'], borderColors: ['rgba(255,255,255,0.05)'], labels: ['Sem dados'] }
+        : {
+            data: [pagos, pendentes, atrasados],
+            colors: ['rgba(52,211,153,0.85)', 'rgba(251,191,36,0.85)', 'rgba(248,113,113,0.85)'],
+            borderColors: ['#34d399', '#fbbf24', '#f87171'],
+            labels: ['Pagos', 'Pendentes', 'Atrasados']
+          };
+
+      if (donutChart) {
+        donutChart.data.datasets[0].data = chartData.data;
+        donutChart.data.datasets[0].backgroundColor = chartData.colors;
+        donutChart.data.datasets[0].borderColor = chartData.borderColors;
+        donutChart.data.labels = chartData.labels;
+        donutChart.update('active');
+        return;
+      }
+
+      donutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: chartData.labels,
+          datasets: [{
+            data: chartData.data,
+            backgroundColor: chartData.colors,
+            borderColor: chartData.borderColors,
+            borderWidth: 2,
+            hoverBorderWidth: 3,
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          cutout: '72%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: '#9ca3af',
+                padding: 14,
+                usePointStyle: true,
+                pointStyleWidth: 10,
+                font: { family: 'Inter', size: 11, weight: 500 }
+              }
+            },
+            tooltip: chartTooltipDefaults
+          }
+        }
+      });
+    }
+
+    // -- Main Chart (Recebimentos do Mes) --
+    function renderMainChart(graficoDiario) {
+      if (!graficoDiario || graficoDiario.length === 0) return;
+
+      var labels = graficoDiario.map(function(d) {
+        return d.dia.split('-')[2];
+      });
+      var esperadoData = graficoDiario.map(function(d) { return d.esperado; });
+      var recebidoData = graficoDiario.map(function(d) { return d.recebido; });
+
+      // Find today's index
+      var today = new Date().toISOString().split('T')[0];
+      var todayIdx = graficoDiario.findIndex(function(d) { return d.dia === today; });
+
+      var ctx = document.getElementById('mainChart').getContext('2d');
+
+      // Plugin to draw today's vertical dashed line
+      var todayLinePlugin = {
+        id: 'todayLine',
+        afterDraw: function(chart) {
+          if (todayIdx < 0) return;
+          var xScale = chart.scales.x;
+          var yScale = chart.scales.y;
+          var x = xScale.getPixelForValue(todayIdx);
+          var ctxC = chart.ctx;
+          ctxC.save();
+          ctxC.beginPath();
+          ctxC.setLineDash([6, 4]);
+          ctxC.strokeStyle = 'rgba(255,255,255,0.25)';
+          ctxC.lineWidth = 1.5;
+          ctxC.moveTo(x, yScale.top);
+          ctxC.lineTo(x, yScale.bottom);
+          ctxC.stroke();
+          // Label
+          ctxC.fillStyle = 'rgba(255,255,255,0.5)';
+          ctxC.font = '500 10px Inter';
+          ctxC.textAlign = 'center';
+          ctxC.fillText('HOJE', x, yScale.top - 6);
+          ctxC.restore();
+        }
+      };
+
+      if (mainChart) {
+        mainChart.data.labels = labels;
+        mainChart.data.datasets[0].data = esperadoData;
+        mainChart.data.datasets[1].data = recebidoData;
+        mainChart.update('active');
+        return;
+      }
+
+      mainChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Esperado',
+              data: esperadoData,
+              backgroundColor: 'rgba(96,165,250,0.35)',
+              borderColor: 'rgba(96,165,250,0.6)',
+              borderWidth: 1,
+              borderRadius: 4,
+              order: 2
+            },
+            {
+              label: 'Recebido',
+              data: recebidoData,
+              type: 'line',
+              borderColor: '#34d399',
+              backgroundColor: 'rgba(52,211,153,0.1)',
+              borderWidth: 2.5,
+              pointRadius: 3,
+              pointBackgroundColor: '#34d399',
+              pointBorderColor: '#34d399',
+              pointHoverRadius: 5,
+              fill: true,
+              tension: 0.3,
+              order: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: Object.assign({}, chartTooltipDefaults, {
+              callbacks: {
+                label: function(context) {
+                  return context.dataset.label + ': ' + formatBRL(context.parsed.y);
+                }
+              }
+            })
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: '#5b5e6b',
+                font: { family: 'Inter', size: 11 },
+                maxRotation: 0
+              },
+              grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: {
+                color: '#5b5e6b',
+                font: { family: 'Inter', size: 11 },
+                callback: function(value) {
+                  if (value >= 1000) return 'R$ ' + (value / 1000).toFixed(1) + 'k';
+                  return 'R$ ' + value;
+                }
+              },
+              grid: { color: 'rgba(255,255,255,0.06)', drawBorder: false }
+            }
+          }
+        },
+        plugins: [todayLinePlugin]
+      });
+    }
+
+    // -- Gauge Chart (Taxa de Adimplencia) --
+    function renderGaugeChart(taxa) {
+      var ctx = document.getElementById('gaugeChart').getContext('2d');
+      var color = gaugeColorHex(taxa);
+
+      // Semicircle gauge using doughnut
+      var filled = taxa;
+      var empty = 100 - taxa;
+
+      if (gaugeChart) {
+        gaugeChart.data.datasets[0].data = [filled, empty];
+        gaugeChart.data.datasets[0].backgroundColor = [color, 'rgba(255,255,255,0.06)'];
+        gaugeChart.update('active');
+        return;
+      }
+
+      gaugeChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          datasets: [{
+            data: [filled, empty],
+            backgroundColor: [color, 'rgba(255,255,255,0.06)'],
+            borderWidth: 0,
+            hoverOffset: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          rotation: -90,
+          circumference: 180,
+          cutout: '78%',
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false }
+          }
+        }
+      });
+    }
+
+    // ===== RENDER METRICAS =====
+    function renderMetricas(m) {
+      metricasData = m;
+
+      // ROW 1 - Financial Cards
+      document.getElementById('finRecebidoHoje').textContent = formatBRL(m.hoje.recebido);
+      document.getElementById('finEsperadoHoje').textContent = formatBRL(m.hoje.esperado);
+
+      var pctHoje = m.hoje.esperado > 0 ? Math.round((m.hoje.recebido / m.hoje.esperado) * 100) : 0;
+      var circumference = 2 * Math.PI * 34;
+      var offset = circumference - (circumference * Math.min(pctHoje, 100) / 100);
+      document.getElementById('ringRecebidoCircle').setAttribute('stroke-dashoffset', offset);
+      document.getElementById('ringRecebidoPct').textContent = pctHoje + '%';
+
+      document.getElementById('finMediaDiaria').textContent = formatBRL(m.media_diaria);
+      document.getElementById('finDiasPassados').textContent = m.dias_passados;
+
+      document.getElementById('finMRR').textContent = formatBRL(m.mrr);
+
+      // ROW 2 - Main Chart
+      renderMainChart(m.grafico_diario);
+
+      // ROW 3 - Gauge
+      var taxa = m.taxa_adimplencia || 0;
+      renderGaugeChart(taxa);
+      var gaugeEl = document.getElementById('gaugeValue');
+      gaugeEl.className = 'gauge-value ' + gaugeColor(taxa);
+      gaugeEl.innerHTML = taxa + '<span style="font-size:1.4rem">%</span>';
+      document.getElementById('gaugeProjecao').textContent = formatBRL(m.projecao_mes);
+
+      // ROW 3 - Resumo do Mes
+      var mesRecebido = m.mes.recebido;
+      var mesEsperado = m.mes.esperado;
+      var mesFaltam = Math.max(0, mesEsperado - mesRecebido);
+      document.getElementById('resumoRecebido').textContent = formatBRL(mesRecebido);
+      document.getElementById('resumoEsperado').textContent = formatBRL(mesEsperado);
+      document.getElementById('resumoFaltam').textContent = formatBRL(mesFaltam);
+
+      var pctMes = mesEsperado > 0 ? Math.round((mesRecebido / mesEsperado) * 100) : 0;
+      document.getElementById('resumoProgressFill').style.width = Math.min(pctMes, 100) + '%';
+      document.getElementById('resumoProgressPct').textContent = pctMes + '%';
+    }
+
+    // ===== RENDER DASHBOARD =====
+    function renderDashboard(data) {
+      dashboardData = data;
+      var s = data.stats;
+
+      // ROW 3 - Donut
+      renderDonutChart(s.pagos, s.pendentes, s.atrasados);
+
+      // ROW 4 - Table
+      var tbody = document.getElementById('cobrancasBody');
+      var cobrancas = data.cobrancas || [];
+      document.getElementById('tableCount').textContent = cobrancas.length + ' registros';
+
+      if (cobrancas.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-faint)">Nenhuma cobranca encontrada</td></tr>';
+      } else {
+        tbody.innerHTML = cobrancas.map(function(c) {
+          var statusClass = c.status === 'pago' ? 'badge-pago' : c.status === 'atrasado' ? 'badge-atrasado' : 'badge-pendente';
+          var msgs = (c.mensagens || []).map(function(m) { return '<span class="msg-badge">' + m + '</span>'; }).join('');
+          var pct = c.percentual_pago || 0;
+          var pColor = progressColor(pct);
+          return '<tr>' +
+            '<td><strong>' + c.nome + '</strong></td>' +
+            '<td>' + c.numero + '/' + c.total_parcelas + '</td>' +
+            '<td>' + formatBRL(c.valor) + '</td>' +
+            '<td><span class="badge ' + statusClass + '">' + c.status + '</span></td>' +
+            '<td><div class="msg-badges">' + (msgs || '<span style="color:var(--text-faint);font-size:0.78rem">--</span>') + '</div></td>' +
+            '<td><div class="mini-progress"><div class="mini-progress-bar"><div class="mini-progress-fill" style="width:' + pct + '%;background:' + pColor + '"></div></div><span class="mini-progress-text">' + pct + '%</span></div></td>' +
+            '</tr>';
+        }).join('');
+      }
+
+      // Cobrancas full section
+      var tbodyFull = document.getElementById('cobrancasFullBody');
+      document.getElementById('tableCountFull').textContent = cobrancas.length + ' registros';
+      if (cobrancas.length === 0) {
+        tbodyFull.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-faint)">Nenhuma cobranca encontrada</td></tr>';
+      } else {
+        tbodyFull.innerHTML = cobrancas.map(function(c) {
+          var statusClass = c.status === 'pago' ? 'badge-pago' : c.status === 'atrasado' ? 'badge-atrasado' : 'badge-pendente';
+          var msgs = (c.mensagens || []).map(function(m) { return '<span class="msg-badge">' + m + '</span>'; }).join('');
+          var pct = c.percentual_pago || 0;
+          var pColor = progressColor(pct);
+          return '<tr>' +
+            '<td><strong>' + c.nome + '</strong></td>' +
+            '<td>' + (c.whatsapp || '--') + '</td>' +
+            '<td>' + c.numero + '/' + c.total_parcelas + '</td>' +
+            '<td>' + formatBRL(c.valor) + '</td>' +
+            '<td><span class="badge ' + statusClass + '">' + c.status + '</span></td>' +
+            '<td><div class="msg-badges">' + (msgs || '<span style="color:var(--text-faint);font-size:0.78rem">--</span>') + '</div></td>' +
+            '<td><div class="mini-progress"><div class="mini-progress-bar"><div class="mini-progress-fill" style="width:' + pct + '%;background:' + pColor + '"></div></div><span class="mini-progress-text">' + pct + '%</span></div></td>' +
+            '</tr>';
+        }).join('');
+      }
+
+      // ROW 5 - Clientes Bons (dashboard + full section)
+      var bons = data.clientes_bons || [];
+      renderClientesBons('clientesBonsGrid', bons);
+      renderClientesBons('clientesBonsGridFull', bons);
+
+      // ROW 5 - Fila Humana (dashboard + full section)
+      var fila = data.fila_humana || [];
+      renderFilaHumana('filaBodyDash', fila);
+      renderFilaHumana('filaBody', fila);
+    }
+
+    function renderClientesBons(gridId, bons) {
+      var grid = document.getElementById(gridId);
+      if (bons.length === 0) {
+        grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">&#9733;</div><div class="empty-state-text">Nenhum cliente elegivel para upsell</div><div class="empty-state-sub">Clientes com alto percentual de pagamento aparecerao aqui</div></div>';
+      } else {
+        grid.innerHTML = bons.map(function(cl) {
+          var pct = cl.percentual || 0;
+          var circumference = 2 * Math.PI * 32;
+          var dashOffset = circumference - (circumference * pct / 100);
+          return '<div class="client-card">' +
+            '<div class="circular-progress">' +
+              '<svg width="76" height="76" viewBox="0 0 76 76">' +
+                '<circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="5"/>' +
+                '<circle cx="38" cy="38" r="32" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" stroke-dasharray="' + circumference + '" stroke-dashoffset="' + dashOffset + '"/>' +
+              '</svg>' +
+              '<div class="circular-progress-value">' + pct + '%</div>' +
+            '</div>' +
+            '<div class="client-name">' + cl.nome + '</div>' +
+            '<div class="client-detail">Parcelas: ' + cl.parcelas_pagas + ' / ' + cl.total_parcelas + '</div>' +
+            '<div class="client-valor">' + formatBRL(cl.valor_total) + '</div>' +
+          '</div>';
+        }).join('');
+      }
+    }
+
+    function renderFilaHumana(tbodyId, fila) {
+      var filaBody = document.getElementById(tbodyId);
+      if (fila.length === 0) {
+        filaBody.innerHTML = '<tr><td colspan="4"><div class="empty-state"><div class="empty-state-icon">&#10003;</div><div class="empty-state-text">Nenhum caso na fila humana</div><div class="empty-state-sub">Quando houver casos que necessitam de atendimento humano, aparecerao aqui</div></div></td></tr>';
+      } else {
+        filaBody.innerHTML = fila.map(function(f) {
+          return '<tr>' +
+            '<td><strong>' + (f.nome || f.cliente_id || '--') + '</strong></td>' +
+            '<td>' + (f.motivo || f.reason || '--') + '</td>' +
+            '<td>' + (f.prioridade || f.priority || '--') + '</td>' +
+            '<td><span class="badge badge-pendente">' + (f.status || 'aguardando') + '</span></td>' +
+          '</tr>';
+        }).join('');
+      }
+    }
+
+    // ===== DATA LOADING =====
+    async function loadDashboard() {
+      try {
+        var res = await fetch('/api/dashboard');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        var data = await res.json();
+        renderDashboard(data);
+      } catch (e) {
+        console.error('Erro ao carregar dashboard:', e);
+      }
+    }
+
+    async function loadMetricas() {
+      try {
+        var res = await fetch('/api/metricas');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        var data = await res.json();
+        renderMetricas(data);
+      } catch (e) {
+        console.error('Erro ao carregar metricas:', e);
+      }
+    }
+
+    async function checkStatus() {
+      try {
+        var res = await fetch('/api/status');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        var data = await res.json();
+        var dot = document.getElementById('statusDot');
+        var text = document.getElementById('statusText');
+        var connected = data.whatsapp && data.whatsapp.connected;
+        if (connected) {
+          dot.className = 'status-dot online';
+          text.textContent = 'WhatsApp Online';
+        } else {
+          dot.className = 'status-dot';
+          text.textContent = 'WhatsApp Offline';
+        }
+      } catch (e) {
+        document.getElementById('statusDot').className = 'status-dot';
+        document.getElementById('statusText').textContent = 'Sem conexao';
+      }
+    }
+
+    function loadAll() {
+      loadDashboard();
+      loadMetricas();
+      checkStatus();
+    }
+
+    // ===== CLOCK =====
+    function updateClock() {
+      document.getElementById('headerDate').textContent = formatDate();
+    }
+
+    // ===== INIT =====
+    updateClock();
+    setInterval(updateClock, 10000);
+
+    loadAll();
+
+    // Auto-refresh every 30 seconds (both endpoints)
+    setInterval(loadAll, 30000);
+
+    // Close sidebar overlay on click outside (mobile)
+    document.addEventListener('click', function(e) {
+      var sidebar = document.getElementById('sidebar');
+      if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !e.target.closest('.mobile-menu-btn')) {
+        sidebar.classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>

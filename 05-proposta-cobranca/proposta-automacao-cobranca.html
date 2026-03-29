@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automação de Cobrança — Proposta Comercial | Grupo Propagar</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    :root {
+      --bg: #fafafa;
+      --bg-card: #ffffff;
+      --bg-dark: #0f1117;
+      --border: #e5e7eb;
+      --text: #111827;
+      --text-sec: #4b5563;
+      --text-faint: #9ca3af;
+      --green: #059669;
+      --green-light: #d1fae5;
+      --green-bg: #ecfdf5;
+      --red: #dc2626;
+      --red-light: #fee2e2;
+      --red-bg: #fef2f2;
+      --yellow: #d97706;
+      --yellow-light: #fef3c7;
+      --yellow-bg: #fffbeb;
+      --blue: #2563eb;
+      --blue-light: #dbeafe;
+      --blue-bg: #eff6ff;
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      font-size: 18px;
+    }
+
+    /* ——— HERO ——— */
+    .hero {
+      background: var(--bg-dark);
+      color: #fff;
+      padding: 80px 32px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(37,99,235,0.15);
+      color: #60a5fa;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      max-width: 800px;
+      margin: 0 auto 16px;
+    }
+
+    .hero h1 span { color: #60a5fa; }
+
+    .hero p {
+      font-size: 20px;
+      color: #94a3b8;
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat { text-align: center; }
+
+    .hero-stat .num {
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .hero-stat .num-red { color: #f87171; }
+    .hero-stat .num-green { color: #34d399; }
+    .hero-stat .num-blue { color: #60a5fa; }
+
+    .hero-stat .lbl {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    /* ——— CONTAINER ——— */
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+
+    .section { margin-bottom: 64px; }
+
+    .sn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .sn-red { background: var(--red-light); color: var(--red); }
+    .sn-green { background: var(--green-light); color: var(--green); }
+    .sn-blue { background: var(--blue-light); color: var(--blue); }
+    .sn-yellow { background: var(--yellow-light); color: var(--yellow); }
+    .sn-purple { background: var(--purple-light); color: var(--purple); }
+
+    .section h2 {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+      line-height: 1.25;
+    }
+
+    .section .sub {
+      font-size: 18px;
+      color: var(--text-sec);
+      margin-bottom: 28px;
+    }
+
+    /* ——— CARDS ——— */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .card h3 {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+
+    .card p, .card li {
+      font-size: 17px;
+      color: var(--text-sec);
+      line-height: 1.85;
+    }
+
+    .card ul { list-style: none; padding: 0; }
+
+    .card ul li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .card ul li:last-child { border-bottom: none; }
+
+    .card ul li .ic { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+
+    /* ——— TABLES ——— */
+    table { width: 100%; border-collapse: collapse; font-size: 16px; margin-top: 16px; }
+
+    th {
+      text-align: left;
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-faint);
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-sec);
+      line-height: 1.6;
+    }
+
+    .row-green td { background: var(--green-bg); }
+    .row-red td { background: var(--red-bg); }
+    .row-yellow td { background: var(--yellow-bg); }
+
+    /* ——— CALLOUT ——— */
+    .co {
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 17px;
+      line-height: 1.85;
+    }
+
+    .co-red { background: var(--red-bg); border: 1px solid #fecaca; color: var(--red); }
+    .co-green { background: var(--green-bg); border: 1px solid #a7f3d0; color: var(--green); }
+    .co-yellow { background: var(--yellow-bg); border: 1px solid #fde68a; color: var(--yellow); }
+    .co-blue { background: var(--blue-bg); border: 1px solid #bfdbfe; color: var(--blue); }
+
+    .co strong { display: block; margin-bottom: 6px; font-size: 18px; }
+
+    /* ——— FLOW ——— */
+    .flow { display: flex; flex-direction: column; }
+
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px 0;
+    }
+
+    .flow-marker {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 16px;
+      flex-shrink: 0;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .flow-line { width: 2px; height: 12px; background: var(--border); margin-left: 25px; }
+
+    .flow-step h4 { font-size: 19px; font-weight: 800; margin-bottom: 6px; }
+    .flow-step p { font-size: 16px; color: var(--text-sec); }
+
+    /* ——— MSG PREVIEW ——— */
+    .msg-preview {
+      background: #e7fed6;
+      border-radius: 12px 12px 12px 0;
+      padding: 16px 20px;
+      font-size: 15px;
+      color: #1a3a0a;
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 12px 0;
+      position: relative;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    }
+
+    .msg-preview .time {
+      text-align: right;
+      font-size: 11px;
+      color: #6b9c4b;
+      margin-top: 6px;
+    }
+
+    .msg-incoming {
+      background: #fff;
+      border-radius: 12px 12px 0 12px;
+      color: #1c1917;
+      margin-left: auto;
+    }
+
+    .msg-incoming .time { color: #a8a29e; }
+
+    /* ——— VS ——— */
+    .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; }
+
+    .vs-card {
+      border-radius: 14px;
+      padding: 28px;
+      border: 1px solid var(--border);
+    }
+
+    .vs-card h4 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .vs-card ul { list-style: none; padding: 0; }
+
+    .vs-card ul li {
+      font-size: 16px;
+      padding: 6px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.6;
+      color: var(--text-sec);
+    }
+
+    /* ——— TIMELINE VISUAL ——— */
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 16px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .tl-item {
+      position: relative;
+      padding: 20px 0;
+    }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -30px;
+      top: 28px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 3px solid;
+    }
+
+    .tl-green::before { border-color: var(--green); background: var(--green-bg); }
+    .tl-yellow::before { border-color: var(--yellow); background: var(--yellow-bg); }
+    .tl-red::before { border-color: var(--red); background: var(--red-bg); }
+    .tl-blue::before { border-color: var(--blue); background: var(--blue-bg); }
+
+    .tl-item .tl-time {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .tl-item h4 { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+    .tl-item p { font-size: 15px; color: var(--text-sec); line-height: 1.7; }
+
+    /* ——— CTA ——— */
+    .cta {
+      background: var(--bg-dark);
+      border-radius: 24px;
+      padding: 56px 40px;
+      text-align: center;
+      color: #fff;
+      margin: 48px 0;
+    }
+
+    .cta h2 {
+      font-size: 32px;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .cta h2 span { color: #60a5fa; }
+
+    .cta p {
+      font-size: 18px;
+      color: #94a3b8;
+      max-width: 560px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: #2563eb;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+      padding: 18px 40px;
+      border-radius: 14px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(37,99,235,0.3);
+    }
+
+    @media (max-width: 640px) {
+      .vs { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 28px; }
+      .hero-stats { gap: 24px; }
+      .section h2 { font-size: 24px; }
+      .cta { padding: 40px 24px; }
+    }
+
+    .divider { height: 1px; background: var(--border); margin: 48px 0; }
+
+    .footer {
+      text-align: center;
+      padding: 40px 24px;
+      color: var(--text-faint);
+      font-size: 14px;
+    }
+
+    .footer a { color: var(--blue); text-decoration: none; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <!-- ========== HERO ========== -->
+  <div class="hero">
+    <div class="hero-badge">Proposta comercial</div>
+    <h1>Automação de Cobrança <span>Inteligente e Humanizada</span></h1>
+    <p>Reduza sua equipe de cobrança, elimine comprovantes falsos e mantenha a taxa de pagamento — tudo com WhatsApp automático + validação bancária em tempo real.</p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num num-red">120</div>
+        <div class="lbl">clientes por cobrador<br>(fisicamente impossível fazer bem)</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num num-green">500+</div>
+        <div class="lbl">clientes por operador<br>com automação</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num num-blue">2 seg</div>
+        <div class="lbl">confirmação real<br>de pagamento</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ========== 1: O PROBLEMA ========== -->
+    <section class="section">
+      <div class="sn sn-red">1</div>
+      <h2>O problema atual da sua operação</h2>
+      <p class="sub">Sua cobrança funciona — mas te custa caro e não escala.</p>
+
+      <div class="card">
+        <h3>Como funciona hoje</h3>
+        <ul>
+          <li>
+            <span class="ic">&#128680;</span>
+            <span><strong>120 clientes por cobrador, cobrados manualmente por dia</strong> — sua equipe manda mensagem um por um, no WhatsApp, várias vezes ao dia. Funciona, mas consome horas e funcionários.</span>
+          </li>
+          <li>
+            <span class="ic">&#128680;</span>
+            <span><strong>Cada cliente precisa de 2-4 cobranças por dia</strong> — são 200 a 400 mensagens manuais por dia. Sua equipe vive no WhatsApp o dia inteiro.</span>
+          </li>
+          <li>
+            <span class="ic">&#128680;</span>
+            <span><strong>Confirmação por comprovante (foto)</strong> — o cliente manda print do PIX e alguém confere. Mas comprovante pode ser falsificado. Tem app que gera PIX falso em 10 segundos.</span>
+          </li>
+          <li>
+            <span class="ic">&#128680;</span>
+            <span><strong>Inadimplência só aparece 24h depois no sistema</strong> — quando o Asaas marca como inadimplente, você já perdeu 1 dia inteiro. O cliente que ia pagar com pressão já esfriou.</span>
+          </li>
+          <li>
+            <span class="ic">&#128680;</span>
+            <span><strong>Custo alto com equipe de cobrança</strong> — salários, treinamento, rotatividade. E se um funcionário falta, a cobrança de 30-40 clientes simplesmente não acontece.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="vs">
+        <div class="vs-card" style="background: var(--red-bg);">
+          <h4 style="color: var(--red);">&#10007; Riscos de continuar assim</h4>
+          <ul>
+            <li><span style="color: var(--red);">&#10007;</span> Comprovante falso passa sem ser detectado</li>
+            <li><span style="color: var(--red);">&#10007;</span> Funcionário esquece de cobrar clientes</li>
+            <li><span style="color: var(--red);">&#10007;</span> Sem padrão: cada um cobra de um jeito</li>
+            <li><span style="color: var(--red);">&#10007;</span> Cobra cliente que já pagou (constrangedor)</li>
+            <li><span style="color: var(--red);">&#10007;</span> Custo fixo alto independente do resultado</li>
+          </ul>
+        </div>
+        <div class="vs-card" style="background: var(--green-bg);">
+          <h4 style="color: var(--green);">&#10003; O que você ganha com automação</h4>
+          <ul>
+            <li><span style="color: var(--green);">&#10003;</span> Confirmação real do banco em 2 segundos</li>
+            <li><span style="color: var(--green);">&#10003;</span> 100% dos clientes cobrados, todo dia, sem falha</li>
+            <li><span style="color: var(--green);">&#10003;</span> Mensagens padronizadas e humanizadas</li>
+            <li><span style="color: var(--green);">&#10003;</span> Nunca mais cobra quem já pagou</li>
+            <li><span style="color: var(--green);">&#10003;</span> 1 pessoa cuida de 500+ clientes (hoje cuida de 120 mal)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 2: A CONTA QUE NÃO FECHA ========== -->
+    <section class="section">
+      <div class="sn sn-red">2</div>
+      <h2>A conta que não fecha: 120 clientes por cobrador</h2>
+      <p class="sub">Vamos colocar números reais na operação. Prepare-se.</p>
+
+      <div class="card">
+        <h3>A matemática cruel das 8 horas</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Métrica</th>
+              <th style="text-align: right;">Número real</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 700;">Clientes na carteira</td>
+              <td style="text-align: right; font-weight: 800; font-size: 18px;">120</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Mensagens necessárias por cliente/dia</td>
+              <td style="text-align: right; font-weight: 800;">3-4 (mínimo)</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Total de mensagens por dia</td>
+              <td style="text-align: right; font-weight: 800; font-size: 18px; color: var(--red);">360 a 480</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Tempo por mensagem (digitar + esperar + conferir)</td>
+              <td style="text-align: right;">2-3 minutos</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Tempo total necessário</td>
+              <td style="text-align: right; font-weight: 800; font-size: 18px; color: var(--red);">12 a 24 horas</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Tempo disponível</td>
+              <td style="text-align: right; font-weight: 800; font-size: 18px;">8 horas</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="co co-red" style="margin-top: 20px;">
+          <strong>Resultado: é fisicamente impossível.</strong>
+          O cobrador precisaria de 12-24h pra fazer o trabalho direito. Tem 8. O que acontece na prática é uma operação pela metade.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>O que realmente acontece com 120 clientes por pessoa</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>O que deveria acontecer</th>
+              <th>O que acontece de verdade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Todos os 120 recebem cobrança às 7h30</td>
+              <td style="color: var(--red); font-weight: 700;">Os primeiros 40-50 recebem. Os outros ficam pra depois (ou pra nunca).</td>
+            </tr>
+            <tr>
+              <td>Cada cliente recebe 3-4 cobranças no dia</td>
+              <td style="color: var(--red); font-weight: 700;">Maioria recebe 1. Alguns recebem 2. Follow-up quase não existe.</td>
+            </tr>
+            <tr>
+              <td>Comprovante é conferido no extrato</td>
+              <td style="color: var(--red); font-weight: 700;">Comprovante é aceito sem conferir. Não dá tempo. Fraude passa.</td>
+            </tr>
+            <tr>
+              <td>Clientes inadimplentes são cobrados com mais pressão</td>
+              <td style="color: var(--red); font-weight: 700;">Os atrasados se misturam com os do dia. Prioridade vira caos.</td>
+            </tr>
+            <tr>
+              <td>Todos os clientes são atendidos igual</td>
+              <td style="color: var(--red); font-weight: 700;">Os últimos 30-40 da lista ficam pra amanhã. Já estão 1 dia atrasados.</td>
+            </tr>
+            <tr>
+              <td>Cobrador termina o dia com tudo em dia</td>
+              <td style="color: var(--red); font-weight: 700;">Termina o dia exausto, com pendências acumuladas, sem certeza de quem pagou.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Com automação: 1 operador cuida de 500+</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Métrica</th>
+              <th style="color: var(--red);">Manual (120/pessoa)</th>
+              <th style="color: var(--green);">Com sistema (500+/pessoa)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 700;">Mensagens enviadas/dia</td>
+              <td style="color: var(--red);">200-300 (incompleto, inconsistente)</td>
+              <td style="font-weight: 700; color: var(--green);">2.000+ (4 msg x 500, automático, sem falha)</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">1a cobrança do dia</td>
+              <td style="color: var(--red);">Depende do cobrador acordar e começar</td>
+              <td style="font-weight: 700; color: var(--green);">7h30, todo dia, 100% dos clientes</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Clientes que recebem 3+ cobranças</td>
+              <td style="color: var(--red);">~30% (os primeiros da lista)</td>
+              <td style="font-weight: 700; color: var(--green);">100% (automático)</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Follow-up</td>
+              <td style="color: var(--red);">Quase zero (não sobra tempo)</td>
+              <td style="font-weight: 700; color: var(--green);">4 tentativas automáticas por cliente</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Tempo do operador humano</td>
+              <td style="color: var(--red);">8h no WhatsApp (e não dá conta)</td>
+              <td style="font-weight: 700; color: var(--green);">2-3h monitorando painel + atendendo resistentes</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Clientes "esquecidos"</td>
+              <td style="color: var(--red);">30-40 por dia</td>
+              <td style="font-weight: 700; color: var(--green);">Zero</td>
+            </tr>
+            <tr class="row-green">
+              <td style="font-weight: 900; font-size: 18px;">Capacidade por pessoa</td>
+              <td style="font-weight: 900; font-size: 20px; color: var(--red);">120 (mal cobrados)</td>
+              <td style="font-weight: 900; font-size: 20px; color: var(--green);">500+ (todos cobrados perfeitamente)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="co co-green" style="margin-top: 20px;">
+          <strong>Na prática:</strong>
+          Se hoje você tem 4 cobradores cuidando de 480 clientes (120 cada), com o sistema você precisa de 1 operador pra mesma base — e ainda sobra capacidade. Os outros 3 podem ser realocados, reduzidos ou focados em vendas de novos empréstimos.
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 3: COMPROVANTE FALSO ========== -->
+    <section class="section">
+      <div class="sn sn-red">3</div>
+      <h2>O problema do comprovante falso</h2>
+      <p class="sub">Hoje qualquer pessoa pode fabricar um comprovante PIX em 10 segundos.</p>
+
+      <div class="card">
+        <h3>Como funciona a fraude</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Etapa</th>
+              <th>O que acontece</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-red">
+              <td style="font-weight: 800;">1</td>
+              <td>Cliente abre app gerador de comprovante (existe dezenas na internet)</td>
+            </tr>
+            <tr class="row-red">
+              <td style="font-weight: 800;">2</td>
+              <td>Preenche: valor, data, nome do destinatário, banco. Gera um print idêntico ao real.</td>
+            </tr>
+            <tr class="row-red">
+              <td style="font-weight: 800;">3</td>
+              <td>Manda o comprovante fake no WhatsApp pro cobrador.</td>
+            </tr>
+            <tr class="row-red">
+              <td style="font-weight: 800;">4</td>
+              <td>Cobrador vê o print, acredita, dá baixa manual. O dinheiro nunca entrou.</td>
+            </tr>
+            <tr class="row-red">
+              <td style="font-weight: 800;">5</td>
+              <td>Você só descobre 24-48h depois, quando confere o extrato — se conferir.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="co co-red">
+          <strong>O prejuízo silencioso:</strong>
+          Se 5 clientes por mês passam comprovante falso de R$ 150, são R$ 750/mês. R$ 9.000/ano. E você nunca sabe o número real porque nem sempre confere.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>A solução: confirmação direto do banco, em tempo real</h3>
+        <p style="font-size: 18px; color: var(--text); margin-bottom: 20px;">
+          Em vez de confiar em comprovante (imagem), o sistema confirma o pagamento <strong>direto com o banco</strong> — automaticamente, em 2 segundos, sem intervenção humana.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Hoje (comprovante)</th>
+              <th>Com automação (webhook bancário)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Cliente manda foto do comprovante</td>
+              <td style="color: var(--green); font-weight: 700;">Cliente paga pelo QR Code gerado pelo sistema</td>
+            </tr>
+            <tr>
+              <td>Funcionário olha e acredita</td>
+              <td style="color: var(--green); font-weight: 700;">Banco confirma automaticamente: "pagou" ou "não pagou"</td>
+            </tr>
+            <tr>
+              <td>Baixa manual</td>
+              <td style="color: var(--green); font-weight: 700;">Baixa automática em 2 segundos</td>
+            </tr>
+            <tr>
+              <td>Pode ser falso</td>
+              <td style="color: var(--green); font-weight: 700;">Impossível falsificar — vem direto do sistema bancário</td>
+            </tr>
+            <tr>
+              <td>Descobre fraude em 24-48h</td>
+              <td style="color: var(--green); font-weight: 700;">Não existe fraude. O dinheiro entrou ou não entrou.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== 4: COMO FUNCIONA ========== -->
+    <section class="section">
+      <div class="sn sn-blue">4</div>
+      <h2>Como funciona o sistema</h2>
+      <p class="sub">3 camadas que trabalham juntas: automação + validação + humano quando necessário.</p>
+
+      <div class="card">
+        <h3>Camada 1 — Cobrança automática por WhatsApp</h3>
+        <p style="margin-bottom: 20px;">O sistema envia mensagens humanizadas nos horários certos, automaticamente, para todos os clientes da carteira. Com áudio pré-gravado pra manter o toque pessoal.</p>
+
+        <div class="timeline">
+          <div class="tl-item tl-green">
+            <div class="tl-time" style="color: var(--green);">7h30 — Lembrete amigável</div>
+            <h4>1a mensagem + QR Code PIX + áudio "bom dia"</h4>
+            <div class="msg-preview">
+              Bom dia, João! Tudo bem? Sua parcela de hoje: <strong>R$ 150,00</strong>.<br><br>
+              Paga por esse PIX que eu já dou baixa na hora pra você:<br>
+              [QR Code PIX]<br>
+              [Código copia e cola]<br><br>
+              Qualquer coisa, me chama aqui!
+              <div class="time">07:30 ✓✓</div>
+            </div>
+            <p>~60% dos que vão pagar, pagam aqui. Sem precisar de 2a cobrança.</p>
+          </div>
+
+          <div class="tl-item tl-yellow">
+            <div class="tl-time" style="color: var(--yellow);">12h — Só pra quem não pagou</div>
+            <h4>2a mensagem + áudio "tá tudo bem?"</h4>
+            <div class="msg-preview">
+              João, vi que a parcela de hoje ainda tá aberta. Sei que o dia corre! Se puder resolver agora no almoço, fica tudo em dia.<br><br>
+              PIX: [código]<br><br>
+              Qualquer dificuldade, me fala.
+              <div class="time">12:00 ✓✓</div>
+            </div>
+            <p>Quem esqueceu de manhã, paga agora. Mais ~15% resolvem aqui.</p>
+          </div>
+
+          <div class="tl-item tl-yellow">
+            <div class="tl-time" style="color: var(--yellow);">17h30 — Urgência leve</div>
+            <h4>3a mensagem + áudio "preciso da sua ajuda"</h4>
+            <div class="msg-preview">
+              João, a parcela de hoje ainda não caiu aqui. Preciso dar baixa até o fim do dia pra não gerar pendência no seu acordo.<br><br>
+              Consegue resolver agora? PIX: [código]
+              <div class="time">17:30 ✓✓</div>
+            </div>
+            <p>Tom mais firme. Mais ~10% pagam nesse horário.</p>
+          </div>
+
+          <div class="tl-item tl-red">
+            <div class="tl-time" style="color: var(--red);">20h — Última tentativa automática</div>
+            <h4>4a mensagem — fechamento do dia</h4>
+            <div class="msg-preview">
+              João, seu dia de pagamento tá fechando e a parcela de R$ 150 ainda tá pendente. Amanhã entra como atraso.<br><br>
+              Se já pagou e eu não vi, manda o comprovante aqui. Se não conseguiu, me responde que a gente vê uma solução.
+              <div class="time">20:00 ✓✓</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Camada 2 — Validação de pagamento em tempo real</h3>
+        <p style="margin-bottom: 20px;">Cada cliente recebe um <strong>QR Code PIX único</strong> por dia, gerado automaticamente. Quando ele paga, o banco confirma em 2 segundos.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 60px;">Passo</th>
+              <th>O que acontece</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 900; color: var(--blue);">1</td>
+              <td>Sistema gera PIX com QR Code único para o João: R$ 150,00 | ID: CLI-047-28/03</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--blue);">2</td>
+              <td>QR Code é enviado junto com a mensagem de cobrança no WhatsApp</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--blue);">3</td>
+              <td>João abre o app do banco, escaneia o QR e paga</td>
+            </tr>
+            <tr class="row-green">
+              <td style="font-weight: 900; color: var(--green);">4</td>
+              <td><strong>Em 2 segundos</strong>, o banco confirma pro sistema: "João pagou R$ 150,00 às 10:15."</td>
+            </tr>
+            <tr class="row-green">
+              <td style="font-weight: 900; color: var(--green);">5</td>
+              <td>Sistema dá baixa automática + manda WhatsApp: <em>"Recebi, João! Tá em dia. Até amanhã!"</em></td>
+            </tr>
+            <tr class="row-green">
+              <td style="font-weight: 900; color: var(--green);">6</td>
+              <td>João <strong>sai da fila de cobrança</strong>. Não recebe mais nenhuma mensagem no dia.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="co co-green" style="margin-top: 20px;">
+          <strong>Zero comprovante. Zero fraude. Zero conferência manual.</strong>
+          O sistema só aceita confirmação que vem do banco. Não importa o que o cliente mande por WhatsApp — a verdade está no extrato, não no print.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Camada 3 — Humano para os resistentes</h3>
+        <p style="margin-bottom: 16px;">Depois das 4 tentativas automáticas, os clientes que não pagaram (em média 15-20) vão pra fila do <strong>atendimento humano</strong> no dia seguinte.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Cenário</th>
+              <th>Quem resolve</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Cliente pagou normalmente</td>
+              <td style="color: var(--green); font-weight: 700;">Automação (80% dos casos)</td>
+            </tr>
+            <tr>
+              <td>Cliente esqueceu, lembrete resolveu</td>
+              <td style="color: var(--green); font-weight: 700;">Automação (lembrete das 12h ou 17h30)</td>
+            </tr>
+            <tr>
+              <td>Cliente ignorou todas as mensagens</td>
+              <td style="color: var(--blue); font-weight: 700;">Humano liga e negocia</td>
+            </tr>
+            <tr>
+              <td>Cliente alega dificuldade financeira</td>
+              <td style="color: var(--blue); font-weight: 700;">Humano negocia reparcelamento</td>
+            </tr>
+            <tr>
+              <td>Cliente com 3+ dias de atraso</td>
+              <td style="color: var(--red); font-weight: 700;">Humano com tom firme + protocolo de cobrança</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="co co-blue">
+          <strong>O humano faz o que o robô não pode:</strong>
+          Negociar, ouvir, pressionar com inteligência emocional. Mas em vez de fazer isso com 120 clientes, faz com 15-20. O resto já foi resolvido pela máquina.
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 4: ÁUDIO HUMANIZADO ========== -->
+    <section class="section">
+      <div class="sn sn-purple">5</div>
+      <h2>O toque humano: áudio pré-gravado</h2>
+      <p class="sub">O cliente sente que é pessoal. Mas na real, é o mesmo áudio enviado pra 30 pessoas.</p>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Áudio</th>
+              <th>Quando envia</th>
+              <th>Tom de voz</th>
+              <th>Exemplo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 800;">Bom dia</td>
+              <td>7h30 — 1a cobrança</td>
+              <td>Amigável, leve</td>
+              <td><em>"Bom dia! Passando pra lembrar da parcelinha de hoje. Se puder resolver logo cedinho, fica tudo tranquilo. Qualquer coisa me chama!"</em></td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">Preocupação</td>
+              <td>12h — 2a tentativa</td>
+              <td>Cuidadoso</td>
+              <td><em>"Oi! Vi que ainda não caiu o pagamento de hoje. Tá tudo bem? Se tiver alguma dificuldade, me fala aqui que a gente resolve."</em></td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">Urgência</td>
+              <td>17h30 — 3a tentativa</td>
+              <td>Firme, respeitoso</td>
+              <td><em>"Oi, preciso da sua ajuda. A parcela de hoje ainda tá aberta e preciso fechar o dia. Consegue resolver agora pra mim?"</em></td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">Reforço positivo</td>
+              <td>Quando paga</td>
+              <td>Alegre</td>
+              <td><em>"Show, recebi aqui! Tá tudo em dia. Muito obrigado pela pontualidade! Até amanhã."</em></td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">Atraso</td>
+              <td>2+ dias sem pagar</td>
+              <td>Sério, sem ameaça</td>
+              <td><em>"Oi, suas parcelas estão acumulando e eu preciso resolver isso com você. Me liga ou me responde aqui pra gente achar uma saída."</em></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="co co-yellow">
+          <strong>Por que funciona:</strong>
+          Áudio no WhatsApp tem taxa de escuta de 70-80%. Texto é ignorado. O cliente ouve a voz, sente que é pessoal, e se sente pressionado a responder. Mas o cobrador gravou uma vez só.
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 5: DASHBOARD ========== -->
+    <section class="section">
+      <div class="sn sn-green">6</div>
+      <h2>Painel de controle em tempo real</h2>
+      <p class="sub">Você acompanha tudo de um lugar só. Sabe quem pagou, quem não pagou e quem precisa de atenção.</p>
+
+      <div class="card">
+        <h3>O que o painel mostra</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Informação</th>
+              <th>Atualização</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-green">
+              <td style="font-weight: 700;">Clientes que pagaram hoje</td>
+              <td style="color: var(--green); font-weight: 700;">Tempo real (2 segundos)</td>
+              <td>Nenhuma — já foi resolvido</td>
+            </tr>
+            <tr class="row-yellow">
+              <td style="font-weight: 700;">Clientes pendentes (ainda não pagaram)</td>
+              <td style="color: var(--yellow); font-weight: 700;">Tempo real</td>
+              <td>Automação continua cobrando</td>
+            </tr>
+            <tr class="row-red">
+              <td style="font-weight: 700;">Clientes em atraso (2+ dias)</td>
+              <td style="color: var(--red); font-weight: 700;">Tempo real</td>
+              <td>Fila do humano — contato pessoal</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Total recebido no dia</td>
+              <td>Tempo real</td>
+              <td>Acompanhamento financeiro</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Taxa de pagamento do dia</td>
+              <td>Tempo real</td>
+              <td>Métrica de eficiência</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Histórico por cliente</td>
+              <td>Acumulado</td>
+              <td>Identificar padrão de atraso</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== 6: ANTES VS DEPOIS ========== -->
+    <section class="section">
+      <div class="sn sn-green">7</div>
+      <h2>Antes e depois: o que muda na sua operação</h2>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Métrica</th>
+              <th style="color: var(--red);">Hoje (manual)</th>
+              <th style="color: var(--green);">Com automação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 700;">Capacidade por cobrador</td>
+              <td style="font-weight: 800; font-size: 18px; color: var(--red);">120 clientes (mal cobrados)</td>
+              <td style="font-weight: 800; font-size: 18px; color: var(--green);">500+ clientes (todos cobrados)</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Clientes que recebem todas as cobranças</td>
+              <td style="color: var(--red); font-weight: 700;">~50-60% (não dá tempo)</td>
+              <td style="font-weight: 700; color: var(--green);">100% — automático</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Mensagens enviadas/dia</td>
+              <td>200-300 (incompleto, inconsistente)</td>
+              <td style="font-weight: 700; color: var(--green);">2.000+ (automático, sem falha)</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">1a cobrança do dia</td>
+              <td>Depende de quem acorda primeiro</td>
+              <td style="font-weight: 700; color: var(--green);">7h30, todo dia, automática</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Confirmação de pagamento</td>
+              <td>Comprovante manual (falsificável)</td>
+              <td style="font-weight: 700; color: var(--green);">Direto do banco, em 2 segundos</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Fraude por comprovante falso</td>
+              <td style="color: var(--red); font-weight: 700;">Possível e frequente</td>
+              <td style="font-weight: 700; color: var(--green);">Impossível</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Cobrar quem já pagou</td>
+              <td style="color: var(--red);">Acontece direto</td>
+              <td style="font-weight: 700; color: var(--green);">Nunca mais</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Detecção de inadimplência</td>
+              <td style="color: var(--red);">24h depois (dia seguinte)</td>
+              <td style="font-weight: 700; color: var(--green);">Tempo real</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Toque humano</td>
+              <td>100% manual</td>
+              <td style="font-weight: 700; color: var(--green);">Áudio pré-gravado + humano só quando precisa</td>
+            </tr>
+            <tr class="row-green">
+              <td style="font-weight: 900; font-size: 18px;">Custo mensal da operação</td>
+              <td style="font-weight: 900; font-size: 20px; color: var(--red);">R$ 8-15 mil</td>
+              <td style="font-weight: 900; font-size: 20px; color: var(--green);">R$ 2-3 mil</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="co co-green">
+        <strong>Economia estimada: R$ 6-12 mil por mês.</strong>
+        Hoje, 4 cobradores cuidam de 480 clientes (120 cada) e não dão conta. Com o sistema, 1 operador cuida de 500+ perfeitamente. Economia de 3 salários + encargos. Zero fraude. Zero cliente esquecido.
+      </div>
+    </section>
+
+    <!-- ========== 7: INVESTIMENTO ========== -->
+    <section class="section">
+      <div class="sn sn-blue">8</div>
+      <h2>Investimento e prazo</h2>
+      <p class="sub">O que entra na implantação e quanto custa manter.</p>
+
+      <div class="card">
+        <h3>O que está incluído</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Entregável</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 700;">Integração com Asaas</td>
+              <td>Geração automática de cobrança PIX diária por cliente + webhook de confirmação em tempo real</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Automação WhatsApp</td>
+              <td>Disparo de 4 mensagens por dia por cliente, com texto humanizado + áudio pré-gravado. Cliente sai da fila ao pagar.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Painel de controle</td>
+              <td>Dashboard em tempo real: quem pagou, quem não pagou, quem precisa de contato humano, total do dia</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Templates de mensagem</td>
+              <td>Textos prontos para os 4 horários + roteiro dos áudios pra gravar</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Cadastro de clientes</td>
+              <td>Migração de toda a base de clientes pro sistema com nome, WhatsApp, valor, vencimento</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Treinamento</td>
+              <td>Treinamento do operador que vai cuidar da fila humana e do painel</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Custos recorrentes (infra)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th style="text-align: right;">Custo/mês</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Asaas (cobranças PIX + webhook)</td>
+              <td style="text-align: right;">R$ 0,49 por cobrança recebida</td>
+            </tr>
+            <tr>
+              <td>Servidor (VPS)</td>
+              <td style="text-align: right;">R$ 50-100</td>
+            </tr>
+            <tr>
+              <td>WhatsApp Business API</td>
+              <td style="text-align: right;">R$ 0-100</td>
+            </tr>
+            <tr class="row-green">
+              <td style="font-weight: 900; font-size: 18px;">Total estimado</td>
+              <td style="text-align: right; font-weight: 900; font-size: 20px; color: var(--green);">R$ 150-300/mês</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="co co-blue" style="margin-top: 20px;">
+          <strong>Comparativo:</strong>
+          Custo de 1 funcionário CLT (salário + encargos): ~R$ 3.000/mês. O sistema inteiro custa 10% de 1 funcionário e faz o trabalho de 3.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Prazo de implantação</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Fase</th>
+              <th>Prazo</th>
+              <th>O que acontece</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 800;">Semana 1</td>
+              <td>5 dias</td>
+              <td>Configuração do Asaas (API + webhook) + automação WhatsApp + cadastro dos clientes</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">Semana 2</td>
+              <td>5 dias</td>
+              <td>Painel de controle + templates de mensagem + gravação dos áudios + testes</td>
+            </tr>
+            <tr class="row-green">
+              <td style="font-weight: 800;">Semana 3</td>
+              <td>5 dias</td>
+              <td>Piloto com 20 clientes + ajustes + treinamento do operador</td>
+            </tr>
+            <tr class="row-green">
+              <td style="font-weight: 800;">Semana 4</td>
+              <td>—</td>
+              <td>Operação completa com toda a base. Sistema rodando.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== 8: FERRAMENTAS ========== -->
+    <section class="section">
+      <div class="sn sn-purple">9</div>
+      <h2>Ferramentas que vamos usar</h2>
+      <p class="sub">Tudo que compõe o sistema, o que cada ferramenta faz e quanto custa.</p>
+
+      <div class="card">
+        <h3>Mapa completo da solução</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Ferramenta</th>
+              <th>O que faz</th>
+              <th>Por que essa</th>
+              <th style="text-align: right;">Custo/mês</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 800;">Asaas</td>
+              <td>Gera cobrança PIX única por cliente, confirma pagamento em tempo real via webhook, controle de inadimplência</td>
+              <td>Já utilizado na operação atual. API robusta, webhook confiável, suporte a PIX Cob.</td>
+              <td style="text-align: right;">R$ 0,49/cobrança<br><span style="font-size: 13px; color: var(--text-faint);">(~R$ 50 pra 100 cobranças/dia)</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">Evolution API</td>
+              <td>Conecta o WhatsApp ao sistema de automação. Envia mensagens, áudios, imagens e QR Codes automaticamente.</td>
+              <td>Open source, gratuito, estável. Alternativa profissional ao Z-API sem custo mensal.</td>
+              <td style="text-align: right; color: var(--green); font-weight: 700;">Gratuito</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">N8N</td>
+              <td>Motor de automação. Orquestra tudo: cria cobranças no Asaas, dispara WhatsApp nos horários certos, processa webhooks, atualiza dashboard.</td>
+              <td>Open source, visual (drag-and-drop), poderoso. Conecta com qualquer API sem precisar programar depois.</td>
+              <td style="text-align: right; color: var(--green); font-weight: 700;">Gratuito</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">PostgreSQL + Supabase</td>
+              <td>Banco de dados. Armazena clientes, parcelas, status de pagamento, histórico.</td>
+              <td>Gratuito até 500MB (suficiente pra essa operação). Interface visual pra consultar dados.</td>
+              <td style="text-align: right; color: var(--green); font-weight: 700;">Gratuito</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">VPS (Servidor)</td>
+              <td>Servidor na nuvem que roda Evolution API + N8N 24h por dia.</td>
+              <td>Contabo, Hetzner ou DigitalOcean. Servidor dedicado, sem depender de computador local.</td>
+              <td style="text-align: right;">R$ 50-100</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">Painel Web</td>
+              <td>Dashboard visual pra acompanhar pagamentos, pendências e métricas em tempo real.</td>
+              <td>Desenvolvido sob medida. Simples, direto, otimizado pra celular.</td>
+              <td style="text-align: right; color: var(--green); font-weight: 700;">Incluso na implantação</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="co co-blue" style="margin-top: 20px;">
+          <strong>Custo recorrente total da infraestrutura: R$ 100-250/mês.</strong>
+          Comparado com o custo de 2-4 funcionários CLT dedicados à cobrança (R$ 6-12 mil/mês), o sistema se paga no primeiro dia.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Como as ferramentas se conectam</h3>
+        <div style="background: #f3f4f6; border-radius: 12px; padding: 32px; margin-top: 16px; text-align: center;">
+          <table style="margin: 0 auto; font-size: 15px; max-width: 700px;">
+            <tbody>
+              <tr>
+                <td style="border: none; padding: 8px; text-align: center;">
+                  <div style="background: var(--blue-bg); border: 2px solid #93c5fd; border-radius: 12px; padding: 16px 24px; display: inline-block; font-weight: 800; color: var(--blue);">
+                    ASAAS<br><span style="font-weight: 400; font-size: 13px;">Gera PIX + confirma pagamento</span>
+                  </div>
+                </td>
+              </tr>
+              <tr><td style="border: none; padding: 4px; text-align: center; color: var(--text-faint); font-size: 24px;">&#8597;</td></tr>
+              <tr>
+                <td style="border: none; padding: 8px; text-align: center;">
+                  <div style="background: var(--purple-light); border: 2px solid #c4b5fd; border-radius: 12px; padding: 16px 24px; display: inline-block; font-weight: 800; color: var(--purple);">
+                    N8N<br><span style="font-weight: 400; font-size: 13px;">Orquestra tudo: horários, regras, decisões</span>
+                  </div>
+                </td>
+              </tr>
+              <tr><td style="border: none; padding: 4px; text-align: center; color: var(--text-faint); font-size: 24px;">&#8597;</td></tr>
+              <tr>
+                <td style="border: none; padding: 8px; text-align: center;">
+                  <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                    <div style="background: var(--green-bg); border: 2px solid #86efac; border-radius: 12px; padding: 16px 20px; font-weight: 800; color: var(--green); flex: 1; min-width: 180px;">
+                      EVOLUTION API<br><span style="font-weight: 400; font-size: 13px;">Envia WhatsApp<br>(texto + áudio + QR)</span>
+                    </div>
+                    <div style="background: var(--yellow-bg); border: 2px solid #fde68a; border-radius: 12px; padding: 16px 20px; font-weight: 800; color: var(--yellow); flex: 1; min-width: 180px;">
+                      SUPABASE<br><span style="font-weight: 400; font-size: 13px;">Banco de dados<br>(clientes + pagamentos)</span>
+                    </div>
+                    <div style="background: var(--red-bg); border: 2px solid #fecaca; border-radius: 12px; padding: 16px 20px; font-weight: 800; color: var(--red); flex: 1; min-width: 180px;">
+                      PAINEL WEB<br><span style="font-weight: 400; font-size: 13px;">Dashboard<br>(acompanhamento em tempo real)</span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 9: PASSO A PASSO ========== -->
+    <section class="section">
+      <div class="sn sn-green">10</div>
+      <h2>Passo a passo da implantação</h2>
+      <p class="sub">De onde estamos até o sistema rodando. Tudo feito por nós — você só valida.</p>
+
+      <div class="co co-green" style="margin-bottom: 28px;">
+        <strong>Importante: você NÃO precisa contratar programador.</strong>
+        Toda a configuração, integração, automação e painel são feitos pela nossa equipe. Nós montamos, testamos, ajustamos e entregamos funcionando. Você só usa.
+      </div>
+
+      <div class="card">
+        <h3>Fase 1 — Preparação (Dias 1-3)</h3>
+        <p style="font-size: 15px; color: var(--text-faint); margin-bottom: 16px;">O que precisamos de você + o que configuramos.</p>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 60px;">Passo</th>
+              <th>O que é feito</th>
+              <th>Quem faz</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 900; color: var(--green);">1</td>
+              <td><strong>Configurar API do Asaas</strong> — Ativar acesso à API na sua conta Asaas (Minha Conta > Integrações > Gerar token). Primeiro em ambiente de teste (sandbox), depois em produção.</td>
+              <td>Nós te guiamos, você clica</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--green);">2</td>
+              <td><strong>Configurar webhook no Asaas</strong> — Cadastrar URL do nosso servidor pra receber notificações instantâneas de pagamento. Eventos: PAYMENT_RECEIVED, PAYMENT_OVERDUE, PAYMENT_CONFIRMED.</td>
+              <td>Nós fazemos</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--green);">3</td>
+              <td><strong>Subir servidor (VPS)</strong> — Contratar e configurar o servidor na nuvem que vai rodar 24h. Instalar Evolution API + N8N + banco de dados.</td>
+              <td>Nós fazemos</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--green);">4</td>
+              <td><strong>Conectar WhatsApp</strong> — Escanear QR Code pra conectar o número de cobrança na Evolution API. Mesmo número que já usa hoje.</td>
+              <td>Você escaneia, nós configuramos</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--green);">5</td>
+              <td><strong>Cadastrar toda a base de clientes</strong> — Migrar a base de clientes (nome, WhatsApp, valor, vencimento) pra dentro do sistema e do Asaas.</td>
+              <td>Nós fazemos (você envia a planilha)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Fase 2 — Construção da Automação (Dias 4-8)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 60px;">Passo</th>
+              <th>O que é feito</th>
+              <th>Quem faz</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 900; color: var(--blue);">6</td>
+              <td><strong>Criar workflow de cobrança diária</strong> — Automação que roda todo dia às 6h: cria cobrança PIX no Asaas pra cada cliente, gera QR Code, armazena no banco de dados.</td>
+              <td>Nós fazemos</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--blue);">7</td>
+              <td><strong>Criar workflow de disparo WhatsApp</strong> — 4 disparos programados (7h30, 12h, 17h30, 20h). Cada horário envia mensagem + áudio + QR Code. Só pra quem NÃO pagou ainda.</td>
+              <td>Nós fazemos</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--blue);">8</td>
+              <td><strong>Criar workflow de confirmação</strong> — Quando Asaas envia webhook "PAGOU", sistema dá baixa automática + manda WhatsApp de confirmação + tira o cliente da fila.</td>
+              <td>Nós fazemos</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--blue);">9</td>
+              <td><strong>Criar templates de mensagem</strong> — Textos humanizados pra cada horário, personalizados com nome e valor. Você aprova antes de ativar.</td>
+              <td>Nós criamos, você aprova</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--blue);">10</td>
+              <td><strong>Gravar os áudios</strong> — Roteiro pronto. Quem cobra hoje grava 5 áudios curtos (30-45 seg cada) no celular. Nós inserimos no sistema.</td>
+              <td>Você grava, nós inserimos</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Fase 3 — Painel e Testes (Dias 9-12)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 60px;">Passo</th>
+              <th>O que é feito</th>
+              <th>Quem faz</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 900; color: var(--purple);">11</td>
+              <td><strong>Construir painel de controle</strong> — Dashboard web com: quem pagou, quem tá pendente, quem precisa de humano, total do dia, histórico por cliente. Funciona no celular.</td>
+              <td>Nós fazemos</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--purple);">12</td>
+              <td><strong>Testes em sandbox</strong> — Rodar toda a operação em ambiente de teste do Asaas. Simular pagamentos, verificar webhooks, validar mensagens. Zero risco.</td>
+              <td>Nós fazemos</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--purple);">13</td>
+              <td><strong>Ajustes finos</strong> — Corrigir horários, ajustar textos, calibrar tom dos áudios. Tudo baseado no feedback de você e do seu cobrador principal.</td>
+              <td>Nós + você</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Fase 4 — Piloto e Go-Live (Dias 13-21)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 60px;">Passo</th>
+              <th>O que é feito</th>
+              <th>Quem faz</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-yellow">
+              <td style="font-weight: 900; color: var(--yellow);">14</td>
+              <td><strong>Piloto com 20 clientes</strong> — Ativar a automação pra 20 clientes reais durante 5 dias. Acompanhar: taxa de pagamento, reação dos clientes, bugs, ajustes.</td>
+              <td>Sistema roda, nós monitoramos</td>
+            </tr>
+            <tr class="row-yellow">
+              <td style="font-weight: 900; color: var(--yellow);">15</td>
+              <td><strong>Validação de resultados</strong> — Comparar: taxa de pagamento do piloto vs manual. Se igual ou melhor → libera pra todos. Se pior → ajusta antes de escalar.</td>
+              <td>Nós + você</td>
+            </tr>
+            <tr class="row-green">
+              <td style="font-weight: 900; color: var(--green);">16</td>
+              <td><strong>Go-Live: 100 clientes</strong> — Ativar pra toda a base. Sistema rodando em produção. 1 funcionário monitora o painel + atende a fila humana.</td>
+              <td>Sistema roda sozinho</td>
+            </tr>
+            <tr class="row-green">
+              <td style="font-weight: 900; color: var(--green);">17</td>
+              <td><strong>Treinamento do operador</strong> — Treinar o 1 funcionário que vai: olhar o painel, atender os resistentes, gravar novos áudios se necessário, cadastrar novos clientes.</td>
+              <td>Nós treinamos</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Fase 5 — Acompanhamento (Dia 22+)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 60px;">Passo</th>
+              <th>O que é feito</th>
+              <th>Quem faz</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 900; color: var(--green);">18</td>
+              <td><strong>Monitoramento por 30 dias</strong> — Acompanhamos o sistema funcionando. Se algo quebrar, corrigimos. Se precisar ajustar mensagem ou horário, ajustamos.</td>
+              <td>Nós fazemos</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--green);">19</td>
+              <td><strong>Relatório de resultado</strong> — Após 30 dias: comparativo completo (taxa de pagamento, economia com equipe, clientes que precisaram de humano, fraudes evitadas).</td>
+              <td>Nós entregamos</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 900; color: var(--green);">20</td>
+              <td><strong>Manutenção contínua</strong> — Se precisar: cadastrar clientes novos, ajustar valores, trocar áudios, incluir novos horários. Suporte técnico incluso.</td>
+              <td>Nós fazemos (suporte mensal)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="co co-green">
+        <strong>Resumo: o que você precisa fazer (e o que NÃO precisa)</strong>
+      </div>
+
+      <div class="vs">
+        <div class="vs-card" style="background: var(--green-bg);">
+          <h4 style="color: var(--green);">&#10003; O que você faz</h4>
+          <ul>
+            <li><span style="color: var(--green);">&#10003;</span> Nos enviar a planilha de clientes</li>
+            <li><span style="color: var(--green);">&#10003;</span> Escanear QR Code do WhatsApp</li>
+            <li><span style="color: var(--green);">&#10003;</span> Gerar token da API do Asaas (te guiamos)</li>
+            <li><span style="color: var(--green);">&#10003;</span> Gravar 5 áudios curtos (roteiro pronto)</li>
+            <li><span style="color: var(--green);">&#10003;</span> Aprovar os textos das mensagens</li>
+            <li><span style="color: var(--green);">&#10003;</span> Acompanhar o piloto conosco</li>
+          </ul>
+        </div>
+        <div class="vs-card" style="background: var(--blue-bg);">
+          <h4 style="color: var(--blue);">Nós fazemos (TUDO isso)</h4>
+          <ul>
+            <li><span style="color: var(--blue);">&#10003;</span> Configurar servidor</li>
+            <li><span style="color: var(--blue);">&#10003;</span> Integrar Asaas (API + webhook)</li>
+            <li><span style="color: var(--blue);">&#10003;</span> Configurar WhatsApp automático</li>
+            <li><span style="color: var(--blue);">&#10003;</span> Criar todas as automações</li>
+            <li><span style="color: var(--blue);">&#10003;</span> Construir o painel de controle</li>
+            <li><span style="color: var(--blue);">&#10003;</span> Cadastrar clientes no sistema</li>
+            <li><span style="color: var(--blue);">&#10003;</span> Testar em sandbox</li>
+            <li><span style="color: var(--blue);">&#10003;</span> Rodar piloto + ajustes</li>
+            <li><span style="color: var(--blue);">&#10003;</span> Treinar seu operador</li>
+            <li><span style="color: var(--blue);">&#10003;</span> Monitorar 30 dias</li>
+            <li><span style="color: var(--blue);">&#10003;</span> Suporte contínuo</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="co co-yellow" style="margin-top: 24px;">
+        <strong>Preciso contratar programador?</strong>
+        Não. Toda a parte técnica — integração, automação, banco de dados, painel — é feita pela Grupo Propagar. Nós somos a equipe técnica. Depois de entregue, o sistema roda sozinho. Se precisar de ajuste, nós fazemos.
+      </div>
+    </section>
+
+    <!-- ========== CTA ========== -->
+    <div class="cta">
+      <h2>Pronto pra <span>parar de rasgar dinheiro</span> com cobrança manual?</h2>
+      <p>Em 3 semanas sua operação de cobrança roda com 1 funcionário, zero comprovante falso e confirmação bancária em tempo real. Nós fazemos tudo.</p>
+      <a href="#" class="cta-btn">Vamos começar</a>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ========== SOBRE ========== -->
+    <section class="section" style="text-align: center;">
+      <p style="font-size: 14px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; margin-bottom: 8px;">Proposta elaborada por</p>
+      <h2 style="font-size: 24px; margin-bottom: 12px;">Grupo Propagar | Marketing e Tecnologia</h2>
+      <p style="font-size: 17px; color: var(--text-sec); max-width: 560px; margin: 0 auto; line-height: 1.8;">
+        Construímos máquinas de vendas e automações inteligentes para empresas que querem escalar sem aumentar equipe.
+      </p>
+      <a href="https://www.instagram.com/ogrupopropagar/" target="_blank" style="display: inline-block; margin-top: 20px; color: var(--blue); font-weight: 700; text-decoration: none;">@ogrupopropagar &rarr;</a>
+    </section>
+
+  </div>
+
+  <div class="footer">
+    <p>&copy; 2026 <a href="https://www.instagram.com/ogrupopropagar/">Grupo Propagar</a> — Documento confidencial. Uso exclusivo do destinatário.</p>
+  </div>
+
+</body>
+</html>

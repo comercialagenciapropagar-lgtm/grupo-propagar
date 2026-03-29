@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Cobrança Inteligente — Mockup</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    :root {
+      --bg: #0f1117;
+      --bg-card: #1a1d27;
+      --bg-card-hover: #1f2330;
+      --border: rgba(255,255,255,0.06);
+      --text: #e4e4e7;
+      --text-sec: #a1a1aa;
+      --text-faint: #52525b;
+      --green: #34d399;
+      --green-dim: rgba(52,211,153,0.12);
+      --red: #f87171;
+      --red-dim: rgba(248,113,113,0.12);
+      --yellow: #fbbf24;
+      --yellow-dim: rgba(251,191,36,0.12);
+      --blue: #60a5fa;
+      --blue-dim: rgba(96,165,250,0.12);
+      --purple: #a78bfa;
+      --purple-dim: rgba(167,139,250,0.12);
+      --gold: #f59e0b;
+      --gold-dim: rgba(245,158,11,0.12);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ——— LAYOUT ——— */
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ——— SIDEBAR ——— */
+    .sidebar {
+      width: 240px;
+      background: #12141c;
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-logo {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      padding: 0 8px;
+    }
+
+    .sidebar-logo span { color: var(--blue); }
+
+    .sidebar-sub {
+      font-size: 11px;
+      color: var(--text-faint);
+      padding: 0 8px;
+      margin-bottom: 32px;
+    }
+
+    .nav-section {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-faint);
+      padding: 0 8px;
+      margin-bottom: 8px;
+      margin-top: 20px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-sec);
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-bottom: 2px;
+    }
+
+    .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+
+    .nav-item.active {
+      background: var(--blue-dim);
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .nav-item .icon { font-size: 18px; width: 24px; text-align: center; }
+
+    .nav-badge {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 8px;
+      border-top: 1px solid var(--border);
+    }
+
+    .sidebar-footer .user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-footer .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--blue-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .sidebar-footer .name { font-size: 13px; font-weight: 600; }
+    .sidebar-footer .role { font-size: 11px; color: var(--text-faint); }
+
+    /* ——— MAIN ——— */
+    .main {
+      flex: 1;
+      padding: 28px 32px;
+      overflow-y: auto;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .page-header h1 {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .page-header .date {
+      font-size: 14px;
+      color: var(--text-sec);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+
+    /* ——— STATS ——— */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .stat-card .label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    .stat-card .value {
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .stat-card .sub {
+      font-size: 12px;
+      color: var(--text-faint);
+      margin-top: 4px;
+    }
+
+    /* ——— SECTIONS ——— */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .section-header h2 {
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-header .badge {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sec);
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .tab.active {
+      background: var(--bg-card);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    /* ——— TABLE ——— */
+    .table-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-faint);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .client-name {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .client-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ——— STATUS BADGES ——— */
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .status-pago { background: var(--green-dim); color: var(--green); }
+    .status-pendente { background: var(--yellow-dim); color: var(--yellow); }
+    .status-atrasado { background: var(--red-dim); color: var(--red); }
+    .status-humano { background: var(--purple-dim); color: var(--purple); }
+    .status-oportunidade { background: var(--gold-dim); color: var(--gold); }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .dot-green { background: var(--green); }
+    .dot-yellow { background: var(--yellow); }
+    .dot-red { background: var(--red); }
+
+    /* ——— PROGRESS BAR ——— */
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.3s;
+    }
+
+    .progress-pct {
+      font-size: 13px;
+      font-weight: 700;
+      width: 40px;
+      text-align: right;
+    }
+
+    /* ——— TIMELINE ——— */
+    .msg-timeline {
+      display: flex;
+      gap: 4px;
+    }
+
+    .msg-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    /* ——— UPSELL CARD ——— */
+    .upsell-section {
+      margin-bottom: 28px;
+    }
+
+    .upsell-card {
+      background: linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(245,158,11,0.03) 100%);
+      border: 1px solid rgba(245,158,11,0.2);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      transition: border-color 0.15s;
+    }
+
+    .upsell-card:hover { border-color: rgba(245,158,11,0.4); }
+
+    .upsell-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .upsell-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--gold-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .upsell-name { font-weight: 700; font-size: 15px; }
+    .upsell-detail { font-size: 13px; color: var(--text-sec); }
+
+    .upsell-progress {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 200px;
+    }
+
+    .upsell-btn {
+      background: var(--gold);
+      color: #000;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* ——— WHATSAPP PREVIEW ——— */
+    .wa-preview {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 28px;
+    }
+
+    .wa-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .wa-header .wa-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #25d366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .wa-header .wa-name { font-weight: 700; font-size: 14px; }
+    .wa-header .wa-status { font-size: 12px; color: var(--green); }
+
+    .wa-messages {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .wa-msg {
+      max-width: 380px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .wa-msg-out {
+      background: #005c4b;
+      color: #e4e4e7;
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
+
+    .wa-msg-in {
+      background: #1f2937;
+      color: #e4e4e7;
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
+
+    .wa-msg .wa-time {
+      text-align: right;
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 4px;
+    }
+
+    .wa-msg-audio {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+    }
+
+    .wa-audio-bar {
+      flex: 1;
+      height: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 999px;
+    }
+
+    .wa-audio-dur {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ——— RESPONSIVE ——— */
+    @media (max-width: 1100px) {
+      .stats { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .mockup-label {
+      text-align: center;
+      padding: 12px;
+      background: rgba(96,165,250,0.08);
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mockup-label">MOCKUP DO SISTEMA — VISUALIZAÇÃO DE COMO VAI FICAR</div>
+
+  <div class="app">
+
+    <!-- ========== SIDEBAR ========== -->
+    <div class="sidebar">
+      <div class="sidebar-logo">Cobrai<span>.app</span></div>
+      <div class="sidebar-sub">Sistema de Cobrança Inteligente</div>
+
+      <div class="nav-section">Principal</div>
+      <div class="nav-item active">
+        <span class="icon">&#128200;</span> Dashboard
+      </div>
+      <div class="nav-item">
+        <span class="icon">&#128101;</span> Clientes
+        <span class="nav-badge" style="background: var(--blue-dim); color: var(--blue);">104</span>
+      </div>
+      <div class="nav-item">
+        <span class="icon">&#128176;</span> Cobranças
+      </div>
+      <div class="nav-item">
+        <span class="icon">&#9989;</span> Pagamentos
+      </div>
+
+      <div class="nav-section">Automação</div>
+      <div class="nav-item">
+        <span class="icon">&#128172;</span> WhatsApp
+        <span class="nav-badge" style="background: var(--green-dim); color: var(--green);">Ativo</span>
+      </div>
+      <div class="nav-item">
+        <span class="icon">&#127925;</span> Áudios
+      </div>
+      <div class="nav-item">
+        <span class="icon">&#9202;</span> Horários
+      </div>
+
+      <div class="nav-section">Inteligência</div>
+      <div class="nav-item">
+        <span class="icon">&#11088;</span> Clientes Bons
+        <span class="nav-badge" style="background: var(--gold-dim); color: var(--gold);">7</span>
+      </div>
+      <div class="nav-item">
+        <span class="icon">&#128200;</span> Relatórios
+      </div>
+      <div class="nav-item">
+        <span class="icon">&#9881;</span> Configurações
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="user">
+          <div class="avatar">OP</div>
+          <div>
+            <div class="name">Operador</div>
+            <div class="role">Cobrança</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <div class="main">
+
+      <!-- Header -->
+      <div class="page-header">
+        <h1>Dashboard de Cobrança</h1>
+        <div class="date">&#128197; Sexta, 28 de Março de 2026 &nbsp;|&nbsp; &#9679; Ao vivo</div>
+      </div>
+
+      <!-- ========== STATS ========== -->
+      <div class="stats">
+        <div class="stat-card">
+          <div class="label">Total de clientes</div>
+          <div class="value">104</div>
+          <div class="sub">Cobranças ativas hoje</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Pagos hoje</div>
+          <div class="value" style="color: var(--green);">71</div>
+          <div class="sub">68% — confirmados pelo banco</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Pendentes</div>
+          <div class="value" style="color: var(--yellow);">18</div>
+          <div class="sub">Automação cobrando</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Fila humana</div>
+          <div class="value" style="color: var(--purple);">12</div>
+          <div class="sub">Precisam de contato pessoal</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Recebido hoje</div>
+          <div class="value" style="color: var(--green);">R$ 10.650</div>
+          <div class="sub">de R$ 15.600 esperado</div>
+        </div>
+      </div>
+
+      <!-- ========== OPORTUNIDADE: CLIENTES BONS ========== -->
+      <div class="upsell-section">
+        <div class="section-header">
+          <h2>
+            <span style="font-size: 20px;">&#11088;</span> Clientes Prontos pra Novo Empréstimo
+            <span class="badge" style="background: var(--gold-dim); color: var(--gold);">7 oportunidades</span>
+          </h2>
+        </div>
+
+        <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; font-size: 13px; color: var(--text-sec);">
+          <strong style="color: var(--gold);">&#128161; Regra automática:</strong> Clientes que pagaram <strong>70% ou mais</strong> das parcelas, sem atraso nos últimos 15 dias, são destacados aqui como oportunidade de novo empréstimo.
+        </div>
+
+        <!-- Cliente Bom 1 -->
+        <div class="upsell-card">
+          <div class="upsell-info">
+            <div class="upsell-avatar">&#11088;</div>
+            <div>
+              <div class="upsell-name">Maria Silva</div>
+              <div class="upsell-detail">Empréstimo: R$ 3.000 | Parcela: R$ 150/dia | 21 de 30 parcelas pagas</div>
+            </div>
+          </div>
+          <div class="upsell-progress">
+            <div class="progress-bar" style="width: 120px;">
+              <div class="progress-fill" style="width: 70%; background: var(--gold);"></div>
+            </div>
+            <span class="progress-pct" style="color: var(--gold);">70%</span>
+          </div>
+          <button class="upsell-btn">&#128172; Oferecer novo</button>
+        </div>
+
+        <!-- Cliente Bom 2 -->
+        <div class="upsell-card">
+          <div class="upsell-info">
+            <div class="upsell-avatar">&#11088;</div>
+            <div>
+              <div class="upsell-name">João Oliveira</div>
+              <div class="upsell-detail">Empréstimo: R$ 5.000 | Parcela: R$ 200/dia | 28 de 30 parcelas pagas</div>
+            </div>
+          </div>
+          <div class="upsell-progress">
+            <div class="progress-bar" style="width: 120px;">
+              <div class="progress-fill" style="width: 93%; background: var(--green);"></div>
+            </div>
+            <span class="progress-pct" style="color: var(--green);">93%</span>
+          </div>
+          <button class="upsell-btn">&#128172; Oferecer novo</button>
+        </div>
+
+        <!-- Cliente Bom 3 -->
+        <div class="upsell-card">
+          <div class="upsell-info">
+            <div class="upsell-avatar">&#11088;</div>
+            <div>
+              <div class="upsell-name">Ana Costa</div>
+              <div class="upsell-detail">Empréstimo: R$ 2.000 | Parcela: R$ 100/dia | 18 de 25 parcelas pagas</div>
+            </div>
+          </div>
+          <div class="upsell-progress">
+            <div class="progress-bar" style="width: 120px;">
+              <div class="progress-fill" style="width: 72%; background: var(--gold);"></div>
+            </div>
+            <span class="progress-pct" style="color: var(--gold);">72%</span>
+          </div>
+          <button class="upsell-btn">&#128172; Oferecer novo</button>
+        </div>
+
+        <!-- Cliente Bom 4 -->
+        <div class="upsell-card">
+          <div class="upsell-info">
+            <div class="upsell-avatar">&#11088;</div>
+            <div>
+              <div class="upsell-name">Pedro Santos</div>
+              <div class="upsell-detail">Empréstimo: R$ 4.000 | Parcela: R$ 180/dia | 24 de 30 parcelas pagas</div>
+            </div>
+          </div>
+          <div class="upsell-progress">
+            <div class="progress-bar" style="width: 120px;">
+              <div class="progress-fill" style="width: 80%; background: var(--gold);"></div>
+            </div>
+            <span class="progress-pct" style="color: var(--gold);">80%</span>
+          </div>
+          <button class="upsell-btn">&#128172; Oferecer novo</button>
+        </div>
+      </div>
+
+      <!-- ========== COBRANÇAS DO DIA ========== -->
+      <div class="section-header">
+        <h2>Cobranças de Hoje</h2>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active">Todos (104)</div>
+        <div class="tab">&#9989; Pagos (71)</div>
+        <div class="tab">&#9888; Pendentes (18)</div>
+        <div class="tab">&#128308; Atrasados (12)</div>
+        <div class="tab">&#128081; Fila Humana (3)</div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Parcela</th>
+              <th>Valor</th>
+              <th>Status</th>
+              <th>Mensagens</th>
+              <th>Progresso Geral</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- PAGO -->
+            <tr>
+              <td>
+                <div class="client-name">
+                  <div class="client-avatar" style="background: var(--green-dim); color: var(--green);">MS</div>
+                  Maria Silva
+                </div>
+              </td>
+              <td>21/30</td>
+              <td>R$ 150</td>
+              <td><span class="status status-pago"><span class="dot dot-green"></span> Pago 10:15</span></td>
+              <td>
+                <div class="msg-timeline">
+                  <div class="msg-dot" style="background: var(--green-dim); color: var(--green);">7h</div>
+                  <div class="msg-dot" style="background: var(--green-dim); color: var(--green);">&#10003;</div>
+                </div>
+              </td>
+              <td>
+                <div class="progress-wrap">
+                  <div class="progress-bar"><div class="progress-fill" style="width: 70%; background: var(--gold);"></div></div>
+                  <span class="progress-pct" style="color: var(--gold);">70%</span>
+                </div>
+              </td>
+              <td><span style="font-size: 12px; color: var(--green);">&#11088; Upsell</span></td>
+            </tr>
+
+            <!-- PAGO -->
+            <tr>
+              <td>
+                <div class="client-name">
+                  <div class="client-avatar" style="background: var(--green-dim); color: var(--green);">JO</div>
+                  João Oliveira
+                </div>
+              </td>
+              <td>28/30</td>
+              <td>R$ 200</td>
+              <td><span class="status status-pago"><span class="dot dot-green"></span> Pago 08:42</span></td>
+              <td>
+                <div class="msg-timeline">
+                  <div class="msg-dot" style="background: var(--green-dim); color: var(--green);">7h</div>
+                  <div class="msg-dot" style="background: var(--green-dim); color: var(--green);">&#10003;</div>
+                </div>
+              </td>
+              <td>
+                <div class="progress-wrap">
+                  <div class="progress-bar"><div class="progress-fill" style="width: 93%; background: var(--green);"></div></div>
+                  <span class="progress-pct" style="color: var(--green);">93%</span>
+                </div>
+              </td>
+              <td><span style="font-size: 12px; color: var(--green);">&#11088; Upsell</span></td>
+            </tr>
+
+            <!-- PENDENTE -->
+            <tr>
+              <td>
+                <div class="client-name">
+                  <div class="client-avatar" style="background: var(--yellow-dim); color: var(--yellow);">CF</div>
+                  Carlos Ferreira
+                </div>
+              </td>
+              <td>15/30</td>
+              <td>R$ 180</td>
+              <td><span class="status status-pendente"><span class="dot dot-yellow"></span> Pendente</span></td>
+              <td>
+                <div class="msg-timeline">
+                  <div class="msg-dot" style="background: var(--green-dim); color: var(--green);">7h</div>
+                  <div class="msg-dot" style="background: var(--green-dim); color: var(--green);">12h</div>
+                  <div class="msg-dot" style="background: var(--yellow-dim); color: var(--yellow);">17h</div>
+                  <div class="msg-dot" style="background: var(--text-faint); color: var(--bg);">20h</div>
+                </div>
+              </td>
+              <td>
+                <div class="progress-wrap">
+                  <div class="progress-bar"><div class="progress-fill" style="width: 50%; background: var(--yellow);"></div></div>
+                  <span class="progress-pct" style="color: var(--yellow);">50%</span>
+                </div>
+              </td>
+              <td><span style="font-size: 12px; color: var(--text-faint);">Aguardando</span></td>
+            </tr>
+
+            <!-- PENDENTE -->
+            <tr>
+              <td>
+                <div class="client-name">
+                  <div class="client-avatar" style="background: var(--yellow-dim); color: var(--yellow);">LR</div>
+                  Lucia Rodrigues
+                </div>
+              </td>
+              <td>8/25</td>
+              <td>R$ 120</td>
+              <td><span class="status status-pendente"><span class="dot dot-yellow"></span> Pendente</span></td>
+              <td>
+                <div class="msg-timeline">
+                  <div class="msg-dot" style="background: var(--green-dim); color: var(--green);">7h</div>
+                  <div class="msg-dot" style="background: var(--green-dim); color: var(--green);">12h</div>
+                  <div class="msg-dot" style="background: var(--text-faint); color: var(--bg);">17h</div>
+                  <div class="msg-dot" style="background: var(--text-faint); color: var(--bg);">20h</div>
+                </div>
+              </td>
+              <td>
+                <div class="progress-wrap">
+                  <div class="progress-bar"><div class="progress-fill" style="width: 32%; background: var(--text-faint);"></div></div>
+                  <span class="progress-pct" style="color: var(--text-faint);">32%</span>
+                </div>
+              </td>
+              <td><span style="font-size: 12px; color: var(--text-faint);">Aguardando</span></td>
+            </tr>
+
+            <!-- ATRASADO - FILA HUMANA -->
+            <tr style="background: rgba(248,113,113,0.03);">
+              <td>
+                <div class="client-name">
+                  <div class="client-avatar" style="background: var(--red-dim); color: var(--red);">RM</div>
+                  Roberto Mendes
+                </div>
+              </td>
+              <td>10/30</td>
+              <td>R$ 200</td>
+              <td><span class="status status-atrasado"><span class="dot dot-red"></span> 3 dias atraso</span></td>
+              <td>
+                <div class="msg-timeline">
+                  <div class="msg-dot" style="background: var(--red-dim); color: var(--red);">7h</div>
+                  <div class="msg-dot" style="background: var(--red-dim); color: var(--red);">12h</div>
+                  <div class="msg-dot" style="background: var(--red-dim); color: var(--red);">17h</div>
+                  <div class="msg-dot" style="background: var(--red-dim); color: var(--red);">20h</div>
+                </div>
+              </td>
+              <td>
+                <div class="progress-wrap">
+                  <div class="progress-bar"><div class="progress-fill" style="width: 33%; background: var(--red);"></div></div>
+                  <span class="progress-pct" style="color: var(--red);">33%</span>
+                </div>
+              </td>
+              <td><span class="status status-humano">&#128222; Ligar</span></td>
+            </tr>
+
+            <!-- ATRASADO - FILA HUMANA -->
+            <tr style="background: rgba(248,113,113,0.03);">
+              <td>
+                <div class="client-name">
+                  <div class="client-avatar" style="background: var(--red-dim); color: var(--red);">PS</div>
+                  Patricia Souza
+                </div>
+              </td>
+              <td>5/20</td>
+              <td>R$ 100</td>
+              <td><span class="status status-atrasado"><span class="dot dot-red"></span> 5 dias atraso</span></td>
+              <td>
+                <div class="msg-timeline">
+                  <div class="msg-dot" style="background: var(--red-dim); color: var(--red);">7h</div>
+                  <div class="msg-dot" style="background: var(--red-dim); color: var(--red);">12h</div>
+                  <div class="msg-dot" style="background: var(--red-dim); color: var(--red);">17h</div>
+                  <div class="msg-dot" style="background: var(--red-dim); color: var(--red);">20h</div>
+                </div>
+              </td>
+              <td>
+                <div class="progress-wrap">
+                  <div class="progress-bar"><div class="progress-fill" style="width: 25%; background: var(--red);"></div></div>
+                  <span class="progress-pct" style="color: var(--red);">25%</span>
+                </div>
+              </td>
+              <td><span class="status status-humano">&#128222; Ligar</span></td>
+            </tr>
+
+            <!-- PAGO -->
+            <tr>
+              <td>
+                <div class="client-name">
+                  <div class="client-avatar" style="background: var(--green-dim); color: var(--green);">AC</div>
+                  Ana Costa
+                </div>
+              </td>
+              <td>18/25</td>
+              <td>R$ 100</td>
+              <td><span class="status status-pago"><span class="dot dot-green"></span> Pago 11:03</span></td>
+              <td>
+                <div class="msg-timeline">
+                  <div class="msg-dot" style="background: var(--green-dim); color: var(--green);">7h</div>
+                  <div class="msg-dot" style="background: var(--green-dim); color: var(--green);">12h</div>
+                  <div class="msg-dot" style="background: var(--green-dim); color: var(--green);">&#10003;</div>
+                </div>
+              </td>
+              <td>
+                <div class="progress-wrap">
+                  <div class="progress-bar"><div class="progress-fill" style="width: 72%; background: var(--gold);"></div></div>
+                  <span class="progress-pct" style="color: var(--gold);">72%</span>
+                </div>
+              </td>
+              <td><span style="font-size: 12px; color: var(--green);">&#11088; Upsell</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ========== PREVIEW WHATSAPP ========== -->
+      <div class="section-header">
+        <h2>
+          <span style="font-size: 20px;">&#128172;</span> Preview do WhatsApp — Maria Silva
+        </h2>
+      </div>
+
+      <div class="wa-preview">
+        <div class="wa-header">
+          <div class="wa-avatar">MS</div>
+          <div>
+            <div class="wa-name">Maria Silva</div>
+            <div class="wa-status">online</div>
+          </div>
+        </div>
+        <div class="wa-messages">
+          <div class="wa-msg wa-msg-out">
+            Bom dia, Maria! Tudo bem? Sua parcela de hoje: <strong>R$ 150,00</strong>.<br><br>
+            Paga por esse PIX que eu já dou baixa na hora pra você:<br><br>
+            &#128179; <strong>Copia e cola:</strong><br>
+            00020126580014br.gov.bcb...<br><br>
+            Qualquer coisa, me chama aqui!
+            <div class="wa-time">07:30 &#10003;&#10003;</div>
+          </div>
+          <div class="wa-msg wa-msg-out wa-msg-audio">
+            <span>&#9654;</span>
+            <div class="wa-audio-bar"></div>
+            <span class="wa-audio-dur">0:32</span>
+            <div class="wa-time">07:30 &#10003;&#10003;</div>
+          </div>
+          <div class="wa-msg wa-msg-in">
+            Bom dia! Já vou pagar, espera um minutinho
+            <div class="wa-time">09:48</div>
+          </div>
+          <div class="wa-msg wa-msg-in">
+            Pronto, paguei agora!
+            <div class="wa-time">10:14</div>
+          </div>
+          <div class="wa-msg wa-msg-out" style="background: #064e3b;">
+            &#9989; <strong>Recebi, Maria!</strong> Parcela de hoje confirmada pelo banco. Tá tudo em dia! Até amanhã.
+            <div class="wa-time">10:15 &#10003;&#10003;</div>
+          </div>
+          <div class="wa-msg wa-msg-out" style="background: #064e3b; max-width: 300px; text-align: center;">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.5); margin-bottom: 4px;">Mensagem automática</div>
+            <strong>Parcela 21 de 30 &#10003;</strong><br>
+            Faltam 9 parcelas.<br>
+            Você é uma cliente exemplar! &#11088;
+            <div class="wa-time">10:15 &#10003;&#10003;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== REGRAS DO CLIENTE BOM ========== -->
+      <div class="section-header">
+        <h2>
+          <span style="font-size: 20px;">&#11088;</span> Regras do "Cliente Bom" — Oferta de Novo Empréstimo
+        </h2>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Critério</th>
+              <th>Regra</th>
+              <th>Por quê</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 700;">Parcelas pagas</td>
+              <td style="font-weight: 700; color: var(--gold);">70% ou mais do total</td>
+              <td>Demonstra comprometimento consistente. Não é sorte — é padrão.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Atrasos recentes</td>
+              <td style="font-weight: 700; color: var(--green);">Zero atrasos nos últimos 15 dias</td>
+              <td>Garante que o bom comportamento é atual, não histórico.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Forma de pagamento</td>
+              <td>Pagou pelo QR Code (confirmação bancária real)</td>
+              <td>Elimina quem "pagou" por comprovante falso no passado.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Ação automática</td>
+              <td style="color: var(--gold);">Sistema destaca no painel + notifica o operador</td>
+              <td>Operador vê a oportunidade e entra em contato com oferta personalizada.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Mensagem sugerida</td>
+              <td colspan="2" style="font-style: italic; color: var(--text-sec);">
+                "Maria, você é uma cliente exemplar — já pagou 70% do seu acordo sem atraso. Quero te oferecer uma condição especial pra um novo empréstimo. Posso te ligar 2 minutinhos?"
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 28px;">
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 18px;">&#128176;</span> Por que oferecer novo empréstimo a 70%
+        </h3>
+        <table>
+          <tbody>
+            <tr>
+              <td style="font-weight: 700; width: 200px;">Risco baixo</td>
+              <td>Cliente já provou que paga. 70% sem atraso é padrão raro. Risco de inadimplência é mínimo.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Fidelização</td>
+              <td>Cliente bom vai pegar empréstimo em algum lugar. Melhor que pegue com você, onde ele já tem histórico e confiança.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Receita recorrente</td>
+              <td>Quando o contrato atual terminar, o novo já está rodando. Sem gap de receita.</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700;">Timing perfeito</td>
+              <td>A 70% o cliente já vê a luz no fim do túnel. Está confiante e receptivo. Depois de 100%, ele some.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
