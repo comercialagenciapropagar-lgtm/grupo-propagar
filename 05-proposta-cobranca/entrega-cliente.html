@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cobrai.app — Sistema de Cobranca Inteligente</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-dark: #0a0a1a;
+      --bg-card: rgba(255,255,255,0.04);
+      --bg-glass: rgba(255,255,255,0.06);
+      --border-glass: rgba(255,255,255,0.08);
+      --text-primary: #f0f0f5;
+      --text-secondary: rgba(240,240,245,0.6);
+      --accent: #6c5ce7;
+      --accent-bright: #a29bfe;
+      --accent-green: #00cec9;
+      --accent-pink: #fd79a8;
+      --accent-orange: #fdcb6e;
+      --whatsapp-green: #25D366;
+      --whatsapp-bubble: #005c4b;
+      --whatsapp-bg: #0b141a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5 { font-family: 'Space Grotesk', 'Inter', sans-serif; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ======================== REVEAL ANIMATION ======================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+    .reveal-delay-6 { transition-delay: 0.6s; }
+
+    /* ======================== SECTION COMMON ======================== */
+    section {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent-bright);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .section-subtitle {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    .section-header { margin-bottom: 64px; }
+
+    /* ======================== HERO ======================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 60px 24px;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(108,92,231,0.3) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(0,206,201,0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 40% at 10% 90%, rgba(253,121,168,0.12) 0%, transparent 50%);
+      animation: heroBgShift 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroBgShift {
+      0% { opacity: 1; filter: hue-rotate(0deg); }
+      100% { opacity: 0.8; filter: hue-rotate(15deg); }
+    }
+
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      animation: float 8s ease-in-out infinite;
+    }
+    .hero-orb-1 { width: 400px; height: 400px; background: var(--accent); top: -10%; left: -5%; animation-delay: 0s; }
+    .hero-orb-2 { width: 300px; height: 300px; background: var(--accent-green); bottom: -5%; right: -5%; animation-delay: 3s; }
+    .hero-orb-3 { width: 200px; height: 200px; background: var(--accent-pink); top: 40%; right: 15%; animation-delay: 5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -20px) scale(1.05); }
+      66% { transform: translate(-20px, 15px) scale(0.95); }
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: 100px;
+      padding: 8px 20px;
+      font-size: 0.85rem;
+      color: var(--accent-bright);
+      margin-bottom: 32px;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-badge-dot {
+      width: 8px; height: 8px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    .hero h1 {
+      font-size: clamp(3.5rem, 10vw, 7rem);
+      font-weight: 900;
+      letter-spacing: -2px;
+      background: linear-gradient(135deg, #fff 0%, var(--accent-bright) 50%, var(--accent-green) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.05;
+      margin-bottom: 8px;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 500;
+      color: var(--accent-bright);
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+
+    .hero-description {
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto 48px;
+      line-height: 1.8;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--accent), #7c5ce7);
+      color: #fff;
+      padding: 16px 36px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 30px rgba(108,92,231,0.4);
+    }
+
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 40px rgba(108,92,231,0.6);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: bobble 2s ease-in-out infinite;
+    }
+
+    .scroll-indicator svg {
+      width: 20px; height: 20px;
+      stroke: var(--text-secondary);
+    }
+
+    @keyframes bobble {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ======================== PROBLEMA ======================== */
+    .problema { background: var(--bg-dark); }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .problem-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      padding: 36px 28px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s, border-color 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .problem-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--accent-pink), var(--accent-orange));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .problem-card:hover { transform: translateY(-4px); border-color: rgba(253,121,168,0.2); }
+    .problem-card:hover::before { opacity: 1; }
+
+    .problem-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .problem-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--accent-pink);
+    }
+
+    .problem-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* ======================== SOLUCAO / TIMELINE ======================== */
+    .solucao {
+      background: linear-gradient(180deg, var(--bg-dark) 0%, #0d0d24 100%);
+    }
+
+    .timeline {
+      position: relative;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-green), var(--accent-pink));
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .timeline-dot {
+      width: 58px;
+      min-width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--bg-glass);
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(10px);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    .timeline-item:hover .timeline-dot {
+      background: rgba(108,92,231,0.2);
+      box-shadow: 0 0 20px rgba(108,92,231,0.3);
+    }
+
+    .timeline-content {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      padding: 24px 28px;
+      flex: 1;
+      backdrop-filter: blur(10px);
+      transition: border-color 0.3s;
+    }
+
+    .timeline-item:hover .timeline-content {
+      border-color: rgba(108,92,231,0.2);
+    }
+
+    .timeline-time {
+      font-family: 'Space Grotesk', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-bright);
+      margin-bottom: 4px;
+    }
+
+    .timeline-content h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .timeline-content p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ======================== MENSAGENS / WHATSAPP MOCKUP ======================== */
+    .mensagens {
+      background: #0d0d24;
+    }
+
+    .mensagens-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .mensagens-layout { grid-template-columns: 1fr; }
+    }
+
+    .phone-frame {
+      width: 340px;
+      max-width: 100%;
+      margin: 0 auto;
+      background: #111b21;
+      border-radius: 32px;
+      padding: 0;
+      border: 3px solid #2a2a3a;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    }
+
+    .phone-header {
+      background: #1f2c34;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .phone-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-green));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .phone-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .phone-status {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+
+    .phone-chat {
+      padding: 16px;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='p' width='60' height='60' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='30' cy='30' r='1' fill='rgba(255,255,255,0.015)'/%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='%230b141a' width='60' height='60'/%3E%3Crect fill='url(%23p)' width='60' height='60'/%3E%3C/svg%3E") #0b141a;
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chat-bubble {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      position: relative;
+      animation: bubbleIn 0.5s ease-out both;
+    }
+
+    .chat-bubble.sent {
+      background: var(--whatsapp-bubble);
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+      color: #e9edef;
+    }
+
+    .chat-bubble.received {
+      background: #1f2c34;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+      color: #e9edef;
+    }
+
+    .chat-bubble .time {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.4);
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .chat-bubble.pix-code {
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      word-break: break-all;
+      background: #1a3a32;
+      border: 1px dashed rgba(37,211,102,0.3);
+    }
+
+    .chat-bubble.confirmed {
+      background: #1a3a1a;
+      border: 1px solid rgba(37,211,102,0.2);
+    }
+
+    @keyframes bubbleIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .mensagens-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .msg-highlight {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .msg-highlight-icon {
+      width: 48px; min-width: 48px; height: 48px;
+      border-radius: 14px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .msg-highlight h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .msg-highlight p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ======================== DASHBOARD ======================== */
+    .dashboard-section { background: var(--bg-dark); }
+
+    .dashboard-mockup {
+      width: 100%;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(108,92,231,0.15), rgba(0,206,201,0.1));
+      border: 1px solid var(--border-glass);
+      padding: 60px 40px;
+      text-align: center;
+      margin-bottom: 48px;
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dashboard-mockup::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent 0%, rgba(108,92,231,0.05) 50%, transparent 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 41px);
+    }
+
+    .dashboard-mockup h3 {
+      position: relative;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .dashboard-mockup p {
+      position: relative;
+      color: var(--text-secondary);
+    }
+
+    .dashboard-bars {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      height: 100px;
+      margin-top: 24px;
+      position: relative;
+    }
+
+    .dashboard-bar {
+      width: 28px;
+      border-radius: 6px 6px 0 0;
+      transition: height 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .metric-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(108,92,231,0.2);
+    }
+
+    .metric-icon {
+      width: 44px; min-width: 44px; height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .metric-card h4 {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+      margin-bottom: 2px;
+    }
+
+    .metric-card p {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    /* ======================== FUNCIONALIDADES ======================== */
+    .funcionalidades { background: #0d0d24; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      padding: 32px 28px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s, border-color 0.3s, background 0.3s;
+      cursor: default;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(162,155,254,0.2);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .feature-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ======================== NUMEROS ======================== */
+    .numeros {
+      background: var(--bg-dark);
+      text-align: center;
+    }
+
+    .numeros-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 50%, rgba(108,92,231,0.08) 0%, transparent 70%);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+      position: relative;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .stat-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-bright), var(--accent-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* ======================== TECNOLOGIA ======================== */
+    .tecnologia {
+      background: #0d0d24;
+      padding: 80px 0;
+    }
+
+    .tech-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 32px;
+    }
+
+    .tech-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: 100px;
+      padding: 10px 22px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      backdrop-filter: blur(10px);
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .tech-pill:hover {
+      border-color: rgba(162,155,254,0.3);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .tech-pill-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    /* ======================== PROXIMOS PASSOS ======================== */
+    .proximos-passos { background: var(--bg-dark); }
+
+    .steps-list {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .step-item:hover {
+      transform: translateX(8px);
+      border-color: rgba(0,206,201,0.2);
+    }
+
+    .step-number {
+      width: 44px; min-width: 44px; height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent-green), #00b894);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .step-item h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .step-item p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* ======================== FOOTER ======================== */
+    footer {
+      padding: 60px 0;
+      text-align: center;
+      border-top: 1px solid var(--border-glass);
+      background: var(--bg-dark);
+    }
+
+    .footer-heart {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .footer-brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .footer-date {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* ======================== RESPONSIVE ======================== */
+    @media (max-width: 600px) {
+      section { padding: 72px 0; }
+      .section-header { margin-bottom: 40px; }
+
+      .timeline::before { left: 20px; }
+      .timeline-dot { width: 42px; min-width: 42px; height: 42px; font-size: 1.1rem; }
+      .timeline-content { padding: 18px 20px; }
+
+      .phone-frame { width: 100%; }
+      .hero h1 { letter-spacing: -1px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge reveal">
+        <span class="hero-badge-dot"></span>
+        Sistema exclusivo
+      </div>
+
+      <h1 class="reveal reveal-delay-1">Cobrai.app</h1>
+      <p class="hero-tagline reveal reveal-delay-2">Sistema de Cobranca Inteligente</p>
+      <p class="hero-description reveal reveal-delay-3">
+        Automatize suas cobrancas, receba mais e gaste menos tempo.
+        Sistema desenvolvido exclusivamente para o <strong>Grupo Propagar</strong>.
+      </p>
+      <a href="#problema" class="hero-cta reveal reveal-delay-4">
+        Conhecer o sistema
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </a>
+    </div>
+
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+  </section>
+
+  <!-- ==================== O PROBLEMA ==================== -->
+  <section class="problema" id="problema">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">O Problema</p>
+        <h2 class="section-title">Cobrar manualmente custa caro.<br>Em tempo e em dinheiro.</h2>
+      </div>
+
+      <div class="problem-grid">
+        <div class="problem-card reveal reveal-delay-1">
+          <span class="problem-icon">&#x23F3;</span>
+          <h3>Cobrancas manuais</h3>
+          <p>Horas perdidas enviando mensagens uma a uma. Tempo que poderia ser investido em crescer o negocio.</p>
+        </div>
+        <div class="problem-card reveal reveal-delay-2">
+          <span class="problem-icon">&#x1F6A8;</span>
+          <h3>Clientes esquecem</h3>
+          <p>Sem lembrete automatico, parcelas acumulam e a inadimplencia cresce sem controle.</p>
+        </div>
+        <div class="problem-card reveal reveal-delay-3">
+          <span class="problem-icon">&#x1F648;</span>
+          <h3>Sem visao do negocio</h3>
+          <p>Nao sabe quem pagou, quem deve, quanto entrou. Decisoes no escuro.</p>
+        </div>
+        <div class="problem-card reveal reveal-delay-4">
+          <span class="problem-icon">&#x1F4B8;</span>
+          <h3>Perda de receita</h3>
+          <p>Dinheiro que deveria estar no caixa fica parado. Cada dia sem cobrar e dinheiro perdido.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== A SOLUCAO / TIMELINE ==================== -->
+  <section class="solucao" id="solucao">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">A Solucao</p>
+        <h2 class="section-title">Um dia inteiro de cobranca.<br>100% automatico.</h2>
+        <p class="section-subtitle">Veja como o Cobrai.app trabalha por voce, do amanhecer a noite.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item reveal">
+          <div class="timeline-dot">&#x2600;&#xFE0F;</div>
+          <div class="timeline-content">
+            <span class="timeline-time">06:00</span>
+            <h3>Geracao de cobrancas PIX</h3>
+            <p>O sistema gera automaticamente todas as cobrancas PIX do dia via Asaas.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal reveal-delay-1">
+          <div class="timeline-dot">&#x1F44B;</div>
+          <div class="timeline-content">
+            <span class="timeline-time">07:30</span>
+            <h3>1a mensagem — Tom amigavel</h3>
+            <p>WhatsApp automatico com saudacao personalizada + codigo PIX pronto para copiar.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal reveal-delay-2">
+          <div class="timeline-dot">&#x1F372;</div>
+          <div class="timeline-content">
+            <span class="timeline-time">12:00</span>
+            <h3>2a mensagem — Lembrete no almoco</h3>
+            <p>Lembrete educado para quem ainda nao pagou. Horario estrategico de pausa.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal reveal-delay-3">
+          <div class="timeline-dot">&#x26A0;&#xFE0F;</div>
+          <div class="timeline-content">
+            <span class="timeline-time">17:30</span>
+            <h3>3a mensagem — Tom firme</h3>
+            <p>Mensagem mais direta, reforçando a importância do pagamento no dia.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal reveal-delay-4">
+          <div class="timeline-dot">&#x1F6A8;</div>
+          <div class="timeline-content">
+            <span class="timeline-time">19:00</span>
+            <h3>4a mensagem — Ultimo aviso</h3>
+            <p>Tom urgente. Ultima chance antes de entrar na fila de atendimento humano.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal reveal-delay-5">
+          <div class="timeline-dot">&#x1F464;</div>
+          <div class="timeline-content">
+            <span class="timeline-time">19:30</span>
+            <h3>Fila de atendimento humano</h3>
+            <p>Quem nao pagou vai para a fila de atendimento direto. Voce liga, negocia, resolve.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MENSAGENS INTELIGENTES ==================== -->
+  <section class="mensagens" id="mensagens">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">Mensagens Inteligentes</p>
+        <h2 class="section-title">Parece uma pessoa de verdade.<br>Mas e o sistema.</h2>
+      </div>
+
+      <div class="mensagens-layout">
+        <!-- PHONE MOCKUP -->
+        <div class="reveal">
+          <div class="phone-frame">
+            <div class="phone-header">
+              <div class="phone-avatar">C</div>
+              <div>
+                <div class="phone-name">Cobrai.app</div>
+                <div class="phone-status">online</div>
+              </div>
+            </div>
+            <div class="phone-chat">
+              <div class="chat-bubble sent" style="animation-delay: 0.3s">
+                Bom dia, Ana! Tudo bem? &#x1F60A;<br><br>
+                Sua parcela de hoje:<br><br>
+                <strong>R$ 100,00</strong><br>
+                Parcela 19 de 25<br><br>
+                Vou mandar o codigo PIX aqui embaixo...
+                <div class="time">07:30 &#x2713;&#x2713;</div>
+              </div>
+
+              <div class="chat-bubble sent pix-code" style="animation-delay: 0.6s">
+                00020126580014br.gov.bcb.pix0136a1b2c3d4-e5f6-7890-abcd-ef1234567890520400005303986540510.005802BR62070503***6304ABC1
+                <div class="time">07:30 &#x2713;&#x2713;</div>
+              </div>
+
+              <div class="chat-bubble received" style="animation-delay: 0.9s">
+                Vou pagar agora!
+                <div class="time">08:15</div>
+              </div>
+
+              <div class="chat-bubble sent confirmed" style="animation-delay: 1.2s">
+                &#x2705; Recebi, Ana! Parcela confirmada!<br><br>
+                Muito obrigado e bom dia! &#x1F64F;
+                <div class="time">08:16 &#x2713;&#x2713;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- HIGHLIGHTS -->
+        <div class="mensagens-highlights">
+          <div class="msg-highlight reveal reveal-delay-1">
+            <div class="msg-highlight-icon">&#x1F4CB;</div>
+            <div>
+              <h4>Codigo PIX separado</h4>
+              <p>O codigo PIX e enviado em mensagem separada para facilitar o copiar e colar do cliente.</p>
+            </div>
+          </div>
+
+          <div class="msg-highlight reveal reveal-delay-2">
+            <div class="msg-highlight-icon">&#x1F3AF;</div>
+            <div>
+              <h4>4 niveis de cobranca</h4>
+              <p>Amigavel &#x2192; Educado &#x2192; Firme &#x2192; Urgente. O tom muda automaticamente ao longo do dia.</p>
+            </div>
+          </div>
+
+          <div class="msg-highlight reveal reveal-delay-3">
+            <div class="msg-highlight-icon">&#x1F916;</div>
+            <div>
+              <h4>Personalizado por cliente</h4>
+              <p>Nome, valor, numero da parcela. Cada mensagem e unica e personalizada.</p>
+            </div>
+          </div>
+
+          <div class="msg-highlight reveal reveal-delay-4">
+            <div class="msg-highlight-icon">&#x2705;</div>
+            <div>
+              <h4>Confirmacao automatica</h4>
+              <p>Quando o pagamento e detectado, o cliente recebe uma mensagem de confirmacao.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DASHBOARD ==================== -->
+  <section class="dashboard-section" id="dashboard">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">Dashboard</p>
+        <h2 class="section-title">Visao completa do seu negocio.<br>Em tempo real.</h2>
+      </div>
+
+      <div class="dashboard-mockup reveal">
+        <h3>&#x1F4CA; Dashboard em tempo real</h3>
+        <p>Acesse pelo navegador, em qualquer dispositivo</p>
+        <div class="dashboard-bars" id="dashboardBars"></div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card reveal reveal-delay-1">
+          <div class="metric-icon">&#x1F4B0;</div>
+          <div>
+            <h4>Recebido Hoje vs Esperado</h4>
+            <p>Acompanhe em tempo real</p>
+          </div>
+        </div>
+        <div class="metric-card reveal reveal-delay-1">
+          <div class="metric-icon">&#x1F4C8;</div>
+          <div>
+            <h4>Media Diaria</h4>
+            <p>Quanto entra por dia</p>
+          </div>
+        </div>
+        <div class="metric-card reveal reveal-delay-2">
+          <div class="metric-icon">&#x1F504;</div>
+          <div>
+            <h4>MRR — Receita Recorrente</h4>
+            <p>Receita mensal recorrente</p>
+          </div>
+        </div>
+        <div class="metric-card reveal reveal-delay-2">
+          <div class="metric-icon">&#x1F4CA;</div>
+          <div>
+            <h4>Grafico dia a dia</h4>
+            <p>Recebimentos visualizados</p>
+          </div>
+        </div>
+        <div class="metric-card reveal reveal-delay-3">
+          <div class="metric-icon">&#x2705;</div>
+          <div>
+            <h4>Taxa de Adimplencia</h4>
+            <p>Pagos, pendentes, atrasados</p>
+          </div>
+        </div>
+        <div class="metric-card reveal reveal-delay-3">
+          <div class="metric-icon">&#x1F464;</div>
+          <div>
+            <h4>Fila Humana</h4>
+            <p>Atendimento direto aos inadimplentes</p>
+          </div>
+        </div>
+        <div class="metric-card reveal reveal-delay-4">
+          <div class="metric-icon">&#x2B50;</div>
+          <div>
+            <h4>Clientes Bons</h4>
+            <p>Prontos para novo emprestimo</p>
+          </div>
+        </div>
+        <div class="metric-card reveal reveal-delay-4">
+          <div class="metric-icon">&#x1F4C4;</div>
+          <div>
+            <h4>Relatorios do Mes</h4>
+            <p>Resumo completo mensal</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FUNCIONALIDADES ==================== -->
+  <section class="funcionalidades" id="funcionalidades">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">Funcionalidades</p>
+        <h2 class="section-title">Tudo o que voce precisa.<br>Num so lugar.</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card reveal reveal-delay-1">
+          <span class="feature-icon">&#x1F4B0;</span>
+          <h3>Cobrancas PIX automaticas</h3>
+          <p>Geradas todo dia as 6h da manha, prontas para envio.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2">
+          <span class="feature-icon">&#x1F4F1;</span>
+          <h3>WhatsApp integrado</h3>
+          <p>Mensagens enviadas direto no WhatsApp do cliente.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-1">
+          <span class="feature-icon">&#x1F4CA;</span>
+          <h3>Dashboard com graficos</h3>
+          <p>Visao visual e completa do seu negocio.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2">
+          <span class="feature-icon">&#x1F464;</span>
+          <h3>Fila humana inteligente</h3>
+          <p>Inadimplentes organizados para voce ligar.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-1">
+          <span class="feature-icon">&#x270F;&#xFE0F;</span>
+          <h3>Templates editaveis</h3>
+          <p>Personalize as mensagens do jeito que quiser.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2">
+          <span class="feature-icon">&#x2B50;</span>
+          <h3>Clientes bons (upsell)</h3>
+          <p>Identifique quem esta pronto para novo emprestimo.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-1">
+          <span class="feature-icon">&#x2705;</span>
+          <h3>Confirmacao de pagamento</h3>
+          <p>Cliente recebe confirmacao automatica ao pagar.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2">
+          <span class="feature-icon">&#x1F4C8;</span>
+          <h3>Relatorios do mes</h3>
+          <p>Resumo mensal completo com todos os numeros.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== NUMEROS ==================== -->
+  <section class="numeros" id="numeros">
+    <div class="numeros-bg"></div>
+    <div class="container" style="position:relative">
+      <div class="section-header reveal" style="text-align:center">
+        <p class="section-label">Numeros</p>
+        <h2 class="section-title">Resultados que falam por si.</h2>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card reveal reveal-delay-1">
+          <div class="stat-number" data-count="4" data-suffix="">0</div>
+          <div class="stat-label">cobrancas automaticas por dia</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-2">
+          <div class="stat-number" data-count="80" data-suffix="%">0</div>
+          <div class="stat-label">menos tempo com cobrancas manuais</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-3">
+          <div class="stat-number" data-count="24" data-suffix="/7">0</div>
+          <div class="stat-label">funcionando sozinho</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-4">
+          <div class="stat-number" data-count="1000" data-suffix="+" data-prefix="">0</div>
+          <div class="stat-label">clientes sem perder performance</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TECNOLOGIA ==================== -->
+  <section class="tecnologia" id="tecnologia">
+    <div class="container" style="text-align:center">
+      <div class="section-header reveal" style="text-align:center">
+        <p class="section-label">Tecnologia</p>
+        <h2 class="section-title" style="font-size:clamp(1.5rem,3vw,2rem)">Construido com tecnologias modernas e confiaveis.</h2>
+      </div>
+
+      <div class="tech-pills reveal">
+        <div class="tech-pill">
+          <span class="tech-pill-dot" style="background:#68a063"></span>
+          Node.js + Express
+        </div>
+        <div class="tech-pill">
+          <span class="tech-pill-dot" style="background:#3ecf8e"></span>
+          Supabase (PostgreSQL)
+        </div>
+        <div class="tech-pill">
+          <span class="tech-pill-dot" style="background:#4f9cf7"></span>
+          Asaas (PIX)
+        </div>
+        <div class="tech-pill">
+          <span class="tech-pill-dot" style="background:#25D366"></span>
+          Evolution API (WhatsApp)
+        </div>
+        <div class="tech-pill">
+          <span class="tech-pill-dot" style="background:#ff6384"></span>
+          Chart.js (Graficos)
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PROXIMOS PASSOS ==================== -->
+  <section class="proximos-passos" id="proximos-passos">
+    <div class="container">
+      <div class="section-header reveal" style="text-align:center">
+        <p class="section-label">Proximos Passos</p>
+        <h2 class="section-title" style="text-align:center">O que falta para ir ao ar.</h2>
+      </div>
+
+      <div class="steps-list">
+        <div class="step-item reveal reveal-delay-1">
+          <div class="step-number">1</div>
+          <div>
+            <h4>Deploy em servidor 24/7</h4>
+            <p>Colocar o sistema rodando em producao, ativo o tempo todo.</p>
+          </div>
+        </div>
+        <div class="step-item reveal reveal-delay-2">
+          <div class="step-number">2</div>
+          <div>
+            <h4>Configuracao do webhook de pagamento</h4>
+            <p>Integrar a confirmacao automatica do Asaas com o sistema.</p>
+          </div>
+        </div>
+        <div class="step-item reveal reveal-delay-3">
+          <div class="step-number">3</div>
+          <div>
+            <h4>Gravacao dos audios personalizados</h4>
+            <p>Audios com a voz da marca para as mensagens de WhatsApp.</p>
+          </div>
+        </div>
+        <div class="step-item reveal reveal-delay-4">
+          <div class="step-number">4</div>
+          <div>
+            <h4>Treinamento de uso</h4>
+            <p>Ensinar a equipe a usar o dashboard e gerenciar a fila humana.</p>
+          </div>
+        </div>
+        <div class="step-item reveal reveal-delay-5">
+          <div class="step-number">5</div>
+          <div>
+            <h4>Cadastro dos clientes reais</h4>
+            <p>Importar a base de clientes e comecar a cobrar automaticamente.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <div class="container">
+      <p class="footer-heart">Desenvolvido com &#x1F499; para o Grupo Propagar</p>
+      <p class="footer-brand">Cobrai.app — Sistema de Cobranca Inteligente</p>
+      <p class="footer-date">Marco 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    // ======================== INTERSECTION OBSERVER FOR REVEALS ========================
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ======================== COUNTER ANIMATION ========================
+    let counterAnimated = false;
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !counterAnimated) {
+          counterAnimated = true;
+          document.querySelectorAll('.stat-number').forEach(el => {
+            const target = parseInt(el.dataset.count);
+            const suffix = el.dataset.suffix || '';
+            const prefix = el.dataset.prefix || '';
+            const duration = 2000;
+            const start = performance.now();
+
+            function update(now) {
+              const elapsed = now - start;
+              const progress = Math.min(elapsed / duration, 1);
+              const eased = 1 - Math.pow(1 - progress, 4);
+              const current = Math.round(target * eased);
+
+              if (target >= 1000) {
+                el.textContent = prefix + current.toLocaleString('pt-BR') + suffix;
+              } else {
+                el.textContent = prefix + current + suffix;
+              }
+
+              if (progress < 1) {
+                requestAnimationFrame(update);
+              }
+            }
+            requestAnimationFrame(update);
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.numeros').forEach(el => counterObserver.observe(el));
+
+    // ======================== DASHBOARD BARS ========================
+    const barsContainer = document.getElementById('dashboardBars');
+    const barHeights = [60, 45, 80, 35, 70, 55, 90, 40, 75, 50, 85, 65, 95, 48, 72];
+    const barColors = ['#6c5ce7', '#a29bfe', '#00cec9', '#6c5ce7', '#a29bfe', '#00cec9', '#6c5ce7', '#a29bfe', '#00cec9', '#6c5ce7', '#a29bfe', '#00cec9', '#6c5ce7', '#a29bfe', '#00cec9'];
+
+    barHeights.forEach((h, i) => {
+      const bar = document.createElement('div');
+      bar.className = 'dashboard-bar';
+      bar.style.height = '0px';
+      bar.style.background = barColors[i % barColors.length];
+      bar.style.transitionDelay = (i * 0.06) + 's';
+      barsContainer.appendChild(bar);
+    });
+
+    const barsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('.dashboard-bar').forEach((bar, i) => {
+            bar.style.height = barHeights[i] + 'px';
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+
+    barsObserver.observe(barsContainer);
+  </script>
+
+</body>
+</html>
