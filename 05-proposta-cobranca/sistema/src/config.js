@@ -26,6 +26,12 @@ module.exports = {
     accessToken: process.env.WHATSAPP_ACCESS_TOKEN,
   },
 
+  zapi: {
+    instanceId: process.env.ZAPI_INSTANCE_ID,
+    token: process.env.ZAPI_TOKEN,
+    clientToken: process.env.ZAPI_CLIENT_TOKEN,
+  },
+
   cobranca: {
     horarios: [
       process.env.COBRANCA_HORARIO_1 || '07:30',

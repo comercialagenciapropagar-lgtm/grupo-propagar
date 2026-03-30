@@ -1,6 +1,6 @@
 const supabase = require('../database');
 const asaas = require('./asaas');
-const evolution = require('./evolution');
+const evolution = require('./zapi');
 
 // ============================================
 // GERAR COBRANÇAS DO DIA

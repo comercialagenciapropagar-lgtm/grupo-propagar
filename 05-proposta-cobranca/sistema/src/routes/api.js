@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const supabase = require('../database');
 const billing = require('../services/billing');
-const evolution = require('../services/evolution');
+const evolution = require('../services/zapi');
 
 const router = Router();
 
@@ -339,6 +339,280 @@ router.get('/metricas', async (req, res) => {
     });
   } catch (err) {
     console.error('[API] Erro métricas:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ============================================
+// TEMPLATES DE MENSAGEM
+// ============================================
+
+router.get('/templates', async (req, res) => {
+  const { data, error } = await supabase
+    .from('templates_mensagem')
+    .select('*')
+    .eq('ativo', true)
+    .order('tipo');
+
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data);
+});
+
+router.put('/templates/:tipo', async (req, res) => {
+  const { conteudo } = req.body;
+  if (!conteudo) return res.status(400).json({ error: 'Conteúdo é obrigatório' });
+
+  const { data, error } = await supabase
+    .from('templates_mensagem')
+    .update({ conteudo, updated_at: new Date().toISOString() })
+    .eq('tipo', req.params.tipo)
+    .eq('ativo', true)
+    .select()
+    .single();
+
+  if (error) return res.status(400).json({ error: error.message });
+  res.json(data);
+});
+
+// ============================================
+// ÁUDIOS
+// ============================================
+
+router.get('/audios', async (req, res) => {
+  const { data, error } = await supabase
+    .from('audios')
+    .select('*')
+    .order('tipo');
+
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data);
+});
+
+router.post('/audios', async (req, res) => {
+  const { nome, tipo, url } = req.body;
+  if (!tipo || !url) return res.status(400).json({ error: 'Tipo e URL são obrigatórios' });
+
+  // Verificar se já existe um áudio desse tipo
+  const { data: existente } = await supabase
+    .from('audios')
+    .select('id')
+    .eq('tipo', tipo)
+    .limit(1);
+
+  if (existente?.length) {
+    // Atualizar existente
+    const { data, error } = await supabase
+      .from('audios')
+      .update({ nome: nome || tipo, url, ativo: true })
+      .eq('tipo', tipo)
+      .select()
+      .single();
+
+    if (error) return res.status(400).json({ error: error.message });
+    return res.json(data);
+  }
+
+  // Criar novo
+  const { data, error } = await supabase
+    .from('audios')
+    .insert({ nome: nome || tipo, tipo, url, ativo: true })
+    .select()
+    .single();
+
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(201).json(data);
+});
+
+// ============================================
+// UPLOAD DE AUDIO (Supabase Storage)
+// ============================================
+
+router.post('/upload-audio', async (req, res) => {
+  try {
+    const { tipo, nome, base64, filename } = req.body;
+
+    // Validar campos obrigatórios
+    if (!tipo || !base64 || !filename) {
+      return res.status(400).json({ error: 'Campos obrigatórios: tipo, base64, filename' });
+    }
+
+    // Validar tipo
+    const tiposValidos = ['cobranca_1', 'cobranca_2', 'cobranca_3', 'confirmacao'];
+    if (!tiposValidos.includes(tipo)) {
+      return res.status(400).json({ error: 'Tipo inválido. Use: ' + tiposValidos.join(', ') });
+    }
+
+    // Validar extensão
+    const ext = filename.split('.').pop().toLowerCase();
+    const extValidas = ['ogg', 'mp3', 'wav', 'm4a', 'webm', 'oga'];
+    if (!extValidas.includes(ext)) {
+      return res.status(400).json({ error: 'Formato inválido. Aceitos: ' + extValidas.join(', ') });
+    }
+
+    // Extrair dados base64 (remover prefixo data:audio/xxx;base64,)
+    const base64Data = base64.includes(',') ? base64.split(',')[1] : base64;
+    const buffer = Buffer.from(base64Data, 'base64');
+
+    // Validar tamanho (5MB max)
+    const maxSize = 5 * 1024 * 1024;
+    if (buffer.length > maxSize) {
+      return res.status(400).json({ error: 'Arquivo muito grande. Máximo: 5MB' });
+    }
+
+    // Detectar content type
+    const mimeTypes = {
+      ogg: 'audio/ogg', mp3: 'audio/mpeg', wav: 'audio/wav',
+      m4a: 'audio/mp4', webm: 'audio/webm', oga: 'audio/ogg'
+    };
+    const contentType = mimeTypes[ext] || 'audio/ogg';
+
+    // Garantir que o bucket existe
+    const { data: buckets } = await supabase.storage.listBuckets();
+    const bucketExists = buckets && buckets.some(b => b.name === 'audios');
+    if (!bucketExists) {
+      const { error: bucketErr } = await supabase.storage.createBucket('audios', {
+        public: true,
+        fileSizeLimit: maxSize,
+        allowedMimeTypes: ['audio/ogg', 'audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/webm']
+      });
+      if (bucketErr && !bucketErr.message.includes('already exists')) {
+        console.error('[Upload] Erro ao criar bucket:', bucketErr);
+        return res.status(500).json({ error: 'Erro ao criar bucket de storage' });
+      }
+    }
+
+    // Path no storage: {tipo}/{timestamp}_{filename}
+    const timestamp = Date.now();
+    const storagePath = tipo + '/' + timestamp + '_' + filename;
+
+    // Upload para Supabase Storage
+    const { data: uploadData, error: uploadErr } = await supabase.storage
+      .from('audios')
+      .upload(storagePath, buffer, {
+        contentType: contentType,
+        upsert: true
+      });
+
+    if (uploadErr) {
+      console.error('[Upload] Erro ao enviar arquivo:', uploadErr);
+      return res.status(500).json({ error: 'Erro ao enviar arquivo: ' + uploadErr.message });
+    }
+
+    // Obter URL pública
+    const { data: urlData } = supabase.storage
+      .from('audios')
+      .getPublicUrl(storagePath);
+
+    const publicUrl = urlData.publicUrl;
+
+    // Upsert na tabela audios
+    const { data: existente } = await supabase
+      .from('audios')
+      .select('id')
+      .eq('tipo', tipo)
+      .limit(1);
+
+    let audioRecord;
+    if (existente && existente.length > 0) {
+      const { data, error } = await supabase
+        .from('audios')
+        .update({ nome: nome || tipo, url: publicUrl, ativo: true })
+        .eq('tipo', tipo)
+        .select()
+        .single();
+      if (error) return res.status(400).json({ error: error.message });
+      audioRecord = data;
+    } else {
+      const { data, error } = await supabase
+        .from('audios')
+        .insert({ nome: nome || tipo, tipo: tipo, url: publicUrl, ativo: true })
+        .select()
+        .single();
+      if (error) return res.status(400).json({ error: error.message });
+      audioRecord = data;
+    }
+
+    console.log('[Upload] Audio ' + tipo + ' salvo: ' + publicUrl);
+    res.json({ url: publicUrl, tipo: tipo, nome: nome || tipo });
+
+  } catch (err) {
+    console.error('[Upload] Erro geral:', err);
+    res.status(500).json({ error: 'Erro interno ao processar upload' });
+  }
+});
+
+// ============================================
+// HORÁRIOS DE COBRANÇA
+// ============================================
+
+router.get('/horarios', (req, res) => {
+  const config = require('../config');
+  res.json({
+    horarios: config.cobranca.horarios,
+  });
+});
+
+router.put('/horarios', async (req, res) => {
+  const { horarios } = req.body;
+  if (!horarios || !Array.isArray(horarios) || horarios.length !== 4) {
+    return res.status(400).json({ error: 'Envie um array com 4 horários' });
+  }
+
+  // Validar formato HH:MM
+  const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+  for (const h of horarios) {
+    if (!regex.test(h)) {
+      return res.status(400).json({ error: `Horário inválido: ${h}. Use formato HH:MM` });
+    }
+  }
+
+  try {
+    // Atualizar variáveis no Render via API
+    const renderApiKey = process.env.RENDER_API_KEY;
+    const renderServiceId = process.env.RENDER_SERVICE_ID;
+
+    if (renderApiKey && renderServiceId) {
+      // Buscar env vars atuais
+      const getRes = await fetch(`https://api.render.com/v1/services/${renderServiceId}/env-vars`, {
+        headers: { 'Authorization': `Bearer ${renderApiKey}` },
+      });
+      const currentVars = await getRes.json();
+
+      // Montar lista atualizada
+      const envVars = currentVars.map(v => ({ key: v.envVar.key, value: v.envVar.value }));
+      for (let i = 0; i < 4; i++) {
+        const key = `COBRANCA_HORARIO_${i + 1}`;
+        const idx = envVars.findIndex(v => v.key === key);
+        if (idx >= 0) envVars[idx].value = horarios[i];
+        else envVars.push({ key, value: horarios[i] });
+      }
+
+      // Atualizar no Render
+      await fetch(`https://api.render.com/v1/services/${renderServiceId}/env-vars`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${renderApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(envVars),
+      });
+
+      // Trigger redeploy
+      await fetch(`https://api.render.com/v1/services/${renderServiceId}/deploys`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${renderApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+
+      res.json({ success: true, horarios, message: 'Horários atualizados. O servidor vai reiniciar em ~30 segundos.' });
+    } else {
+      res.json({ success: true, horarios, message: 'Horários salvos (reinicie o servidor manualmente para aplicar).' });
+    }
+  } catch (err) {
+    console.error('[Horários] Erro:', err);
     res.status(500).json({ error: err.message });
   }
 });

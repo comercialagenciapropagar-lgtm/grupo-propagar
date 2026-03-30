@@ -155,6 +155,54 @@
       100% { transform: scale(1.8); opacity: 0; }
     }
 
+    /* ===== SIDEBAR OVERLAY (mobile) ===== */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 99;
+    }
+    .sidebar-overlay.show { display: block; }
+
+    /* ===== MOBILE TOP BAR ===== */
+    .mobile-topbar {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      background: var(--bg-sidebar);
+      border-bottom: 1px solid var(--border);
+      z-index: 90;
+      align-items: center;
+      padding: 0 16px;
+      gap: 12px;
+    }
+
+    .mobile-topbar-logo {
+      font-size: 1.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    .hamburger-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      line-height: 1;
+      border-radius: var(--radius-sm);
+      transition: background 0.2s;
+    }
+
+    .hamburger-btn:hover { background: rgba(255,255,255,0.06); }
+
     /* ===== MAIN ===== */
     .main {
       margin-left: var(--sidebar-w);
@@ -190,63 +238,6 @@
       display: flex;
       gap: 10px;
     }
-
-    .btn {
-      padding: 9px 18px;
-      border-radius: var(--radius-sm);
-      font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #34d399, #22c55e);
-      color: #064e3b;
-    }
-
-    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-
-    .btn-secondary {
-      background: var(--bg-card);
-      color: var(--text);
-      border: 1px solid var(--border-light);
-    }
-
-    .btn-secondary:hover { background: var(--bg-card-hover); }
-
-    .dropdown-wrapper { position: relative; }
-
-    .dropdown-menu {
-      position: absolute;
-      top: calc(100% + 6px);
-      right: 0;
-      background: var(--bg-card);
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-sm);
-      min-width: 200px;
-      display: none;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-      z-index: 200;
-      overflow: hidden;
-    }
-
-    .dropdown-menu.show { display: block; }
-
-    .dropdown-item {
-      padding: 10px 16px;
-      font-size: 0.85rem;
-      color: var(--text-sec);
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .dropdown-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
 
     .content { padding: 28px 32px; }
 
@@ -540,7 +531,7 @@
       margin-top: 8px;
     }
 
-    /* ===== TABLE ===== */
+    /* ===== TABLE (desktop) ===== */
     .table-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -574,6 +565,9 @@
       border-radius: 20px;
       font-weight: 500;
     }
+
+    .table-desktop { display: block; }
+    .cards-mobile { display: none; }
 
     table { width: 100%; border-collapse: collapse; }
 
@@ -652,6 +646,42 @@
       font-weight: 600;
       color: var(--text-sec);
       white-space: nowrap;
+    }
+
+    /* ===== MOBILE COBRANCA CARDS ===== */
+    .cobranca-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 10px;
+    }
+
+    .cobranca-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .cobranca-card-name {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .cobranca-card-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.82rem;
+      color: var(--text-sec);
+      margin-bottom: 10px;
+    }
+
+    .cobranca-card-details span { font-weight: 500; }
+
+    .cobranca-card-progress {
+      margin-top: 8px;
     }
 
     /* ===== ROW 5 - TWO COLUMNS ===== */
@@ -782,40 +812,6 @@
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.12); }
 
-    /* ===== MOBILE MENU ===== */
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      color: var(--text);
-      font-size: 1.4rem;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 1100px) {
-      .fin-cards-grid { grid-template-columns: 1fr 1fr; }
-      .row3-grid { grid-template-columns: 1fr; }
-      .row5-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 768px) {
-      .sidebar { transform: translateX(-100%); }
-      .sidebar.open { transform: translateX(0); box-shadow: 0 0 40px rgba(0,0,0,0.5); }
-      .main { margin-left: 0; }
-      .content { padding: 20px 16px; }
-      .header { padding: 16px; }
-      .fin-cards-grid { grid-template-columns: 1fr; }
-      .mobile-menu-btn { display: block; }
-      .header-left { display: flex; align-items: center; gap: 12px; }
-    }
-
-    @media (max-width: 480px) {
-      .header-actions { gap: 6px; }
-      .btn { padding: 8px 12px; font-size: 0.8rem; }
-    }
-
     /* ===== SHIMMER / LOADING ===== */
     .shimmer {
       background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
@@ -827,9 +823,283 @@
       0% { background-position: 200% 0; }
       100% { background-position: -200% 0; }
     }
+
+    /* ===== RESPONSIVE: TABLET ===== */
+    @media (max-width: 1100px) {
+      .fin-cards-grid { grid-template-columns: 1fr 1fr; }
+      .row3-grid { grid-template-columns: 1fr; }
+      .row5-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===== RESPONSIVE: MOBILE ===== */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+        box-shadow: 0 0 40px rgba(0,0,0,0.5);
+      }
+
+      .mobile-topbar {
+        display: flex;
+      }
+
+      .main {
+        margin-left: 0;
+        padding-top: 56px;
+      }
+
+      .header {
+        padding: 16px;
+        top: 56px;
+      }
+
+      .header-left h1 {
+        font-size: 1.15rem;
+      }
+
+      .header-date {
+        font-size: 0.78rem;
+      }
+
+      .content {
+        padding: 20px 16px;
+      }
+
+      .fin-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .fin-card {
+        padding: 16px;
+      }
+
+      .fin-card-value {
+        font-size: 2rem;
+      }
+
+      .fin-card-label {
+        font-size: 0.75rem;
+        margin-bottom: 8px;
+      }
+
+      .progress-ring-wrapper {
+        width: 64px;
+        height: 64px;
+      }
+
+      .progress-ring-wrapper svg {
+        width: 64px;
+        height: 64px;
+      }
+
+      .progress-ring-center {
+        font-size: 0.85rem;
+      }
+
+      .main-chart-card {
+        padding: 16px;
+      }
+
+      .main-chart-container {
+        height: 200px;
+      }
+
+      .main-chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+
+      .main-chart-title {
+        font-size: 0.95rem;
+      }
+
+      .main-chart-legend {
+        gap: 12px;
+      }
+
+      .legend-item {
+        font-size: 0.7rem;
+      }
+
+      .row3-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .row3-card {
+        padding: 16px;
+      }
+
+      .row3-title {
+        font-size: 0.9rem;
+        margin-bottom: 14px;
+      }
+
+      .donut-container {
+        width: 170px;
+        height: 170px;
+      }
+
+      .donut-center-value {
+        font-size: 1.8rem;
+      }
+
+      .gauge-container {
+        width: 150px;
+        height: 85px;
+      }
+
+      .gauge-value {
+        font-size: 2.2rem;
+      }
+
+      /* Table -> Card layout on mobile */
+      .table-desktop { display: none; }
+      .cards-mobile { display: block; }
+
+      .table-header {
+        padding: 16px;
+      }
+
+      .table-title {
+        font-size: 0.9rem;
+      }
+
+      .row5-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .clients-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .client-card {
+        padding: 14px;
+      }
+
+      .circular-progress {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 8px;
+      }
+
+      .client-name {
+        font-size: 0.85rem;
+      }
+
+      .client-detail {
+        font-size: 0.72rem;
+      }
+
+      .client-valor {
+        font-size: 0.92rem;
+      }
+
+      .section-header h2 {
+        font-size: 1rem;
+      }
+
+      .empty-state {
+        padding: 40px 16px;
+      }
+
+      .empty-state-icon {
+        font-size: 2.2rem;
+      }
+
+      .resumo-value {
+        font-size: 1rem;
+      }
+    }
+
+    /* ===== RESPONSIVE: SMALL MOBILE ===== */
+    @media (max-width: 480px) {
+      .content {
+        padding: 16px 12px;
+      }
+
+      .fin-card {
+        padding: 14px;
+      }
+
+      .fin-card-value {
+        font-size: 1.7rem;
+      }
+
+      .fin-card-label {
+        font-size: 0.7rem;
+      }
+
+      .main-chart-container {
+        height: 180px;
+      }
+
+      .header-left h1 {
+        font-size: 1rem;
+      }
+
+      .clients-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cobranca-card {
+        padding: 14px;
+      }
+
+      .cobranca-card-name {
+        font-size: 0.9rem;
+      }
+
+      .cobranca-card-details {
+        font-size: 0.78rem;
+        gap: 8px;
+      }
+
+      .donut-container {
+        width: 150px;
+        height: 150px;
+      }
+
+      .donut-center-value {
+        font-size: 1.5rem;
+      }
+
+      .gauge-container {
+        width: 130px;
+        height: 75px;
+      }
+
+      .gauge-value {
+        font-size: 1.8rem;
+      }
+
+      .resumo-label {
+        font-size: 0.8rem;
+      }
+
+      .resumo-value {
+        font-size: 0.92rem;
+      }
+    }
   </style>
 </head>
 <body>
+
+  <!-- MOBILE TOP BAR -->
+  <div class="mobile-topbar" id="mobileTopbar">
+    <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">&#9776;</button>
+    <div class="mobile-topbar-logo">Cobrai.app</div>
+  </div>
+
+  <!-- SIDEBAR OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
@@ -864,7 +1134,6 @@
     <!-- HEADER -->
     <header class="header">
       <div class="header-left">
-        <button class="mobile-menu-btn" onclick="toggleSidebar()">&#9776;</button>
         <div>
           <h1>Dashboard</h1>
           <div class="header-date" id="headerDate"></div>
@@ -985,13 +1254,14 @@
           </div>
         </div>
 
-        <!-- ROW 4 - Cobrancas de Hoje Table -->
+        <!-- ROW 4 - Cobrancas de Hoje -->
         <div class="table-card">
           <div class="table-header">
             <div class="table-title">Cobrancas de Hoje</div>
             <div class="table-count" id="tableCount">0 registros</div>
           </div>
-          <div style="overflow-x:auto">
+          <!-- Desktop table -->
+          <div class="table-desktop" style="overflow-x:auto">
             <table>
               <thead>
                 <tr>
@@ -1007,6 +1277,9 @@
                 <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-faint)">Carregando...</td></tr>
               </tbody>
             </table>
+          </div>
+          <!-- Mobile card layout -->
+          <div class="cards-mobile" id="cobrancasCards" style="padding:12px">
           </div>
         </div>
 
@@ -1033,7 +1306,7 @@
               <div class="accent-line"></div>
             </div>
             <div class="table-card" style="margin-bottom:0">
-              <div style="overflow-x:auto">
+              <div class="table-desktop" style="overflow-x:auto">
                 <table>
                   <thead>
                     <tr>
@@ -1047,6 +1320,8 @@
                     <tr><td colspan="4" style="text-align:center;padding:40px;color:var(--text-faint)">Carregando...</td></tr>
                   </tbody>
                 </table>
+              </div>
+              <div class="cards-mobile" id="filaCardsDash" style="padding:12px">
               </div>
             </div>
           </div>
@@ -1065,12 +1340,11 @@
             <div class="table-title">Lista Completa</div>
             <div class="table-count" id="tableCountFull">0 registros</div>
           </div>
-          <div style="overflow-x:auto">
+          <div class="table-desktop" style="overflow-x:auto">
             <table>
               <thead>
                 <tr>
                   <th>Cliente</th>
-                  <th>WhatsApp</th>
                   <th>Parcela</th>
                   <th>Valor</th>
                   <th>Status</th>
@@ -1079,9 +1353,11 @@
                 </tr>
               </thead>
               <tbody id="cobrancasFullBody">
-                <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-faint)">Carregando...</td></tr>
+                <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-faint)">Carregando...</td></tr>
               </tbody>
             </table>
+          </div>
+          <div class="cards-mobile" id="cobrancasFullCards" style="padding:12px">
           </div>
         </div>
       </div>
@@ -1107,7 +1383,7 @@
           <div class="accent-line"></div>
         </div>
         <div class="table-card">
-          <div style="overflow-x:auto">
+          <div class="table-desktop" style="overflow-x:auto">
             <table>
               <thead>
                 <tr>
@@ -1122,6 +1398,8 @@
               </tbody>
             </table>
           </div>
+          <div class="cards-mobile" id="filaCards" style="padding:12px">
+          </div>
         </div>
       </div>
 
@@ -1130,11 +1408,82 @@
 
   <script>
     // ===== HARDCODED DATA =====
-    const DASHBOARD_DATA = {"stats":{"total_clientes":6,"pagos":3,"pendentes":3,"atrasados":0,"fila_humana":0,"valor_recebido":400,"valor_esperado":750},"cobrancas":[{"parcela_id":"1","cliente_id":"1","nome":"Maria Silva","whatsapp":"11999990001","numero":22,"total_parcelas":30,"valor":150,"status":"pago","data_pagamento":"2026-03-29T14:38:45.83+00:00","percentual_pago":93,"mensagens":[]},{"parcela_id":"2","cliente_id":"1","nome":"Maria Silva","whatsapp":"11999990001","numero":24,"total_parcelas":30,"valor":150,"status":"pago","data_pagamento":"2026-03-29T14:38:45.95+00:00","percentual_pago":93,"mensagens":[]},{"parcela_id":"3","cliente_id":"2","nome":"Patricia Souza","whatsapp":"11999990006","numero":6,"total_parcelas":20,"valor":100,"status":"pago","data_pagamento":"2026-03-29T14:38:46.123+00:00","percentual_pago":65,"mensagens":[]},{"parcela_id":"4","cliente_id":"1","nome":"Maria Silva","whatsapp":"11999990001","numero":23,"total_parcelas":30,"valor":150,"status":"pendente","data_pagamento":null,"percentual_pago":93,"mensagens":[]},{"parcela_id":"5","cliente_id":"2","nome":"Patricia Souza","whatsapp":"11999990006","numero":7,"total_parcelas":20,"valor":100,"status":"pendente","data_pagamento":null,"percentual_pago":65,"mensagens":[]},{"parcela_id":"6","cliente_id":"3","nome":"Ana Costa","whatsapp":"48999990003","numero":19,"total_parcelas":25,"valor":100,"status":"pendente","data_pagamento":null,"percentual_pago":96,"mensagens":["cobranca_1","cobranca_2","cobranca_3","cobranca_4"]}],"clientes_bons":[{"cliente_id":"3","nome":"Ana Costa","whatsapp":"48999990003","emprestimo_id":"1","valor_total":2000,"valor_parcela":100,"total_parcelas":25,"parcelas_pagas":24,"percentual":96},{"cliente_id":"1","nome":"Maria Silva","whatsapp":"11999990001","emprestimo_id":"2","valor_total":3000,"valor_parcela":150,"total_parcelas":30,"parcelas_pagas":28,"percentual":93}],"fila_humana":[]};
+    const DASHBOARD_DATA = {
+      stats: { total_clientes: 24, pagos: 18, pendentes: 4, atrasados: 2, fila_humana: 1, valor_recebido: 4850, valor_esperado: 6420 },
+      cobrancas: [
+        { nome: "Maria Silva", numero: 22, total_parcelas: 30, valor: 150, status: "pago", data_pagamento: "2026-03-29T09:15:00", percentual_pago: 73, mensagens: ["cobranca_1"] },
+        { nome: "Joao Oliveira", numero: 28, total_parcelas: 30, valor: 200, status: "pago", data_pagamento: "2026-03-29T08:42:00", percentual_pago: 93, mensagens: ["cobranca_1"] },
+        { nome: "Ana Costa", numero: 19, total_parcelas: 25, valor: 100, status: "pago", data_pagamento: "2026-03-29T10:30:00", percentual_pago: 76, mensagens: ["cobranca_1", "cobranca_2"] },
+        { nome: "Carlos Ferreira", numero: 15, total_parcelas: 20, valor: 250, status: "pago", data_pagamento: "2026-03-29T07:55:00", percentual_pago: 75, mensagens: ["cobranca_1"] },
+        { nome: "Fernanda Lima", numero: 8, total_parcelas: 15, valor: 180, status: "pago", data_pagamento: "2026-03-29T11:20:00", percentual_pago: 53, mensagens: ["cobranca_1", "cobranca_2"] },
+        { nome: "Roberto Mendes", numero: 12, total_parcelas: 25, valor: 120, status: "pago", data_pagamento: "2026-03-29T09:45:00", percentual_pago: 48, mensagens: ["cobranca_1"] },
+        { nome: "Patricia Souza", numero: 6, total_parcelas: 20, valor: 100, status: "pago", data_pagamento: "2026-03-29T12:10:00", percentual_pago: 30, mensagens: ["cobranca_1", "cobranca_2", "cobranca_3"] },
+        { nome: "Lucas Martins", numero: 18, total_parcelas: 24, valor: 175, status: "pago", data_pagamento: "2026-03-29T08:15:00", percentual_pago: 75, mensagens: ["cobranca_1"] },
+        { nome: "Juliana Rocha", numero: 10, total_parcelas: 18, valor: 220, status: "pago", data_pagamento: "2026-03-29T10:05:00", percentual_pago: 56, mensagens: ["cobranca_1"] },
+        { nome: "Ricardo Maia", numero: 22, total_parcelas: 30, valor: 130, status: "pago", data_pagamento: "2026-03-29T11:45:00", percentual_pago: 73, mensagens: ["cobranca_1", "cobranca_2"] },
+        { nome: "Camila Santos", numero: 14, total_parcelas: 20, valor: 160, status: "pago", data_pagamento: "2026-03-29T09:30:00", percentual_pago: 70, mensagens: ["cobranca_1"] },
+        { nome: "Bruno Alves", numero: 5, total_parcelas: 12, valor: 300, status: "pago", data_pagamento: "2026-03-29T13:20:00", percentual_pago: 42, mensagens: ["cobranca_1"] },
+        { nome: "Mariana Dias", numero: 9, total_parcelas: 15, valor: 190, status: "pago", data_pagamento: "2026-03-29T07:30:00", percentual_pago: 60, mensagens: ["cobranca_1"] },
+        { nome: "Diego Nascimento", numero: 20, total_parcelas: 25, valor: 140, status: "pago", data_pagamento: "2026-03-29T14:00:00", percentual_pago: 80, mensagens: ["cobranca_1", "cobranca_2"] },
+        { nome: "Tatiane Ramos", numero: 16, total_parcelas: 22, valor: 110, status: "pago", data_pagamento: "2026-03-29T08:50:00", percentual_pago: 73, mensagens: ["cobranca_1"] },
+        { nome: "Marcos Pereira", numero: 11, total_parcelas: 18, valor: 200, status: "pago", data_pagamento: "2026-03-29T12:30:00", percentual_pago: 61, mensagens: ["cobranca_1", "cobranca_2"] },
+        { nome: "Sandra Moreira", numero: 7, total_parcelas: 15, valor: 165, status: "pago", data_pagamento: "2026-03-29T10:15:00", percentual_pago: 47, mensagens: ["cobranca_1"] },
+        { nome: "Eduardo Gomes", numero: 25, total_parcelas: 30, valor: 135, status: "pago", data_pagamento: "2026-03-29T11:00:00", percentual_pago: 83, mensagens: ["cobranca_1"] },
+        { nome: "Renata Barbosa", numero: 4, total_parcelas: 10, valor: 280, status: "pendente", data_pagamento: null, percentual_pago: 40, mensagens: ["cobranca_1", "cobranca_2", "cobranca_3"] },
+        { nome: "Thiago Costa", numero: 13, total_parcelas: 20, valor: 150, status: "pendente", data_pagamento: null, percentual_pago: 65, mensagens: ["cobranca_1", "cobranca_2", "cobranca_3", "cobranca_4"] },
+        { nome: "Aline Ferreira", numero: 3, total_parcelas: 12, valor: 200, status: "pendente", data_pagamento: null, percentual_pago: 25, mensagens: ["cobranca_1", "cobranca_2"] },
+        { nome: "Gustavo Ribeiro", numero: 17, total_parcelas: 24, valor: 190, status: "pendente", data_pagamento: null, percentual_pago: 71, mensagens: ["cobranca_1", "cobranca_2", "cobranca_3"] },
+        { nome: "Vanessa Lopes", numero: 8, total_parcelas: 15, valor: 170, status: "atrasado", data_pagamento: null, percentual_pago: 53, mensagens: ["cobranca_1", "cobranca_2", "cobranca_3", "cobranca_4"] },
+        { nome: "Felipe Cardoso", numero: 2, total_parcelas: 10, valor: 350, status: "atrasado", data_pagamento: null, percentual_pago: 20, mensagens: ["cobranca_1", "cobranca_2", "cobranca_3", "cobranca_4"] }
+      ],
+      clientes_bons: [
+        { nome: "Joao Oliveira", valor_total: 6000, valor_parcela: 200, total_parcelas: 30, parcelas_pagas: 28, percentual: 93 },
+        { nome: "Eduardo Gomes", valor_total: 4050, valor_parcela: 135, total_parcelas: 30, parcelas_pagas: 25, percentual: 83 },
+        { nome: "Diego Nascimento", valor_total: 3500, valor_parcela: 140, total_parcelas: 25, parcelas_pagas: 20, percentual: 80 },
+        { nome: "Ana Costa", valor_total: 2500, valor_parcela: 100, total_parcelas: 25, parcelas_pagas: 19, percentual: 76 }
+      ],
+      fila_humana: [
+        { id: "1", motivo: "ignorou_mensagens", prioridade: 2, status: "pendente", created_at: "2026-03-29T15:00:00", clientes: { nome: "Felipe Cardoso", whatsapp: "48999990010" }, parcelas: { numero: 2, valor: 350, data_vencimento: "2026-03-27", emprestimos: { total_parcelas: 10, parcelas_pagas: 2 } } }
+      ]
+    };
 
-    const METRICAS_DATA = {"hoje":{"recebido":400,"esperado":750},"mes":{"recebido":16000,"esperado":17760},"media_diaria":761.9,"mrr":17760,"projecao_mes":17523.81,"taxa_adimplencia":99,"grafico_diario":[{"dia":"2026-03-02","recebido":630,"esperado":630},{"dia":"2026-03-03","recebido":630,"esperado":630},{"dia":"2026-03-04","recebido":630,"esperado":630},{"dia":"2026-03-05","recebido":830,"esperado":830},{"dia":"2026-03-06","recebido":830,"esperado":830},{"dia":"2026-03-09","recebido":830,"esperado":830},{"dia":"2026-03-10","recebido":930,"esperado":930},{"dia":"2026-03-11","recebido":930,"esperado":930},{"dia":"2026-03-12","recebido":930,"esperado":930},{"dia":"2026-03-13","recebido":930,"esperado":930},{"dia":"2026-03-16","recebido":930,"esperado":930},{"dia":"2026-03-17","recebido":680,"esperado":680},{"dia":"2026-03-18","recebido":580,"esperado":580},{"dia":"2026-03-19","recebido":780,"esperado":780},{"dia":"2026-03-20","recebido":930,"esperado":930},{"dia":"2026-03-23","recebido":780,"esperado":930},{"dia":"2026-03-24","recebido":730,"esperado":730},{"dia":"2026-03-25","recebido":730,"esperado":730},{"dia":"2026-03-26","recebido":730,"esperado":730},{"dia":"2026-03-27","recebido":630,"esperado":630},{"dia":"2026-03-29","recebido":400,"esperado":750},{"dia":"2026-03-30","recebido":0,"esperado":630},{"dia":"2026-03-31","recebido":0,"esperado":630}],"dias_passados":21,"dias_restantes":2};
+    const METRICAS_DATA = {
+      hoje: { recebido: 4850, esperado: 6420 },
+      mes: { recebido: 128750, esperado: 152800 },
+      media_diaria: 6131,
+      mrr: 152800,
+      projecao_mes: 140993,
+      taxa_adimplencia: 92,
+      grafico_diario: [
+        { dia: "2026-03-02", recebido: 5800, esperado: 6200 },
+        { dia: "2026-03-03", recebido: 6100, esperado: 6200 },
+        { dia: "2026-03-04", recebido: 5900, esperado: 6200 },
+        { dia: "2026-03-05", recebido: 6500, esperado: 6800 },
+        { dia: "2026-03-06", recebido: 6300, esperado: 6800 },
+        { dia: "2026-03-09", recebido: 6700, esperado: 6800 },
+        { dia: "2026-03-10", recebido: 5400, esperado: 6420 },
+        { dia: "2026-03-11", recebido: 6420, esperado: 6420 },
+        { dia: "2026-03-12", recebido: 6100, esperado: 6420 },
+        { dia: "2026-03-13", recebido: 6420, esperado: 6420 },
+        { dia: "2026-03-16", recebido: 5900, esperado: 6420 },
+        { dia: "2026-03-17", recebido: 6200, esperado: 6420 },
+        { dia: "2026-03-18", recebido: 5700, esperado: 6000 },
+        { dia: "2026-03-19", recebido: 6000, esperado: 6420 },
+        { dia: "2026-03-20", recebido: 6420, esperado: 6420 },
+        { dia: "2026-03-23", recebido: 5800, esperado: 6420 },
+        { dia: "2026-03-24", recebido: 6300, esperado: 6420 },
+        { dia: "2026-03-25", recebido: 6100, esperado: 6420 },
+        { dia: "2026-03-26", recebido: 6420, esperado: 6420 },
+        { dia: "2026-03-27", recebido: 5500, esperado: 6200 },
+        { dia: "2026-03-29", recebido: 4850, esperado: 6420 },
+        { dia: "2026-03-30", recebido: 0, esperado: 6420 },
+        { dia: "2026-03-31", recebido: 0, esperado: 6420 }
+      ],
+      dias_passados: 21,
+      dias_restantes: 2
+    };
 
-    const STATUS_DATA = {"sistema":"online","whatsapp":{"connected":true,"state":"open"}};
+    const STATUS_DATA = { sistema: "online", whatsapp: { connected: true, state: "open" } };
 
     // ===== STATE =====
     let donutChart = null;
@@ -1149,10 +1498,10 @@
     }
 
     function formatDate() {
-      const now = new Date();
-      const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      const date = now.toLocaleDateString('pt-BR', opts);
-      const time = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      var now = new Date();
+      var opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      var date = now.toLocaleDateString('pt-BR', opts);
+      var time = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
       return date.charAt(0).toUpperCase() + date.slice(1) + ' - ' + time;
     }
 
@@ -1186,11 +1535,19 @@
         name === 'dashboard' ? 'Dashboard' :
         name === 'cobrancas' ? 'Cobrancas' :
         name === 'clientes-bons' ? 'Clientes Bons' : 'Fila Humana';
-      document.getElementById('sidebar').classList.remove('open');
+      closeSidebar();
     }
 
     function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
+      var sidebar = document.getElementById('sidebar');
+      var overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('show');
     }
 
     // ===== CHARTS =====
@@ -1281,6 +1638,10 @@
 
       var ctx = document.getElementById('mainChart').getContext('2d');
 
+      // Determine mobile font size
+      var isMobile = window.innerWidth <= 768;
+      var tickSize = isMobile ? 9 : 11;
+
       // Plugin to draw today's vertical dashed line
       var todayLinePlugin = {
         id: 'todayLine',
@@ -1298,7 +1659,6 @@
           ctxC.moveTo(x, yScale.top);
           ctxC.lineTo(x, yScale.bottom);
           ctxC.stroke();
-          // Label
           ctxC.fillStyle = 'rgba(255,255,255,0.5)';
           ctxC.font = '500 10px Inter';
           ctxC.textAlign = 'center';
@@ -1336,7 +1696,7 @@
               borderColor: '#34d399',
               backgroundColor: 'rgba(52,211,153,0.1)',
               borderWidth: 2.5,
-              pointRadius: 3,
+              pointRadius: isMobile ? 2 : 3,
               pointBackgroundColor: '#34d399',
               pointBorderColor: '#34d399',
               pointHoverRadius: 5,
@@ -1367,7 +1727,7 @@
             x: {
               ticks: {
                 color: '#5b5e6b',
-                font: { family: 'Inter', size: 11 },
+                font: { family: 'Inter', size: tickSize },
                 maxRotation: 0
               },
               grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false }
@@ -1376,7 +1736,7 @@
               beginAtZero: true,
               ticks: {
                 color: '#5b5e6b',
-                font: { family: 'Inter', size: 11 },
+                font: { family: 'Inter', size: tickSize },
                 callback: function(value) {
                   if (value >= 1000) return 'R$ ' + (value / 1000).toFixed(1) + 'k';
                   return 'R$ ' + value;
@@ -1395,7 +1755,6 @@
       var ctx = document.getElementById('gaugeChart').getContext('2d');
       var color = gaugeColorHex(taxa);
 
-      // Semicircle gauge using doughnut
       var filled = taxa;
       var empty = 100 - taxa;
 
@@ -1428,6 +1787,63 @@
           }
         }
       });
+    }
+
+    // ===== RENDER COBRANCA CARDS (mobile) =====
+    function renderCobrancaCards(containerId, cobrancas) {
+      var container = document.getElementById(containerId);
+      if (!container) return;
+      if (cobrancas.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-faint)">Nenhuma cobranca encontrada</div>';
+        return;
+      }
+      container.innerHTML = cobrancas.map(function(c) {
+        var statusClass = c.status === 'pago' ? 'badge-pago' : c.status === 'atrasado' ? 'badge-atrasado' : 'badge-pendente';
+        var pct = c.percentual_pago || 0;
+        var pColor = progressColor(pct);
+        var msgs = (c.mensagens || []).length;
+        return '<div class="cobranca-card">' +
+          '<div class="cobranca-card-top">' +
+            '<div class="cobranca-card-name">' + c.nome + '</div>' +
+            '<span class="badge ' + statusClass + '">' + c.status + '</span>' +
+          '</div>' +
+          '<div class="cobranca-card-details">' +
+            '<span>Parcela ' + c.numero + '/' + c.total_parcelas + '</span>' +
+            '<span>' + formatBRL(c.valor) + '</span>' +
+            (msgs > 0 ? '<span>' + msgs + ' msg enviada' + (msgs > 1 ? 's' : '') + '</span>' : '') +
+          '</div>' +
+          '<div class="cobranca-card-progress">' +
+            '<div class="mini-progress">' +
+              '<div class="mini-progress-bar"><div class="mini-progress-fill" style="width:' + pct + '%;background:' + pColor + '"></div></div>' +
+              '<span class="mini-progress-text">' + pct + '%</span>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    // ===== RENDER FILA HUMANA CARDS (mobile) =====
+    function renderFilaHumanaCards(containerId, fila) {
+      var container = document.getElementById(containerId);
+      if (!container) return;
+      if (fila.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-faint)"><div style="font-size:2rem;margin-bottom:8px;opacity:0.5">&#10003;</div>Nenhum caso na fila humana</div>';
+        return;
+      }
+      container.innerHTML = fila.map(function(f) {
+        var nome = (f.clientes && f.clientes.nome) || f.nome || '--';
+        var motivo = f.motivo || '--';
+        return '<div class="cobranca-card">' +
+          '<div class="cobranca-card-top">' +
+            '<div class="cobranca-card-name">' + nome + '</div>' +
+            '<span class="badge badge-pendente">' + (f.status || 'aguardando') + '</span>' +
+          '</div>' +
+          '<div class="cobranca-card-details">' +
+            '<span>Motivo: ' + motivo.replace(/_/g, ' ') + '</span>' +
+            '<span>Prioridade: ' + (f.prioridade || '--') + '</span>' +
+          '</div>' +
+        '</div>';
+      }).join('');
     }
 
     // ===== RENDER METRICAS =====
@@ -1481,7 +1897,7 @@
       // ROW 3 - Donut
       renderDonutChart(s.pagos, s.pendentes, s.atrasados);
 
-      // ROW 4 - Table
+      // ROW 4 - Table (desktop)
       var tbody = document.getElementById('cobrancasBody');
       var cobrancas = data.cobrancas || [];
       document.getElementById('tableCount').textContent = cobrancas.length + ' registros';
@@ -1505,11 +1921,14 @@
         }).join('');
       }
 
-      // Cobrancas full section
+      // ROW 4 - Cards (mobile)
+      renderCobrancaCards('cobrancasCards', cobrancas);
+
+      // Cobrancas full section (desktop table)
       var tbodyFull = document.getElementById('cobrancasFullBody');
       document.getElementById('tableCountFull').textContent = cobrancas.length + ' registros';
       if (cobrancas.length === 0) {
-        tbodyFull.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-faint)">Nenhuma cobranca encontrada</td></tr>';
+        tbodyFull.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-faint)">Nenhuma cobranca encontrada</td></tr>';
       } else {
         tbodyFull.innerHTML = cobrancas.map(function(c) {
           var statusClass = c.status === 'pago' ? 'badge-pago' : c.status === 'atrasado' ? 'badge-atrasado' : 'badge-pendente';
@@ -1518,7 +1937,6 @@
           var pColor = progressColor(pct);
           return '<tr>' +
             '<td><strong>' + c.nome + '</strong></td>' +
-            '<td>' + (c.whatsapp || '--') + '</td>' +
             '<td>' + c.numero + '/' + c.total_parcelas + '</td>' +
             '<td>' + formatBRL(c.valor) + '</td>' +
             '<td><span class="badge ' + statusClass + '">' + c.status + '</span></td>' +
@@ -1527,6 +1945,9 @@
             '</tr>';
         }).join('');
       }
+
+      // Cobrancas full section (mobile cards)
+      renderCobrancaCards('cobrancasFullCards', cobrancas);
 
       // ROW 5 - Clientes Bons (dashboard + full section)
       var bons = data.clientes_bons || [];
@@ -1537,6 +1958,10 @@
       var fila = data.fila_humana || [];
       renderFilaHumana('filaBodyDash', fila);
       renderFilaHumana('filaBody', fila);
+
+      // Fila Humana mobile cards
+      renderFilaHumanaCards('filaCardsDash', fila);
+      renderFilaHumanaCards('filaCards', fila);
     }
 
     function renderClientesBons(gridId, bons) {
@@ -1566,13 +1991,16 @@
 
     function renderFilaHumana(tbodyId, fila) {
       var filaBody = document.getElementById(tbodyId);
+      if (!filaBody) return;
       if (fila.length === 0) {
         filaBody.innerHTML = '<tr><td colspan="4"><div class="empty-state"><div class="empty-state-icon">&#10003;</div><div class="empty-state-text">Nenhum caso na fila humana</div><div class="empty-state-sub">Quando houver casos que necessitam de atendimento humano, aparecerao aqui</div></div></td></tr>';
       } else {
         filaBody.innerHTML = fila.map(function(f) {
+          var nome = (f.clientes && f.clientes.nome) || f.nome || f.cliente_id || '--';
+          var motivo = f.motivo || f.reason || '--';
           return '<tr>' +
-            '<td><strong>' + (f.nome || f.cliente_id || '--') + '</strong></td>' +
-            '<td>' + (f.motivo || f.reason || '--') + '</td>' +
+            '<td><strong>' + nome + '</strong></td>' +
+            '<td>' + motivo.replace(/_/g, ' ') + '</td>' +
             '<td>' + (f.prioridade || f.priority || '--') + '</td>' +
             '<td><span class="badge badge-pendente">' + (f.status || 'aguardando') + '</span></td>' +
           '</tr>';
@@ -1616,14 +2044,13 @@
 
     // ===== INIT =====
     updateClock();
-
     loadAll();
 
     // Close sidebar overlay on click outside (mobile)
     document.addEventListener('click', function(e) {
       var sidebar = document.getElementById('sidebar');
-      if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !e.target.closest('.mobile-menu-btn')) {
-        sidebar.classList.remove('open');
+      if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !e.target.closest('.hamburger-btn')) {
+        closeSidebar();
       }
     });
   </script>
