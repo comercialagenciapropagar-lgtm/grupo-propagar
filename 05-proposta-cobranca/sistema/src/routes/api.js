@@ -119,6 +119,19 @@ router.put('/clientes/:id', async (req, res) => {
   res.json(data);
 });
 
+router.delete('/clientes/:id', async (req, res) => {
+  // Desativar cliente (soft delete)
+  const { data, error } = await supabase
+    .from('clientes')
+    .update({ ativo: false })
+    .eq('id', req.params.id)
+    .select()
+    .single();
+
+  if (error) return res.status(400).json({ error: error.message });
+  res.json({ message: 'Cliente removido', data });
+});
+
 // ============================================
 // EMPRÉSTIMOS
 // ============================================

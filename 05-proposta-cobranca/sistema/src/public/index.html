@@ -2726,9 +2726,25 @@
           '<td>' + (c.whatsapp || '--') + '</td>' +
           '<td>' + (c.cpf || '--') + '</td>' +
           '<td>' + empAtivos + '</td>' +
-          '<td><button class="btn-table-action" onclick="selectClienteForEmprestimo(\'' + id + '\')">Novo Emprestimo</button></td>' +
+          '<td>' +
+            '<button class="btn-table-action" onclick="selectClienteForEmprestimo(\'' + id + '\')">Novo Emprestimo</button> ' +
+            '<button class="btn-table-action" style="background:rgba(248,113,113,0.1);color:#f87171;border-color:rgba(248,113,113,0.25)" onclick="excluirCliente(\'' + id + '\',\'' + (c.nome || '').replace(/'/g, '') + '\')">Excluir</button>' +
+          '</td>' +
           '</tr>';
       }).join('');
+    }
+
+    async function excluirCliente(id, nome) {
+      if (!confirm('Tem certeza que deseja excluir o cliente ' + nome + '?')) return;
+      try {
+        var res = await fetch('/api/clientes/' + id, { method: 'DELETE' });
+        var data = await res.json();
+        if (!res.ok) { showToast(data.error || 'Erro ao excluir', 'error'); return; }
+        showToast('Cliente ' + nome + ' removido!', 'success');
+        loadClientesCadastro();
+      } catch (e) {
+        showToast('Erro: ' + e.message, 'error');
+      }
     }
 
     function selectClienteForEmprestimo(clienteId) {
