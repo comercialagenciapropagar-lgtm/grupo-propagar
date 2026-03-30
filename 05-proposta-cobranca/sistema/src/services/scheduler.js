@@ -13,7 +13,7 @@ function iniciar() {
   // ============================================
   // 06:00 - Gerar cobranças do dia no Asaas
   // ============================================
-  cron.schedule('0 6 * * *', async () => {
+  cron.schedule('0 6 * * 1-6', async () => {
     console.log('[Scheduler] === 06:00 - Gerando cobranças do dia ===');
     try {
       await billing.atualizarAtrasados();
@@ -33,7 +33,7 @@ function iniciar() {
     const { hora, minuto } = parsarHorario(horario);
     const tipo = `cobranca_${index + 1}`;
 
-    cron.schedule(`${minuto} ${hora} * * *`, async () => {
+    cron.schedule(`${minuto} ${hora} * * 1-6`, async () => {
       console.log(`[Scheduler] === ${horario} - Disparo ${tipo} ===`);
       try {
         await billing.dispararMensagens(tipo);
@@ -48,7 +48,7 @@ function iniciar() {
   // ============================================
   // 19:30 - Mover não pagos para fila humana
   // ============================================
-  cron.schedule('30 19 * * *', async () => {
+  cron.schedule('30 19 * * 1-6', async () => {
     console.log('[Scheduler] === 19:30 - Movendo para fila humana ===');
     try {
       await billing.atualizarAtrasados();
