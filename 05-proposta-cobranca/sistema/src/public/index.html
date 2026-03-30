@@ -1391,9 +1391,98 @@
       0% { background-position: 200% 0; }
       100% { background-position: -200% 0; }
     }
+
+    /* ===== LOGIN SCREEN ===== */
+    #login-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d3a 50%, #0f1117 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .login-card {
+      background: rgba(26, 29, 39, 0.95);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 380px;
+      max-width: 90vw;
+      text-align: center;
+      backdrop-filter: blur(20px);
+    }
+
+    .login-logo { font-size: 32px; font-weight: 800; color: #34d399; margin-bottom: 8px; }
+    .login-subtitle { color: #9ca3af; font-size: 14px; margin-bottom: 32px; }
+
+    .login-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: #141620;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #e8e8ed;
+      font-size: 15px;
+      margin-bottom: 12px;
+      outline: none;
+      font-family: inherit;
+    }
+    .login-input:focus { border-color: #34d399; box-shadow: 0 0 0 3px rgba(52,211,153,0.15); }
+    .login-input::placeholder { color: #5b5e6b; }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: #34d399;
+      color: #0f1117;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      font-family: inherit;
+    }
+    .login-btn:hover { background: #2dc08a; }
+
+    .login-error { color: #f87171; font-size: 13px; margin-top: 12px; min-height: 20px; }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--text-sec);
+    }
+    .user-info .logout-btn {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-sec);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-family: inherit;
+    }
+    .user-info .logout-btn:hover { border-color: var(--red); color: var(--red); }
   </style>
 </head>
 <body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-logo">Cobrai.app</div>
+      <div class="login-subtitle">Sistema de Cobranca Inteligente</div>
+      <input type="text" id="login-usuario" class="login-input" placeholder="Usuario" autocomplete="username" autofocus>
+      <input type="password" id="login-senha" class="login-input" placeholder="Senha" autocomplete="current-password">
+      <button class="login-btn" onclick="handleLogin()">Entrar</button>
+      <div class="login-error" id="login-error"></div>
+    </div>
+  </div>
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
@@ -1425,6 +1514,10 @@
       <div class="status-indicator">
         <span class="status-dot" id="statusDot"></span>
         <span id="statusText">Verificando...</span>
+      </div>
+      <div class="user-info">
+        <span id="user-display-name"></span>
+        <button class="logout-btn" onclick="logout()">Sair</button>
       </div>
     </div>
   </aside>
@@ -1895,6 +1988,69 @@
   <div class="toast" id="toastMsg"></div>
 
   <script>
+    // ===== AUTH =====
+    function checkAuth() {
+      var token = localStorage.getItem('cobrai_token');
+      var nome = localStorage.getItem('cobrai_nome');
+      if (token && nome) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('user-display-name').textContent = nome;
+        return true;
+      }
+      document.getElementById('login-screen').style.display = 'flex';
+      return false;
+    }
+
+    async function handleLogin() {
+      var usuario = document.getElementById('login-usuario').value.trim();
+      var senha = document.getElementById('login-senha').value;
+      var errorEl = document.getElementById('login-error');
+      errorEl.textContent = '';
+
+      if (!usuario || !senha) {
+        errorEl.textContent = 'Preencha usuario e senha';
+        return;
+      }
+
+      try {
+        var res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ usuario: usuario, senha: senha })
+        });
+        var data = await res.json();
+        if (!res.ok) {
+          errorEl.textContent = data.error || 'Erro ao fazer login';
+          return;
+        }
+        localStorage.setItem('cobrai_token', data.token);
+        localStorage.setItem('cobrai_nome', data.nome);
+        localStorage.setItem('cobrai_usuario', data.usuario);
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('user-display-name').textContent = data.nome;
+        loadAll();
+      } catch (e) {
+        errorEl.textContent = 'Erro de conexao';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('cobrai_token');
+      localStorage.removeItem('cobrai_nome');
+      localStorage.removeItem('cobrai_usuario');
+      location.reload();
+    }
+
+    // Enter key on password field
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('login-senha').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') handleLogin();
+      });
+      document.getElementById('login-usuario').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') document.getElementById('login-senha').focus();
+      });
+    });
+
     // ===== STATE =====
     let donutChart = null;
     let mainChart = null;
@@ -2447,10 +2603,14 @@
     updateClock();
     setInterval(updateClock, 10000);
 
-    loadAll();
+    if (checkAuth()) {
+      loadAll();
+    }
 
     // Auto-refresh every 30 seconds (both endpoints)
-    setInterval(loadAll, 30000);
+    setInterval(function() {
+      if (checkAuth()) loadAll();
+    }, 30000);
 
     // Close sidebar overlay on click outside (mobile)
     document.addEventListener('click', function(e) {

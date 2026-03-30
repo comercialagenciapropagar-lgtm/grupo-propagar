@@ -6,6 +6,43 @@ const evolution = require('../services/zapi');
 const router = Router();
 
 // ============================================
+// AUTENTICACAO
+// ============================================
+
+const USERS = {
+  'orobertoaraujo': { senha: '1234', nome: 'Roberto Araujo' },
+  'oricardomaia': { senha: '1234', nome: 'Ricardo Maia' },
+};
+
+router.post('/login', (req, res) => {
+  const { usuario, senha } = req.body;
+  const user = USERS[usuario];
+  if (!user || user.senha !== senha) {
+    return res.status(401).json({ error: 'Usuario ou senha invalidos' });
+  }
+  // Simple token (base64 of user:timestamp)
+  const token = Buffer.from(usuario + ':' + Date.now()).toString('base64');
+  res.json({ token, nome: user.nome, usuario });
+});
+
+router.get('/auth/check', (req, res) => {
+  const auth = req.headers.authorization;
+  if (!auth || !auth.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Nao autorizado' });
+  }
+  try {
+    const token = auth.split(' ')[1];
+    const decoded = Buffer.from(token, 'base64').toString();
+    const usuario = decoded.split(':')[0];
+    const user = USERS[usuario];
+    if (!user) return res.status(401).json({ error: 'Token invalido' });
+    res.json({ usuario, nome: user.nome });
+  } catch (e) {
+    res.status(401).json({ error: 'Token invalido' });
+  }
+});
+
+// ============================================
 // DASHBOARD
 // ============================================
 
