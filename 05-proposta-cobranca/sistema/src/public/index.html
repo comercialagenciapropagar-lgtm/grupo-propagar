@@ -1537,6 +1537,9 @@
         <button class="btn btn-primary" onclick="gerarCobrancas()">
           &#9889; Gerar Cobrancas
         </button>
+        <button class="btn btn-primary" style="background:#e17055;" onclick="abrirModalCobrarCliente()">
+          &#128176; Cobrar Agora
+        </button>
         <div class="dropdown-wrapper">
           <button class="btn btn-secondary" onclick="toggleDropdown(event)">
             &#9993; Disparar Mensagem &#9660;
@@ -3288,5 +3291,76 @@
     }
   </script>
 
+<!-- MODAL COBRAR CLIENTE -->
+<div id="modalCobrarCliente" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:32px;width:90%;max-width:440px;">
+    <h3 style="margin-bottom:8px;color:var(--text);">Cobrar Cliente Agora</h3>
+    <p style="color:var(--text-sec);font-size:0.85rem;margin-bottom:20px;">Gera a cobranca PIX e envia pelo WhatsApp imediatamente.</p>
+    <label style="display:block;margin-bottom:8px;color:var(--text-sec);font-size:0.85rem;">Selecione o cliente</label>
+    <select id="selectCobrarCliente" style="width:100%;padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:1rem;margin-bottom:24px;">
+      <option value="">Carregando...</option>
+    </select>
+    <div style="display:flex;gap:12px;justify-content:flex-end;">
+      <button class="btn btn-secondary" onclick="fecharModalCobrarCliente()">Cancelar</button>
+      <button class="btn btn-primary" style="background:#e17055;" onclick="cobrarClienteImediato()">Cobrar Agora</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function abrirModalCobrarCliente() {
+    var modal = document.getElementById('modalCobrarCliente');
+    modal.style.display = 'flex';
+    var select = document.getElementById('selectCobrarCliente');
+    select.innerHTML = '<option value="">Carregando...</option>';
+    try {
+      var res = await fetch('/api/clientes');
+      var clientes = await res.json();
+      select.innerHTML = '<option value="">-- Escolha um cliente --</option>';
+      clientes.forEach(function(c) {
+        select.innerHTML += '<option value="' + c.id + '">' + c.nome + ' - ' + (c.whatsapp || '') + '</option>';
+      });
+    } catch (e) {
+      select.innerHTML = '<option value="">Erro ao carregar clientes</option>';
+    }
+  }
+
+  function fecharModalCobrarCliente() {
+    document.getElementById('modalCobrarCliente').style.display = 'none';
+  }
+
+  async function cobrarClienteImediato() {
+    var select = document.getElementById('selectCobrarCliente');
+    var clienteId = select.value;
+    if (!clienteId) {
+      alert('Selecione um cliente!');
+      return;
+    }
+    var nome = select.options[select.selectedIndex].text;
+    if (!confirm('Cobrar ' + nome + ' agora?')) return;
+
+    try {
+      var res = await fetch('/api/acoes/cobrar-cliente', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cliente_id: clienteId })
+      });
+      var data = await res.json();
+      if (data.mensagem) {
+        alert(data.mensagem);
+      } else {
+        alert('Cobranca enviada! Sucesso: ' + data.sucesso + ' | Erros: ' + data.erros);
+      }
+      fecharModalCobrarCliente();
+      loadAll();
+    } catch (e) {
+      alert('Erro ao cobrar cliente: ' + e.message);
+    }
+  }
+
+  document.getElementById('modalCobrarCliente').addEventListener('click', function(e) {
+    if (e.target === this) fecharModalCobrarCliente();
+  });
+</script>
 </body>
 </html>

@@ -287,6 +287,19 @@ router.post('/acoes/disparar-mensagens', async (req, res) => {
   }
 });
 
+router.post('/acoes/cobrar-cliente', async (req, res) => {
+  const { cliente_id } = req.body;
+  if (!cliente_id) {
+    return res.status(400).json({ error: 'cliente_id é obrigatório' });
+  }
+  try {
+    const resultado = await billing.cobrarClienteImediato(cliente_id);
+    res.json(resultado);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.post('/acoes/atualizar-atrasados', async (req, res) => {
   try {
     const count = await billing.atualizarAtrasados();

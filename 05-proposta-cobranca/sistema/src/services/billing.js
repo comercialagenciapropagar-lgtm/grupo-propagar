@@ -516,6 +516,136 @@ async function getDashboardData() {
 }
 
 // ============================================
+// COBRAR CLIENTE IMEDIATAMENTE
+// ============================================
+
+async function cobrarClienteImediato(clienteId) {
+  console.log(`[Billing] Cobrança imediata para cliente ${clienteId}...`);
+
+  const hoje = new Date().toISOString().split('T')[0];
+
+  // Buscar parcelas pendentes do cliente (sem cobrança gerada)
+  const { data: parcelas, error } = await supabase
+    .from('parcelas')
+    .select(`
+      id, numero, valor, data_vencimento, emprestimo_id,
+      emprestimos!inner(id, asaas_customer_id, cliente_id, total_parcelas, parcelas_pagas,
+        clientes!inner(id, nome, whatsapp, cpf, email)
+      )
+    `)
+    .eq('emprestimos.cliente_id', clienteId)
+    .eq('status', 'pendente')
+    .is('asaas_payment_id', null)
+    .order('data_vencimento', { ascending: true })
+    .limit(1);
+
+  if (error) {
+    console.error('[Billing] Erro ao buscar parcelas do cliente:', error);
+    throw new Error('Erro ao buscar parcelas do cliente');
+  }
+
+  if (!parcelas?.length) {
+    return { sucesso: 0, erros: 0, mensagem: 'Nenhuma parcela pendente para este cliente' };
+  }
+
+  let sucesso = 0;
+  let erros = 0;
+
+  for (const parcela of parcelas) {
+    try {
+      const emp = parcela.emprestimos;
+      const cliente = emp.clientes;
+
+      // Garantir que o cliente existe no Asaas
+      let asaasCustomerId = emp.asaas_customer_id;
+      if (!asaasCustomerId) {
+        const asaasCliente = await asaas.criarCliente({
+          nome: cliente.nome,
+          cpf: cliente.cpf,
+          whatsapp: cliente.whatsapp,
+          email: cliente.email,
+        });
+        asaasCustomerId = asaasCliente.id;
+
+        await supabase
+          .from('emprestimos')
+          .update({ asaas_customer_id: asaasCustomerId })
+          .eq('id', emp.id);
+      }
+
+      // Criar cobrança PIX no Asaas
+      const cobranca = await asaas.criarCobrancaPix({
+        asaasCustomerId,
+        valor: parcela.valor,
+        descricao: `Parcela ${parcela.numero} - ${cliente.nome}`,
+        vencimento: hoje,
+        externalReference: parcela.id,
+      });
+
+      // Buscar QR Code PIX
+      const qrcode = await asaas.buscarQrCodePix(cobranca.id);
+
+      // Atualizar parcela
+      await supabase
+        .from('parcelas')
+        .update({
+          asaas_payment_id: cobranca.id,
+          asaas_pix_qrcode: qrcode.encodedImage,
+          asaas_pix_copiaecola: qrcode.payload,
+          data_vencimento: hoje,
+        })
+        .eq('id', parcela.id);
+
+      // Buscar template de cobrança 1 (lembrete)
+      const { data: templates } = await supabase
+        .from('templates_mensagem')
+        .select('conteudo')
+        .eq('tipo', 'cobranca_1')
+        .eq('ativo', true)
+        .limit(1);
+
+      const template = templates?.[0]?.conteudo;
+
+      if (template) {
+        const mensagem = template
+          .replace(/\{\{nome\}\}/g, cliente.nome.split(' ')[0])
+          .replace(/\{\{valor\}\}/g, parcela.valor.toFixed(2).replace('.', ','))
+          .replace(/\{\{pix_copiaecola\}\}/g, '')
+          .replace(/\{\{numero\}\}/g, parcela.numero)
+          .replace(/\{\{total\}\}/g, emp.total_parcelas)
+          .replace(/\{\{restantes\}\}/g, emp.total_parcelas - emp.parcelas_pagas)
+          .replace(/\n{3,}/g, '\n\n');
+
+        // Enviar mensagem WhatsApp
+        await evolution.enviarTexto(cliente.whatsapp, mensagem);
+
+        // Enviar PIX separado
+        if (qrcode.payload) {
+          await new Promise(r => setTimeout(r, 1500));
+          await evolution.enviarTexto(cliente.whatsapp, qrcode.payload);
+        }
+
+        // Registrar envio
+        await supabase.from('mensagens').insert({
+          parcela_id: parcela.id,
+          cliente_id: cliente.id,
+          tipo: 'cobranca_1',
+          conteudo: mensagem,
+        });
+      }
+
+      sucesso++;
+      console.log(`[Billing] ✓ Cobrança imediata: ${cliente.nome} - Parcela ${parcela.numero} - R$ ${parcela.valor}`);
+    } catch (err) {
+      erros++;
+      console.error(`[Billing] ✗ Erro cobrança imediata parcela ${parcela.id}:`, err.message);
+    }
+  }
+
+  return { sucesso, erros };
+}
+
+// ============================================
 // EXPORTS
 // ============================================
 
@@ -526,4 +656,5 @@ module.exports = {
   atualizarAtrasados,
   moverParaFilaHumana,
   getDashboardData,
+  cobrarClienteImediato,
 };
