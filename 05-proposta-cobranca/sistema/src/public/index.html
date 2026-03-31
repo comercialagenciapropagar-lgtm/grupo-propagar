@@ -2537,8 +2537,11 @@
         filaBody.innerHTML = '<tr><td colspan="4"><div class="empty-state"><div class="empty-state-icon">&#10003;</div><div class="empty-state-text">Nenhum caso na fila humana</div><div class="empty-state-sub">Quando houver casos que necessitam de atendimento humano, aparecerao aqui</div></div></td></tr>';
       } else {
         filaBody.innerHTML = fila.map(function(f) {
+          var nome = (f.clientes && f.clientes.nome) || f.nome || f.cliente_id || '--';
+          var whatsapp = (f.clientes && f.clientes.whatsapp) || f.whatsapp || '';
+          var whatsappLink = whatsapp ? '<br><a href="https://wa.me/55' + whatsapp.replace(/\D/g,'') + '" target="_blank" style="color:var(--green);text-decoration:none;font-size:0.85rem;">&#128222; ' + whatsapp + '</a>' : '';
           return '<tr>' +
-            '<td><strong>' + (f.nome || f.cliente_id || '--') + '</strong></td>' +
+            '<td><strong>' + nome + '</strong>' + whatsappLink + '</td>' +
             '<td>' + (f.motivo || f.reason || '--') + '</td>' +
             '<td>' + (f.prioridade || f.priority || '--') + '</td>' +
             '<td><span class="badge badge-pendente">' + (f.status || 'aguardando') + '</span></td>' +

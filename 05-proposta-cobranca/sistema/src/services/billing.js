@@ -449,7 +449,7 @@ async function getDashboardData() {
   // Fila humana
   const { data: filaHumana, count: filaCount } = await supabase
     .from('fila_humana')
-    .select('*', { count: 'exact' })
+    .select('*, clientes(nome, whatsapp)', { count: 'exact' })
     .in('status', ['pendente', 'em_atendimento']);
 
   // Clientes bons (upsell)
