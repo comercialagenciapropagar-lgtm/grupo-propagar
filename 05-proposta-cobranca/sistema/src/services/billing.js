@@ -312,6 +312,10 @@ async function processarPagamento(paymentId) {
         await evolution.enviarAudio(cliente.whatsapp, audios[0].url);
       }
 
+      // Enviar mensagem de direcionamento para renovação/quitação
+      await new Promise(r => setTimeout(r, 2000));
+      await evolution.enviarTexto(cliente.whatsapp, '📲 Quer *renovar* seu crédito ou *quitar* seu contrato? Fale direto com nosso atendente: https://wa.me/5548992238802');
+
       await supabase.from('mensagens').insert({
         parcela_id: parcela.id,
         cliente_id: cliente.id,
