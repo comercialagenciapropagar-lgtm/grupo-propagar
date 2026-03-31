@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GirouCr&eacute;dito &mdash; Cr&eacute;dito R&aacute;pido pra Motorista de App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0b14;
+      --bg-card: #12131f;
+      --bg-card-hover: #1a1c2e;
+      --border: rgba(255,255,255,0.06);
+      --text: #f0f0f5;
+      --text-sec: rgba(240,240,245,0.6);
+      --accent: #22c55e;
+      --accent-light: #4ade80;
+      --accent-dark: #16a34a;
+      --accent-glow: rgba(34,197,94,0.15);
+      --yellow: #facc15;
+      --orange: #f97316;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* REVEAL */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,11,20,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border); padding: 16px 0;
+    }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 800; font-size: 1.5rem; }
+    .logo span { color: var(--accent); }
+    .nav-cta {
+      background: var(--accent); color: #000; font-weight: 700; font-size: 0.85rem;
+      padding: 10px 24px; border-radius: 50px; text-decoration: none;
+      transition: all 0.3s;
+    }
+    .nav-cta:hover { background: var(--accent-light); transform: translateY(-1px); }
+
+    /* HERO */
+    .hero {
+      padding: 160px 0 100px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1400&q=80') center/cover no-repeat;
+      filter: brightness(0.2) saturate(0.6);
+      z-index: 0;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(180deg, rgba(10,11,20,0.4) 0%, rgba(10,11,20,0.95) 80%);
+      z-index: 1;
+    }
+    .hero .container { position: relative; z-index: 2; }
+
+    /* IMAGE SHOWCASE */
+    .showcase {
+      padding: 0 0 80px; overflow: hidden;
+    }
+    .showcase-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;
+      margin-top: 0;
+    }
+    .showcase-item {
+      border-radius: 16px; overflow: hidden; position: relative;
+      height: 320px;
+    }
+    .showcase-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.7); transition: all 0.5s;
+    }
+    .showcase-item:hover img { filter: brightness(0.9); transform: scale(1.05); }
+    .showcase-item .caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 24px; background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      color: #fff; font-weight: 700; font-size: 1.1rem;
+    }
+    .showcase-item .caption small {
+      display: block; font-size: 0.8rem; font-weight: 400;
+      color: rgba(255,255,255,0.5); margin-top: 4px;
+    }
+
+    /* STEPS IMAGES */
+    .step-img {
+      width: 100%; height: 180px; border-radius: 14px;
+      object-fit: cover; margin-bottom: 20px;
+      filter: brightness(0.8); border: 1px solid var(--border);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent-glow); border: 1px solid rgba(34,197,94,0.2);
+      padding: 8px 20px; border-radius: 50px; font-size: 0.85rem;
+      color: var(--accent-light); font-weight: 600; margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800;
+      line-height: 1.1; margin-bottom: 20px;
+    }
+    .hero h1 .green { color: var(--accent); }
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem); color: var(--text-sec);
+      max-width: 600px; margin: 0 auto 40px;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--accent); color: #000; font-weight: 700;
+      font-size: 1.1rem; padding: 18px 40px; border-radius: 60px;
+      text-decoration: none; transition: all 0.3s;
+      box-shadow: 0 0 40px rgba(34,197,94,0.3);
+    }
+    .hero-cta:hover { background: var(--accent-light); transform: translateY(-2px); box-shadow: 0 0 60px rgba(34,197,94,0.4); }
+    .hero-sub {
+      margin-top: 16px; font-size: 0.85rem; color: var(--text-sec);
+    }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 48px; margin-top: 60px;
+      flex-wrap: wrap;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 800; color: var(--accent); }
+    .hero-stat-label { font-size: 0.85rem; color: var(--text-sec); margin-top: 4px; }
+
+    /* SECTION */
+    section { padding: 100px 0; }
+    .section-label {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800;
+      margin-bottom: 16px; line-height: 1.15;
+    }
+    .section-desc { color: var(--text-sec); max-width: 550px; font-size: 1.05rem; }
+    .section-center { text-align: center; }
+    .section-center .section-desc { margin: 0 auto; }
+
+    /* BENEFITS */
+    .benefits-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px; margin-top: 48px;
+    }
+    .benefit-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px; transition: all 0.3s;
+    }
+    .benefit-card:hover { background: var(--bg-card-hover); border-color: rgba(34,197,94,0.15); transform: translateY(-4px); }
+    .benefit-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 20px;
+    }
+    .benefit-icon.green { background: rgba(34,197,94,0.1); }
+    .benefit-icon.yellow { background: rgba(250,204,21,0.1); }
+    .benefit-icon.orange { background: rgba(249,115,22,0.1); }
+    .benefit-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+    .benefit-card p { color: var(--text-sec); font-size: 0.95rem; }
+
+    /* STEPS */
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px; margin-top: 48px;
+    }
+    .step {
+      text-align: center; padding: 24px;
+    }
+    .step-number {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--accent-glow); border: 2px solid rgba(34,197,94,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 800;
+      color: var(--accent); margin: 0 auto 20px;
+    }
+    .step h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .step p { color: var(--text-sec); font-size: 0.9rem; }
+
+    /* FORM SECTION */
+    .form-section {
+      background: radial-gradient(ellipse at 50% 100%, rgba(34,197,94,0.06) 0%, transparent 60%);
+    }
+    .form-wrapper {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+      align-items: center; margin-top: 48px;
+    }
+    .form-benefits { display: flex; flex-direction: column; gap: 20px; }
+    .form-benefit {
+      display: flex; align-items: flex-start; gap: 16px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px;
+    }
+    .form-benefit-icon {
+      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+      background: var(--accent-glow); display: flex; align-items: center;
+      justify-content: center; font-size: 1.1rem;
+    }
+    .form-benefit h4 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+    .form-benefit p { color: var(--text-sec); font-size: 0.85rem; }
+
+    .form-box {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 36px;
+    }
+    .form-box h3 {
+      font-size: 1.4rem; font-weight: 700; margin-bottom: 6px;
+    }
+    .form-box .form-sub { color: var(--text-sec); font-size: 0.9rem; margin-bottom: 24px; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block; font-size: 0.85rem; font-weight: 600;
+      color: var(--text-sec); margin-bottom: 6px;
+    }
+    .form-group input, .form-group select {
+      width: 100%; padding: 14px 16px; border-radius: 10px;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.04);
+      color: var(--text); font-size: 1rem; font-family: 'Inter', sans-serif;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none; border-color: var(--accent);
+    }
+    .form-group select option { background: var(--bg-card); color: var(--text); }
+
+    .form-submit {
+      width: 100%; padding: 16px; border: none; border-radius: 12px;
+      background: var(--accent); color: #000; font-weight: 700;
+      font-size: 1.05rem; font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: all 0.3s; margin-top: 8px;
+    }
+    .form-submit:hover { background: var(--accent-light); }
+
+    .form-disclaimer {
+      text-align: center; font-size: 0.75rem; color: var(--text-sec);
+      margin-top: 12px;
+    }
+
+    /* FAQ */
+    .faq-list { max-width: 700px; margin: 48px auto 0; }
+    .faq-item {
+      border-bottom: 1px solid var(--border); padding: 20px 0;
+    }
+    .faq-question {
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; font-weight: 600; font-size: 1.05rem;
+    }
+    .faq-question span { transition: transform 0.3s; }
+    .faq-question.active span { transform: rotate(45deg); }
+    .faq-answer {
+      max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+      color: var(--text-sec); font-size: 0.95rem; line-height: 1.7;
+    }
+    .faq-answer.open { max-height: 300px; padding-top: 12px; }
+
+    /* FOOTER */
+    footer {
+      padding: 40px 0; border-top: 1px solid var(--border);
+      text-align: center; color: var(--text-sec); font-size: 0.85rem;
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      .form-wrapper { grid-template-columns: 1fr; gap: 32px; }
+      .hero-stats { gap: 24px; }
+      .form-benefits { order: 2; }
+      .form-box { order: 1; }
+      .showcase-grid { grid-template-columns: 1fr; }
+      .showcase-item { height: 220px; }
+    }
+
+    /* WHATSAPP FLOAT */
+    .wpp-float {
+      position: fixed; bottom: 24px; right: 24px; z-index: 99;
+      width: 60px; height: 60px; border-radius: 50%;
+      background: #25D366; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4); cursor: pointer;
+      transition: all 0.3s; text-decoration: none;
+    }
+    .wpp-float:hover { transform: scale(1.1); }
+    .wpp-float svg { width: 32px; height: 32px; fill: #fff; }
+
+    /* SUCCESS */
+    .form-success {
+      display: none; text-align: center; padding: 40px 20px;
+    }
+    .form-success.show { display: block; }
+    .form-success h3 { color: var(--accent); font-size: 1.5rem; margin-bottom: 12px; }
+    .form-success p { color: var(--text-sec); }
+    .form-content.hide { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container">
+      <div class="logo">Girou<span>Cr&eacute;dito</span></div>
+      <a href="#solicitar" class="nav-cta">Quero meu cr&eacute;dito</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge reveal">&#9889; Aprova&ccedil;&atilde;o em minutos</div>
+      <h1 class="reveal reveal-d1">
+        Cr&eacute;dito r&aacute;pido pra quem<br><span class="green">vive na estrada</span>
+      </h1>
+      <p class="reveal reveal-d2">
+        Empr&eacute;stimo a partir de R$ 200 pra motoristas de app.
+        Sem burocracia, sem consulta ao Serasa e com aprova&ccedil;&atilde;o r&aacute;pida.
+      </p>
+      <a href="#solicitar" class="hero-cta reveal reveal-d3">
+        Solicitar agora &#8594;
+      </a>
+      <div class="hero-sub reveal reveal-d3">Resposta em at&eacute; 30 minutos</div>
+      <div class="hero-stats reveal reveal-d4">
+        <div class="hero-stat">
+          <div class="hero-stat-value">500+</div>
+          <div class="hero-stat-label">Motoristas atendidos</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">R$ 200</div>
+          <div class="hero-stat-label">Valor m&iacute;nimo</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">0</div>
+          <div class="hero-stat-label">Consulta ao Serasa</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHOWCASE -->
+  <section class="showcase">
+    <div class="container">
+      <div class="showcase-grid">
+        <div class="showcase-item reveal">
+          <img src="https://images.unsplash.com/photo-1606567595334-d39972c85dbe?w=600&q=80" alt="Motorista de app">
+          <div class="caption">Motoristas de app<small>Uber, 99, iFood, Lalamove e mais</small></div>
+        </div>
+        <div class="showcase-item reveal reveal-d1">
+          <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&q=80" alt="Carro">
+          <div class="caption">Cr&eacute;dito r&aacute;pido<small>Dinheiro na m&atilde;o via PIX</small></div>
+        </div>
+        <div class="showcase-item reveal reveal-d2">
+          <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80" alt="Pagamento">
+          <div class="caption">Sem burocracia<small>Tudo pelo WhatsApp</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section>
+    <div class="container">
+      <div class="section-center">
+        <div class="section-label reveal">Vantagens</div>
+        <h2 class="section-title reveal reveal-d1">Por que motoristas escolhem a GirouCr&eacute;dito?</h2>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card reveal">
+          <div class="benefit-icon green">&#9889;</div>
+          <h3>Aprova&ccedil;&atilde;o r&aacute;pida</h3>
+          <p>Nada de esperar dias. Voc&ecirc; faz a solicita&ccedil;&atilde;o e recebe uma resposta em minutos, direto no seu WhatsApp.</p>
+        </div>
+        <div class="benefit-card reveal reveal-d1">
+          <div class="benefit-icon yellow">&#128274;</div>
+          <h3>Sem consulta ao Serasa</h3>
+          <p>Seu nome pode estar negativado. Isso n&atilde;o impede voc&ecirc; de conseguir cr&eacute;dito com a gente.</p>
+        </div>
+        <div class="benefit-card reveal reveal-d2">
+          <div class="benefit-icon orange">&#128196;</div>
+          <h3>Zero burocracia</h3>
+          <p>Sem papelada, sem fiador, sem enrola&ccedil;&atilde;o. S&oacute; precisa ser motorista de app e ter resid&ecirc;ncia fixa.</p>
+        </div>
+        <div class="benefit-card reveal reveal-d3">
+          <div class="benefit-icon green">&#128178;</div>
+          <h3>Parcelas que cabem no bolso</h3>
+          <p>Voc&ecirc; escolhe como pagar. Parcelas pensadas pra realidade de quem roda todo dia.</p>
+        </div>
+        <div class="benefit-card reveal reveal-d4">
+          <div class="benefit-icon yellow">&#128241;</div>
+          <h3>Tudo pelo WhatsApp</h3>
+          <p>Da solicita&ccedil;&atilde;o ao pagamento, tudo pelo celular. Simples como pedir uma corrida.</p>
+        </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon orange">&#128664;</div>
+          <h3>Feito pra motorista</h3>
+          <p>Uber, 99, iFood, Lalamove, InDriver... Se voc&ecirc; roda em app, a GirouCr&eacute;dito &eacute; pra voc&ecirc;.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEPS -->
+  <section>
+    <div class="container">
+      <div class="section-center">
+        <div class="section-label reveal">Como funciona</div>
+        <h2 class="section-title reveal reveal-d1">3 passos e o dinheiro est&aacute; na sua m&atilde;o</h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step reveal">
+          <img class="step-img" src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=500&q=80" alt="Celular">
+          <div class="step-number">1</div>
+          <h3>Preencha o formul&aacute;rio</h3>
+          <p>Informe seus dados b&aacute;sicos e qual app voc&ecirc; dirige. Leva menos de 1 minuto.</p>
+        </div>
+        <div class="step reveal reveal-d1">
+          <img class="step-img" src="https://images.unsplash.com/photo-1556745757-8d76bdb6984b?w=500&q=80" alt="Analise">
+          <div class="step-number">2</div>
+          <h3>An&aacute;lise express</h3>
+          <p>Nossa equipe analisa sua solicita&ccedil;&atilde;o e entra em contato pelo WhatsApp rapidamente.</p>
+        </div>
+        <div class="step reveal reveal-d2">
+          <img class="step-img" src="https://images.unsplash.com/photo-1604594849809-dfedbc827105?w=500&q=80" alt="PIX">
+          <div class="step-number">3</div>
+          <h3>Receba seu cr&eacute;dito</h3>
+          <p>Aprovado? O dinheiro cai na sua conta via PIX. Simples assim.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section class="form-section" id="solicitar">
+    <div class="container">
+      <div class="section-center">
+        <div class="section-label reveal">Solicite agora</div>
+        <h2 class="section-title reveal reveal-d1">Preencha e receba seu cr&eacute;dito</h2>
+        <p class="section-desc reveal reveal-d2">Sem compromisso. Voc&ecirc; s&oacute; fecha se quiser.</p>
+      </div>
+      <div class="form-wrapper">
+        <div class="form-benefits">
+          <div class="form-benefit reveal">
+            <div class="form-benefit-icon">&#9989;</div>
+            <div>
+              <h4>Sem taxa de an&aacute;lise</h4>
+              <p>Voc&ecirc; n&atilde;o paga nada pra saber se foi aprovado.</p>
+            </div>
+          </div>
+          <div class="form-benefit reveal reveal-d1">
+            <div class="form-benefit-icon">&#9989;</div>
+            <div>
+              <h4>Seus dados est&atilde;o seguros</h4>
+              <p>N&atilde;o compartilhamos suas informa&ccedil;&otilde;es com ningu&eacute;m.</p>
+            </div>
+          </div>
+          <div class="form-benefit reveal reveal-d2">
+            <div class="form-benefit-icon">&#9989;</div>
+            <div>
+              <h4>Resposta r&aacute;pida</h4>
+              <p>Retornamos no seu WhatsApp em at&eacute; 30 minutos.</p>
+            </div>
+          </div>
+          <div class="form-benefit reveal reveal-d3">
+            <div class="form-benefit-icon">&#9989;</div>
+            <div>
+              <h4>Negativado? Sem problema</h4>
+              <p>N&atilde;o consultamos Serasa, SPC ou Boa Vista.</p>
+            </div>
+          </div>
+        </div>
+        <div class="form-box reveal">
+          <div class="form-content" id="formContent">
+            <h3>Solicitar cr&eacute;dito</h3>
+            <p class="form-sub">Preencha abaixo que entramos em contato</p>
+            <form id="leadForm" onsubmit="enviarLead(event)">
+              <div class="form-group">
+                <label>Nome completo</label>
+                <input type="text" id="fNome" placeholder="Seu nome" required>
+              </div>
+              <div class="form-group">
+                <label>WhatsApp</label>
+                <input type="tel" id="fWhatsapp" placeholder="(00) 00000-0000" required>
+              </div>
+              <div class="form-group">
+                <label>Qual app voc&ecirc; dirige?</label>
+                <select id="fApp" required>
+                  <option value="">Selecione</option>
+                  <option value="uber">Uber</option>
+                  <option value="99">99</option>
+                  <option value="ifood">iFood</option>
+                  <option value="lalamove">Lalamove</option>
+                  <option value="indriver">InDriver</option>
+                  <option value="varios">Mais de um app</option>
+                  <option value="outro">Outro</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Quanto voc&ecirc; precisa?</label>
+                <select id="fValor" required>
+                  <option value="">Selecione</option>
+                  <option value="200-500">R$ 200 a R$ 500</option>
+                  <option value="500-1000">R$ 500 a R$ 1.000</option>
+                  <option value="1000-2000">R$ 1.000 a R$ 2.000</option>
+                  <option value="2000+">Acima de R$ 2.000</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Possui resid&ecirc;ncia fixa no seu nome ou de familiar?</label>
+                <select id="fResidencia" required>
+                  <option value="">Selecione</option>
+                  <option value="sim_meu_nome">Sim, no meu nome</option>
+                  <option value="sim_familiar">Sim, no nome de familiar</option>
+                  <option value="nao">N&atilde;o</option>
+                </select>
+              </div>
+              <button type="submit" class="form-submit">Solicitar cr&eacute;dito agora &#8594;</button>
+            </form>
+            <div class="form-disclaimer">Ao enviar, voc&ecirc; concorda em ser contatado pelo WhatsApp.</div>
+          </div>
+          <div class="form-success" id="formSuccess">
+            <h3>&#9989; Solicita&ccedil;&atilde;o enviada!</h3>
+            <p>Recebemos seus dados. Nossa equipe vai entrar em contato pelo WhatsApp em breve.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <div class="container">
+      <div class="section-center">
+        <div class="section-label reveal">D&uacute;vidas</div>
+        <h2 class="section-title reveal reveal-d1">Perguntas frequentes</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Preciso ter conta em banco? <span>+</span>
+          </div>
+          <div class="faq-answer">
+            Sim, voc&ecirc; precisa ter uma conta banc&aacute;ria (pode ser digital) pra receber o valor via PIX.
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Estou negativado, consigo cr&eacute;dito? <span>+</span>
+          </div>
+          <div class="faq-answer">
+            Sim! N&oacute;s n&atilde;o consultamos Serasa, SPC ou Boa Vista. Sua an&aacute;lise &eacute; feita com base em outros crit&eacute;rios.
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Qual o valor m&iacute;nimo e m&aacute;ximo? <span>+</span>
+          </div>
+          <div class="faq-answer">
+            O valor m&iacute;nimo &eacute; de R$ 200. O m&aacute;ximo depende da sua an&aacute;lise. Preencha o formul&aacute;rio pra saber quanto voc&ecirc; pode receber.
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Como pago as parcelas? <span>+</span>
+          </div>
+          <div class="faq-answer">
+            As parcelas s&atilde;o pagas via PIX. Voc&ecirc; recebe o c&oacute;digo diretamente no seu WhatsApp no dia do vencimento.
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Preciso ter resid&ecirc;ncia fixa? <span>+</span>
+          </div>
+          <div class="faq-answer">
+            Sim, &eacute; necess&aacute;rio ter uma resid&ecirc;ncia fixa no seu nome ou no nome de um familiar pr&oacute;ximo.
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Rodo em mais de um app, posso solicitar? <span>+</span>
+          </div>
+          <div class="faq-answer">
+            Claro! Se voce roda em Uber, 99, iFood ou qualquer outro app de transporte ou entrega, voce pode solicitar.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="logo" style="margin-bottom:12px;">Girou<span>Cr&eacute;dito</span></div>
+      <p>Cr&eacute;dito r&aacute;pido pra quem vive na estrada.</p>
+    </div>
+  </footer>
+
+  <!-- WHATSAPP FLOAT -->
+  <a href="https://wa.me/5548998550009" target="_blank" class="wpp-float">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <script>
+    // REVEAL ON SCROLL
+    var reveals = document.querySelectorAll('.reveal');
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(function(el) { observer.observe(el); });
+
+    // FAQ
+    function toggleFaq(el) {
+      el.classList.toggle('active');
+      el.nextElementSibling.classList.toggle('open');
+    }
+
+    // PHONE MASK
+    document.getElementById('fWhatsapp').addEventListener('input', function(e) {
+      var v = e.target.value.replace(/\D/g, '');
+      if (v.length > 11) v = v.slice(0, 11);
+      if (v.length > 6) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+      else if (v.length > 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+      else if (v.length > 0) v = '(' + v;
+      e.target.value = v;
+    });
+
+    // VALIDACAO: motorista + residencia fixa
+    function validarRequisitos() {
+      var app = document.getElementById('fApp').value;
+      var residencia = document.getElementById('fResidencia').value;
+
+      // Remover alerta anterior
+      var alertaAntigo = document.getElementById('alertaRequisitos');
+      if (alertaAntigo) alertaAntigo.remove();
+
+      if (!app || !residencia) return true; // ainda nao preencheu, deixa seguir
+
+      if (residencia === 'nao') {
+        var alerta = document.createElement('div');
+        alerta.id = 'alertaRequisitos';
+        alerta.style.cssText = 'background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:10px;padding:16px;margin-top:12px;text-align:center;';
+        alerta.innerHTML = '<p style="color:#f87171;font-weight:600;margin-bottom:4px;">Infelizmente voc\u00ea n\u00e3o atende os requisitos</p><p style="color:rgba(240,240,245,0.6);font-size:0.85rem;">Para solicitar cr\u00e9dito, \u00e9 necess\u00e1rio possuir resid\u00eancia fixa no seu nome ou de familiar.</p>';
+        document.querySelector('.form-submit').style.display = 'none';
+        document.getElementById('leadForm').appendChild(alerta);
+        return false;
+      }
+      document.querySelector('.form-submit').style.display = 'block';
+      return true;
+    }
+
+    document.getElementById('fApp').addEventListener('change', validarRequisitos);
+    document.getElementById('fResidencia').addEventListener('change', validarRequisitos);
+
+    // FORM SUBMIT
+    function enviarLead(e) {
+      e.preventDefault();
+      if (!validarRequisitos()) return;
+
+      var residencia = document.getElementById('fResidencia').value;
+      if (residencia === 'nao') return;
+
+      var dados = {
+        nome: document.getElementById('fNome').value,
+        whatsapp: document.getElementById('fWhatsapp').value,
+        app: document.getElementById('fApp').value,
+        valor: document.getElementById('fValor').value,
+        residencia: document.getElementById('fResidencia').value,
+        data: new Date().toISOString()
+      };
+
+      // Salvar no localStorage como backup
+      var leads = JSON.parse(localStorage.getItem('girou_leads') || '[]');
+      leads.push(dados);
+      localStorage.setItem('girou_leads', JSON.stringify(leads));
+
+      // Montar mensagem pro WhatsApp
+      var msg = '*Nova solicita\u00e7\u00e3o GirouCr\u00e9dito*\n\n';
+      msg += '*Nome:* ' + dados.nome + '\n';
+      msg += '*WhatsApp:* ' + dados.whatsapp + '\n';
+      msg += '*App:* ' + dados.app + '\n';
+      msg += '*Valor:* ' + dados.valor + '\n';
+      msg += '*Resid\u00eancia fixa:* ' + dados.residencia + '\n';
+
+      // Abrir WhatsApp com a mensagem (trocar numero)
+      var numero = '5548998550009'; // TROCAR PELO SEU NUMERO
+      window.open('https://wa.me/' + numero + '?text=' + encodeURIComponent(msg), '_blank');
+
+      // Mostrar sucesso
+      document.getElementById('formContent').classList.add('hide');
+      document.getElementById('formSuccess').classList.add('show');
+    }
+  </script>
+
+</body>
+</html>
