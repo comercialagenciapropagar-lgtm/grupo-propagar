@@ -200,6 +200,10 @@ async function dispararMensagens(tipoMensagem) {
         await evolution.enviarAudio(cliente.whatsapp, audioUrl);
       }
 
+      // Enviar mensagem de direcionamento para renovação/quitação
+      await new Promise(r => setTimeout(r, 2000));
+      await evolution.enviarTexto(cliente.whatsapp, '📲 Quer *renovar* seu crédito ou *quitar* seu contrato? Fale direto com nosso atendente: https://wa.me/5548992238802');
+
       // Registrar envio
       await supabase.from('mensagens').insert({
         parcela_id: parcela.id,
@@ -624,6 +628,10 @@ async function cobrarClienteImediato(clienteId) {
           await new Promise(r => setTimeout(r, 1500));
           await evolution.enviarTexto(cliente.whatsapp, qrcode.payload);
         }
+
+        // Enviar mensagem de direcionamento para renovação/quitação
+        await new Promise(r => setTimeout(r, 2000));
+        await evolution.enviarTexto(cliente.whatsapp, '📲 Quer *renovar* seu crédito ou *quitar* seu contrato? Fale direto com nosso atendente: https://wa.me/5548992238802');
 
         // Registrar envio
         await supabase.from('mensagens').insert({
