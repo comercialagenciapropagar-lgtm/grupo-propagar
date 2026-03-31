@@ -587,32 +587,13 @@ router.post('/upload-audio', async (req, res) => {
 
     const publicUrl = urlData.publicUrl;
 
-    // Upsert na tabela audios
-    const { data: existente } = await supabase
+    // Inserir novo áudio (permite múltiplos por tipo para rotação)
+    const { data: audioRecord, error: audioErr } = await supabase
       .from('audios')
-      .select('id')
-      .eq('tipo', tipo)
-      .limit(1);
-
-    let audioRecord;
-    if (existente && existente.length > 0) {
-      const { data, error } = await supabase
-        .from('audios')
-        .update({ nome: nome || tipo, url: publicUrl, ativo: true })
-        .eq('tipo', tipo)
-        .select()
-        .single();
-      if (error) return res.status(400).json({ error: error.message });
-      audioRecord = data;
-    } else {
-      const { data, error } = await supabase
-        .from('audios')
-        .insert({ nome: nome || tipo, tipo: tipo, url: publicUrl, ativo: true })
-        .select()
-        .single();
-      if (error) return res.status(400).json({ error: error.message });
-      audioRecord = data;
-    }
+      .insert({ nome: nome || tipo, tipo: tipo, url: publicUrl, ativo: true })
+      .select()
+      .single();
+    if (audioErr) return res.status(400).json({ error: audioErr.message });
 
     console.log('[Upload] Audio ' + tipo + ' salvo: ' + publicUrl);
     res.json({ url: publicUrl, tipo: tipo, nome: nome || tipo });
