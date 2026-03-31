@@ -2991,10 +2991,10 @@
 
     // -- Audios --
     var audioSlots = [
-      { id: 'cobranca_1', label: 'Bom dia', sublabel: '07:30 - 1a cobranca' },
-      { id: 'cobranca_2', label: 'Preocupacao', sublabel: '12:00 - 2a cobranca' },
-      { id: 'cobranca_3', label: 'Urgencia', sublabel: '17:30 - 3a cobranca' },
-      { id: 'confirmacao', label: 'Reforco Positivo', sublabel: 'confirmacao de pagamento' }
+      { id: 'cobranca_1', dbTipo: 'bom_dia', label: 'Bom dia', sublabel: '07:30 - 1a cobranca' },
+      { id: 'cobranca_2', dbTipo: 'preocupacao', label: 'Preocupacao', sublabel: '12:00 - 2a cobranca' },
+      { id: 'cobranca_3', dbTipo: 'urgencia', label: 'Urgencia', sublabel: '17:30 - 3a cobranca' },
+      { id: 'confirmacao', dbTipo: 'reforco_positivo', label: 'Reforco Positivo', sublabel: 'confirmacao de pagamento' }
     ];
 
     // State per audio slot
@@ -3012,7 +3012,7 @@
 
         var html = '';
         audioSlots.forEach(function(slot) {
-          var found = audios.find(function(a) { return a.tipo === slot.id || a.id === slot.id; });
+          var found = audios.find(function(a) { return a.tipo === slot.dbTipo || a.tipo === slot.id; });
           var url = found ? (found.url || '') : '';
           var isAtivo = url && url.length > 0;
 

@@ -114,11 +114,18 @@ async function dispararMensagens(tipoMensagem) {
     return { enviados: 0, erros: 0 };
   }
 
-  // Buscar áudio correspondente ao tipo (mesmo ID usado no upload)
+  // Buscar áudio correspondente ao tipo
+  const tipoAudio = {
+    cobranca_1: 'bom_dia',
+    cobranca_2: 'preocupacao',
+    cobranca_3: 'urgencia',
+    cobranca_4: 'atraso',
+  }[tipoMensagem];
+
   const { data: audios } = await supabase
     .from('audios')
     .select('url')
-    .eq('tipo', tipoMensagem)
+    .eq('tipo', tipoAudio)
     .eq('ativo', true);
 
   const audioUrl = audios?.length > 0 ? audios[Math.floor(Math.random() * audios.length)].url : null;
@@ -295,7 +302,7 @@ async function processarPagamento(paymentId) {
       const { data: audios } = await supabase
         .from('audios')
         .select('url')
-        .eq('tipo', 'confirmacao')
+        .eq('tipo', 'reforco_positivo')
         .eq('ativo', true)
         .limit(1);
 

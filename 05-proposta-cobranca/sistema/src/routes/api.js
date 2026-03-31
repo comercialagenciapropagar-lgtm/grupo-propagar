@@ -518,10 +518,16 @@ router.post('/upload-audio', async (req, res) => {
       return res.status(400).json({ error: 'Campos obrigatórios: tipo, base64, filename' });
     }
 
-    // Validar tipo
-    const tiposValidos = ['cobranca_1', 'cobranca_2', 'cobranca_3', 'confirmacao'];
-    if (!tiposValidos.includes(tipo)) {
-      return res.status(400).json({ error: 'Tipo inválido. Use: ' + tiposValidos.join(', ') });
+    // Mapear tipo do frontend para o tipo do banco
+    const tipoMap = {
+      cobranca_1: 'bom_dia',
+      cobranca_2: 'preocupacao',
+      cobranca_3: 'urgencia',
+      confirmacao: 'reforco_positivo',
+    };
+    const tipoDB = tipoMap[tipo];
+    if (!tipoDB) {
+      return res.status(400).json({ error: 'Tipo inválido. Use: ' + Object.keys(tipoMap).join(', ') });
     }
 
     // Validar extensão
@@ -590,13 +596,13 @@ router.post('/upload-audio', async (req, res) => {
     // Inserir novo áudio (permite múltiplos por tipo para rotação)
     const { data: audioRecord, error: audioErr } = await supabase
       .from('audios')
-      .insert({ nome: nome || tipo, tipo: tipo, url: publicUrl, ativo: true })
+      .insert({ nome: nome || tipoDB, tipo: tipoDB, url: publicUrl, ativo: true })
       .select()
       .single();
     if (audioErr) return res.status(400).json({ error: audioErr.message });
 
-    console.log('[Upload] Audio ' + tipo + ' salvo: ' + publicUrl);
-    res.json({ url: publicUrl, tipo: tipo, nome: nome || tipo });
+    console.log('[Upload] Audio ' + tipoDB + ' salvo: ' + publicUrl);
+    res.json({ url: publicUrl, tipo: tipo, nome: nome || tipoDB });
 
   } catch (err) {
     console.error('[Upload] Erro geral:', err);
