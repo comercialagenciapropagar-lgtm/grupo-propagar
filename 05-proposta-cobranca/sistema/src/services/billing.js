@@ -126,10 +126,9 @@ async function dispararMensagens(tipoMensagem) {
     .from('audios')
     .select('url')
     .eq('tipo', tipoAudio)
-    .eq('ativo', true)
-    .limit(1);
+    .eq('ativo', true);
 
-  const audioUrl = audios?.[0]?.url;
+  const audioUrl = audios?.length > 0 ? audios[Math.floor(Math.random() * audios.length)].url : null;
 
   // Buscar parcelas pendentes de hoje
   const { data: parcelas, error } = await supabase
