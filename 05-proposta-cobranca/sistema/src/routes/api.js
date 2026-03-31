@@ -95,6 +95,25 @@ router.post('/clientes', async (req, res) => {
     return res.status(400).json({ error: 'Nome e WhatsApp são obrigatórios' });
   }
 
+  // Verificar se já existe um cliente inativo com esse WhatsApp e reativar
+  const { data: existente } = await supabase
+    .from('clientes')
+    .select('id, ativo')
+    .eq('whatsapp', whatsapp)
+    .single();
+
+  if (existente && !existente.ativo) {
+    const { data, error } = await supabase
+      .from('clientes')
+      .update({ nome, whatsapp, cpf, email, observacoes, ativo: true })
+      .eq('id', existente.id)
+      .select()
+      .single();
+
+    if (error) return res.status(400).json({ error: error.message });
+    return res.status(200).json(data);
+  }
+
   const { data, error } = await supabase
     .from('clientes')
     .insert({ nome, whatsapp, cpf, email, observacoes })
