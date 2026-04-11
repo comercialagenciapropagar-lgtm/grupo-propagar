@@ -1,6 +1,52 @@
 const supabase = require('../database');
 const asaas = require('./asaas');
 const evolution = require('./zapi');
+const { logger } = require('../middleware/logger');
+const { ehFeriadoHoje } = require('./feriados');
+const { estaPausado } = require('./sistema');
+const {
+  lintMensagem,
+  jitterSleep,
+  dentroDeHorarioHumano,
+  aplicarPlaceholders,
+} = require('./humanizador');
+
+// Retry de envio WhatsApp com backoff. Tenta N vezes, aumentando o delay.
+async function enviarComRetry(fn, tentativas = 3) {
+  let ultimoErro;
+  for (let i = 0; i < tentativas; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      ultimoErro = err;
+      if (i < tentativas - 1) {
+        const delay = 1000 * Math.pow(2, i) + Math.floor(Math.random() * 500);
+        logger.warn(
+          { tentativa: i + 1, err: err.message },
+          '[Billing] Falha no envio, tentando de novo'
+        );
+        await new Promise((r) => setTimeout(r, delay));
+      }
+    }
+  }
+  throw ultimoErro;
+}
+
+// Verifica se o cliente esta com cobranca pausada (blocklist).
+// Faz query tolerante: se a coluna nao existir ainda, retorna false.
+async function clienteEstaPausado(clienteId) {
+  try {
+    const { data, error } = await supabase
+      .from('clientes')
+      .select('cobranca_pausada')
+      .eq('id', clienteId)
+      .single();
+    if (error) return false;
+    return !!data?.cobranca_pausada;
+  } catch {
+    return false;
+  }
+}
 
 // ============================================
 // GERAR COBRANÇAS DO DIA
@@ -8,7 +54,14 @@ const evolution = require('./zapi');
 
 async function gerarCobrancasDoDia() {
   const hoje = new Date().toISOString().split('T')[0];
-  console.log(`[Billing] Gerando cobranças para ${hoje}...`);
+  logger.info({ hoje }, '[Billing] Gerando cobranças do dia');
+
+  // Guarda: sistema pausado globalmente?
+  const sistema = await estaPausado();
+  if (sistema.pausado) {
+    logger.warn({ motivo: sistema.motivo }, '[Billing] Sistema pausado, nao gera cobrancas');
+    return { sucesso: 0, erros: 0, pausado: true };
+  }
 
   // Buscar parcelas do dia que ainda não têm cobrança no Asaas
   const { data: parcelas, error } = await supabase
@@ -98,20 +151,36 @@ async function gerarCobrancasDoDia() {
 
 async function dispararMensagens(tipoMensagem) {
   const hoje = new Date().toISOString().split('T')[0];
-  console.log(`[Billing] Disparando mensagens tipo: ${tipoMensagem}...`);
+  logger.info({ tipo: tipoMensagem }, '[Billing] Disparando mensagens');
 
-  // Buscar template
+  // Guarda 1: sistema pausado globalmente?
+  const sistema = await estaPausado();
+  if (sistema.pausado) {
+    logger.warn({ motivo: sistema.motivo }, '[Billing] Sistema pausado, abortando disparo');
+    return { enviados: 0, erros: 0, pausado: true };
+  }
+
+  // Guarda 2: horario humano (defesa contra cron bug).
+  if (!dentroDeHorarioHumano()) {
+    logger.warn('[Billing] Fora do horario humano (07-21), abortando');
+    return { enviados: 0, erros: 0, foraHorario: true };
+  }
+
+  // Buscar TODAS as variacoes do template (anti-copia-cola).
   const { data: templates } = await supabase
     .from('templates_mensagem')
     .select('conteudo')
     .eq('tipo', tipoMensagem)
-    .eq('ativo', true)
-    .limit(1);
+    .eq('ativo', true);
 
-  const template = templates?.[0]?.conteudo;
-  if (!template) {
-    console.error(`[Billing] Template não encontrado: ${tipoMensagem}`);
+  if (!templates?.length) {
+    logger.error({ tipo: tipoMensagem }, '[Billing] Nenhum template ativo');
     return { enviados: 0, erros: 0 };
+  }
+
+  // Helper: sorteia uma variacao por cliente (rotacao).
+  function sortearTemplate() {
+    return templates[Math.floor(Math.random() * templates.length)].conteudo;
   }
 
   // Buscar áudio correspondente ao tipo
@@ -167,43 +236,93 @@ async function dispararMensagens(tipoMensagem) {
   let enviados = 0;
   let erros = 0;
 
+  // Se hoje e feriado, nao dispara mensagens.
+  if (await ehFeriadoHoje()) {
+    logger.info('[Billing] Hoje e feriado - pulando disparo de mensagens');
+    return { enviados: 0, erros: 0, feriado: true };
+  }
+
   for (const parcela of parcelas) {
     if (jaEnviadasSet.has(parcela.id)) continue;
 
     const emp = parcela.emprestimos;
     const cliente = emp.clientes;
 
+    // Blocklist: pula clientes com cobranca pausada.
+    if (await clienteEstaPausado(cliente.id)) {
+      logger.info(
+        { cliente: cliente.nome },
+        '[Billing] Cliente com cobranca pausada, pulando'
+      );
+      continue;
+    }
+
+    // Sorteia uma variacao por cliente (rotacao anti-copia-cola).
+    const templateEscolhido = sortearTemplate();
+
+    // Monta mensagem com placeholders humanizados (saudacao dinamica).
+    const mensagem = aplicarPlaceholders(templateEscolhido, {
+      nome: cliente.nome,
+      valor: parcela.valor,
+      numero: parcela.numero,
+      total: emp.total_parcelas,
+      restantes: emp.total_parcelas - emp.parcelas_pagas,
+      pix_copiaecola: '', // vai separado
+    });
+
+    // LINT: se ainda houver {{placeholder}} nao resolvido, aborta e move
+    // para fila humana (nao deixa sair com cara de robo quebrado).
+    const problemas = lintMensagem(mensagem);
+    if (problemas.length) {
+      erros++;
+      logger.error(
+        { cliente: cliente.nome, problemas, parcelaId: parcela.id },
+        '[Billing] Mensagem com problema de template, abortando envio'
+      );
+      await supabase.from('mensagens').insert({
+        parcela_id: parcela.id,
+        cliente_id: cliente.id,
+        tipo: tipoMensagem,
+        conteudo: mensagem,
+        status_envio: 'erro',
+        erro: `lint falhou: ${problemas.join('; ')}`,
+      });
+      // Move pra fila humana pra operador ver o que deu errado
+      await supabase.from('fila_humana').insert({
+        cliente_id: cliente.id,
+        parcela_id: parcela.id,
+        motivo: 'ignorou_mensagens',
+        prioridade: 2,
+        observacoes: `template quebrado: ${problemas.join('; ')}`,
+      }).then(() => {}, () => {});
+      continue;
+    }
+
     try {
-      // Montar mensagem personalizada (sem o PIX no corpo)
-      const mensagem = template
-        .replace(/\{\{nome\}\}/g, cliente.nome.split(' ')[0])
-        .replace(/\{\{valor\}\}/g, parcela.valor.toFixed(2).replace('.', ','))
-        .replace(/\{\{pix_copiaecola\}\}/g, '')
-        .replace(/\{\{numero\}\}/g, parcela.numero)
-        .replace(/\{\{total\}\}/g, emp.total_parcelas)
-        .replace(/\{\{restantes\}\}/g, emp.total_parcelas - emp.parcelas_pagas)
-        .replace(/\n{3,}/g, '\n\n');
+      // Envio com retry + jitter entre etapas.
+      await enviarComRetry(() => evolution.enviarTexto(cliente.whatsapp, mensagem));
 
-      // Enviar texto via WhatsApp
-      await evolution.enviarTexto(cliente.whatsapp, mensagem);
-
-      // Enviar código PIX separado (fácil de copiar)
       if (parcela.asaas_pix_copiaecola) {
-        await new Promise(r => setTimeout(r, 1500));
-        await evolution.enviarTexto(cliente.whatsapp, parcela.asaas_pix_copiaecola);
+        await jitterSleep(1200, 2500);
+        await enviarComRetry(() =>
+          evolution.enviarTexto(cliente.whatsapp, parcela.asaas_pix_copiaecola)
+        );
       }
 
-      // Enviar áudio se disponível (apenas nas cobranças 1-3)
       if (audioUrl && tipoMensagem !== 'cobranca_4') {
-        await new Promise(r => setTimeout(r, 2000));
-        await evolution.enviarAudio(cliente.whatsapp, audioUrl);
+        await jitterSleep(1800, 3500);
+        await enviarComRetry(() => evolution.enviarAudio(cliente.whatsapp, audioUrl));
       }
 
-      // Enviar mensagem de direcionamento para renovação/quitação
-      await new Promise(r => setTimeout(r, 2000));
-      await evolution.enviarTexto(cliente.whatsapp, '📲 Quer *renovar* seu crédito ou *quitar* seu contrato? Fale direto com nosso atendente: https://wa.me/5548992238802');
+      await jitterSleep(1800, 3500);
+      await enviarComRetry(() =>
+        evolution.enviarTexto(
+          cliente.whatsapp,
+          '📲 Quer *renovar* seu crédito ou *quitar* seu contrato? Fale direto com nosso atendente: https://wa.me/5548992238802'
+        )
+      );
 
-      // Registrar envio
+      // Registra envio
       await supabase.from('mensagens').insert({
         parcela_id: parcela.id,
         cliente_id: cliente.id,
@@ -212,11 +331,16 @@ async function dispararMensagens(tipoMensagem) {
       });
 
       enviados++;
-      console.log(`[Billing] ✓ Mensagem enviada: ${cliente.nome} (${tipoMensagem})`);
+      logger.info(
+        { cliente: cliente.nome, tipo: tipoMensagem },
+        '[Billing] Mensagem enviada'
+      );
     } catch (err) {
       erros++;
-      console.error(`[Billing] ✗ Erro envio ${cliente.nome}:`, err.message);
-
+      logger.error(
+        { err: err.message, cliente: cliente.nome },
+        '[Billing] Erro no envio apos retries'
+      );
       await supabase.from('mensagens').insert({
         parcela_id: parcela.id,
         cliente_id: cliente.id,
@@ -227,8 +351,8 @@ async function dispararMensagens(tipoMensagem) {
       });
     }
 
-    // Delay entre clientes para não sobrecarregar a API
-    await new Promise(r => setTimeout(r, 3000));
+    // Jitter entre clientes (2.5-5.5s, mais humano que 3s fixo).
+    await jitterSleep(2500, 5500);
   }
 
   console.log(`[Billing] Resultado ${tipoMensagem}: ${enviados} enviados, ${erros} erros.`);
@@ -240,13 +364,13 @@ async function dispararMensagens(tipoMensagem) {
 // ============================================
 
 async function processarPagamento(paymentId) {
-  console.log(`[Billing] Processando pagamento: ${paymentId}`);
+  logger.info({ paymentId }, '[Billing] Processando pagamento');
 
-  // Buscar parcela pelo ID do Asaas
+  // Buscar parcela pelo ID do Asaas (inclui status para checar idempotencia).
   const { data: parcelas, error } = await supabase
     .from('parcelas')
     .select(`
-      id, numero, valor, emprestimo_id,
+      id, numero, valor, status, emprestimo_id,
       emprestimos!inner(id, total_parcelas, parcelas_pagas,
         clientes!inner(id, nome, whatsapp)
       )
@@ -255,7 +379,7 @@ async function processarPagamento(paymentId) {
     .limit(1);
 
   if (error || !parcelas?.length) {
-    console.error('[Billing] Parcela não encontrada para payment:', paymentId);
+    logger.warn({ paymentId }, '[Billing] Parcela nao encontrada para payment');
     return false;
   }
 
@@ -263,7 +387,18 @@ async function processarPagamento(paymentId) {
   const emp = parcela.emprestimos;
   const cliente = emp.clientes;
 
-  // Marcar como pago
+  // IDEMPOTENCIA: se a parcela ja esta paga, ignora o evento.
+  // Evita double-booking caso o Asaas reenvie o webhook.
+  if (parcela.status === 'pago') {
+    logger.info(
+      { paymentId, parcelaId: parcela.id },
+      '[Billing] Pagamento ja processado, ignorando (idempotencia)'
+    );
+    return false;
+  }
+
+  // Marcar como pago (o trigger fn_atualizar_parcelas_pagas incrementa o
+  // contador apenas quando muda de nao-pago para pago).
   await supabase
     .from('parcelas')
     .update({
@@ -279,24 +414,35 @@ async function processarPagamento(paymentId) {
     .eq('parcela_id', parcela.id)
     .eq('status', 'pendente');
 
-  // Buscar template de confirmação
+  // Buscar variacoes do template de confirmação (rotacao).
   const { data: templates } = await supabase
     .from('templates_mensagem')
     .select('conteudo')
     .eq('tipo', 'confirmacao')
-    .eq('ativo', true)
-    .limit(1);
+    .eq('ativo', true);
 
-  if (templates?.[0]) {
+  if (templates?.length) {
+    const templateEscolhido =
+      templates[Math.floor(Math.random() * templates.length)].conteudo;
     const parcelas_pagas_atualizadas = emp.parcelas_pagas + 1;
-    const mensagem = templates[0].conteudo
-      .replace(/\{\{nome\}\}/g, cliente.nome.split(' ')[0])
-      .replace(/\{\{numero\}\}/g, parcela.numero)
-      .replace(/\{\{total\}\}/g, emp.total_parcelas)
-      .replace(/\{\{restantes\}\}/g, emp.total_parcelas - parcelas_pagas_atualizadas);
+    const mensagem = aplicarPlaceholders(templateEscolhido, {
+      nome: cliente.nome,
+      numero: parcela.numero,
+      total: emp.total_parcelas,
+      restantes: emp.total_parcelas - parcelas_pagas_atualizadas,
+    });
+
+    const problemas = lintMensagem(mensagem);
+    if (problemas.length) {
+      logger.error(
+        { cliente: cliente.nome, problemas },
+        '[Billing] Template de confirmacao quebrado, nao envia'
+      );
+      return true;
+    }
 
     try {
-      await evolution.enviarTexto(cliente.whatsapp, mensagem);
+      await enviarComRetry(() => evolution.enviarTexto(cliente.whatsapp, mensagem));
 
       // Enviar áudio de reforço positivo
       const { data: audios } = await supabase
@@ -307,13 +453,18 @@ async function processarPagamento(paymentId) {
         .limit(1);
 
       if (audios?.[0]?.url) {
-        await new Promise(r => setTimeout(r, 2000));
-        await evolution.enviarAudio(cliente.whatsapp, audios[0].url);
+        await jitterSleep(1800, 3500);
+        await enviarComRetry(() => evolution.enviarAudio(cliente.whatsapp, audios[0].url));
       }
 
       // Enviar mensagem de direcionamento para renovação/quitação
-      await new Promise(r => setTimeout(r, 2000));
-      await evolution.enviarTexto(cliente.whatsapp, '📲 Quer *renovar* seu crédito ou *quitar* seu contrato? Fale direto com nosso atendente: https://wa.me/5548992238802');
+      await jitterSleep(1800, 3500);
+      await enviarComRetry(() =>
+        evolution.enviarTexto(
+          cliente.whatsapp,
+          '📲 Quer *renovar* seu crédito ou *quitar* seu contrato? Fale direto com nosso atendente: https://wa.me/5548992238802'
+        )
+      );
 
       await supabase.from('mensagens').insert({
         parcela_id: parcela.id,
@@ -327,6 +478,52 @@ async function processarPagamento(paymentId) {
   }
 
   console.log(`[Billing] ✓ Pagamento confirmado: ${cliente.nome} - Parcela ${parcela.numero}`);
+  return true;
+}
+
+// ============================================
+// REVERTER PAGAMENTO (REFUND ASAAS)
+// ============================================
+
+async function reverterPagamento(paymentId) {
+  logger.info({ paymentId }, '[Billing] Revertendo pagamento (refund)');
+  const { data: parcelas, error } = await supabase
+    .from('parcelas')
+    .select('id, status, emprestimo_id')
+    .eq('asaas_payment_id', paymentId)
+    .limit(1);
+
+  if (error || !parcelas?.length) {
+    logger.warn({ paymentId }, '[Billing] Parcela nao encontrada para refund');
+    return false;
+  }
+  const parcela = parcelas[0];
+
+  if (parcela.status !== 'pago') {
+    logger.info({ paymentId }, '[Billing] Parcela nao estava paga, ignora refund');
+    return false;
+  }
+
+  // Marcar como pendente novamente
+  await supabase
+    .from('parcelas')
+    .update({ status: 'pendente', data_pagamento: null })
+    .eq('id', parcela.id);
+
+  // Decrementar contador no emprestimo (o trigger so incrementa; decremento
+  // precisa ser manual).
+  const { data: emp } = await supabase
+    .from('emprestimos')
+    .select('parcelas_pagas')
+    .eq('id', parcela.emprestimo_id)
+    .single();
+  if (emp && emp.parcelas_pagas > 0) {
+    await supabase
+      .from('emprestimos')
+      .update({ parcelas_pagas: emp.parcelas_pagas - 1, status: 'ativo' })
+      .eq('id', parcela.emprestimo_id);
+  }
+
   return true;
 }
 
@@ -603,46 +800,54 @@ async function cobrarClienteImediato(clienteId) {
         })
         .eq('id', parcela.id);
 
-      // Buscar template de cobrança 1 (lembrete)
+      // Buscar variacoes do template de cobranca 1 (rotacao).
       const { data: templates } = await supabase
         .from('templates_mensagem')
         .select('conteudo')
         .eq('tipo', 'cobranca_1')
-        .eq('ativo', true)
-        .limit(1);
+        .eq('ativo', true);
 
-      const template = templates?.[0]?.conteudo;
-
-      if (template) {
-        const mensagem = template
-          .replace(/\{\{nome\}\}/g, cliente.nome.split(' ')[0])
-          .replace(/\{\{valor\}\}/g, parcela.valor.toFixed(2).replace('.', ','))
-          .replace(/\{\{pix_copiaecola\}\}/g, '')
-          .replace(/\{\{numero\}\}/g, parcela.numero)
-          .replace(/\{\{total\}\}/g, emp.total_parcelas)
-          .replace(/\{\{restantes\}\}/g, emp.total_parcelas - emp.parcelas_pagas)
-          .replace(/\n{3,}/g, '\n\n');
-
-        // Enviar mensagem WhatsApp
-        await evolution.enviarTexto(cliente.whatsapp, mensagem);
-
-        // Enviar PIX separado
-        if (qrcode.payload) {
-          await new Promise(r => setTimeout(r, 1500));
-          await evolution.enviarTexto(cliente.whatsapp, qrcode.payload);
-        }
-
-        // Enviar mensagem de direcionamento para renovação/quitação
-        await new Promise(r => setTimeout(r, 2000));
-        await evolution.enviarTexto(cliente.whatsapp, '📲 Quer *renovar* seu crédito ou *quitar* seu contrato? Fale direto com nosso atendente: https://wa.me/5548992238802');
-
-        // Registrar envio
-        await supabase.from('mensagens').insert({
-          parcela_id: parcela.id,
-          cliente_id: cliente.id,
-          tipo: 'cobranca_1',
-          conteudo: mensagem,
+      if (templates?.length) {
+        const templateEscolhido =
+          templates[Math.floor(Math.random() * templates.length)].conteudo;
+        const mensagem = aplicarPlaceholders(templateEscolhido, {
+          nome: cliente.nome,
+          valor: parcela.valor,
+          numero: parcela.numero,
+          total: emp.total_parcelas,
+          restantes: emp.total_parcelas - emp.parcelas_pagas,
+          pix_copiaecola: '',
         });
+
+        const problemas = lintMensagem(mensagem);
+        if (problemas.length) {
+          logger.error(
+            { cliente: cliente.nome, problemas },
+            '[Billing] Template cobranca_1 quebrado no envio imediato'
+          );
+        } else {
+          await enviarComRetry(() => evolution.enviarTexto(cliente.whatsapp, mensagem));
+
+          if (qrcode.payload) {
+            await jitterSleep(1200, 2500);
+            await enviarComRetry(() => evolution.enviarTexto(cliente.whatsapp, qrcode.payload));
+          }
+
+          await jitterSleep(1800, 3500);
+          await enviarComRetry(() =>
+            evolution.enviarTexto(
+              cliente.whatsapp,
+              '📲 Quer *renovar* seu crédito ou *quitar* seu contrato? Fale direto com nosso atendente: https://wa.me/5548992238802'
+            )
+          );
+
+          await supabase.from('mensagens').insert({
+            parcela_id: parcela.id,
+            cliente_id: cliente.id,
+            tipo: 'cobranca_1',
+            conteudo: mensagem,
+          });
+        }
       }
 
       sucesso++;
@@ -664,6 +869,7 @@ module.exports = {
   gerarCobrancasDoDia,
   dispararMensagens,
   processarPagamento,
+  reverterPagamento,
   atualizarAtrasados,
   moverParaFilaHumana,
   getDashboardData,

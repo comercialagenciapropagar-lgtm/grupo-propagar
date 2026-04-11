@@ -1,8 +1,26 @@
 require('dotenv').config();
 
+function parseUsers() {
+  try {
+    const raw = process.env.AUTH_USERS_JSON;
+    if (!raw) return [];
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr : [];
+  } catch (e) {
+    console.error('[Config] AUTH_USERS_JSON invalido:', e.message);
+    return [];
+  }
+}
+
 module.exports = {
   port: process.env.PORT || 3000,
   nodeEnv: process.env.NODE_ENV || 'development',
+
+  security: {
+    jwtSecret: process.env.JWT_SECRET,
+    corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:3001',
+    users: parseUsers(),
+  },
 
   supabase: {
     url: process.env.SUPABASE_URL,

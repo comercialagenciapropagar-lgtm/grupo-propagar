@@ -1,7 +1,14 @@
 const { Router } = require('express');
+const bcrypt = require('bcryptjs');
+const rateLimit = require('express-rate-limit');
 const supabase = require('../database');
 const billing = require('../services/billing');
 const evolution = require('../services/zapi');
+const config = require('../config');
+const { logger } = require('../middleware/logger');
+const { assinarToken, exigirAuth } = require('../middleware/auth');
+const { registrarAuditoria } = require('../services/audit');
+const { validarCpf, validarWhatsapp } = require('../services/validacao');
 
 const router = Router();
 
@@ -9,38 +16,77 @@ const router = Router();
 // AUTENTICACAO
 // ============================================
 
-const USERS = {
-  'orobertoaraujo': { senha: '1234', nome: 'Roberto Araujo' },
-  'oricardomaia': { senha: '1234', nome: 'Ricardo Maia' },
-};
+// Rate limit: 5 tentativas por minuto por IP.
+const loginLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Muitas tentativas. Aguarde 1 minuto.' },
+});
 
-router.post('/login', (req, res) => {
-  const { usuario, senha } = req.body;
-  const user = USERS[usuario];
-  if (!user || user.senha !== senha) {
+function findUser(usuario) {
+  return config.security.users.find((u) => u.usuario === usuario);
+}
+
+router.post('/login', loginLimiter, async (req, res) => {
+  const { usuario, senha } = req.body || {};
+  if (!usuario || !senha) {
+    return res.status(400).json({ error: 'Informe usuario e senha' });
+  }
+
+  const user = findUser(usuario);
+  if (!user) {
+    logger.warn({ usuario, ip: req.ip }, 'Tentativa de login com usuario inexistente');
     return res.status(401).json({ error: 'Usuario ou senha invalidos' });
   }
-  // Simple token (base64 of user:timestamp)
-  const token = Buffer.from(usuario + ':' + Date.now()).toString('base64');
-  res.json({ token, nome: user.nome, usuario });
+
+  const ok = await bcrypt.compare(senha, user.senha_hash || '');
+  if (!ok) {
+    logger.warn({ usuario, ip: req.ip }, 'Tentativa de login com senha invalida');
+    return res.status(401).json({ error: 'Usuario ou senha invalidos' });
+  }
+
+  const token = assinarToken({ usuario: user.usuario, nome: user.nome });
+  registrarAuditoria({
+    usuario: user.usuario,
+    acao: 'login',
+    detalhes: { ip: req.ip, userAgent: req.headers['user-agent'] },
+  }).catch(() => {});
+
+  logger.info({ usuario: user.usuario }, 'Login bem-sucedido');
+  res.json({ token, nome: user.nome, usuario: user.usuario });
 });
 
-router.get('/auth/check', (req, res) => {
-  const auth = req.headers.authorization;
-  if (!auth || !auth.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Nao autorizado' });
+router.get('/auth/check', exigirAuth, (req, res) => {
+  res.json({ usuario: req.usuario.usuario, nome: req.usuario.nome });
+});
+
+// ============================================
+// HEALTH CHECK (publico)
+// ============================================
+router.get('/health', async (req, res) => {
+  const result = { sistema: 'online', timestamp: new Date().toISOString() };
+  try {
+    const { error } = await supabase.from('clientes').select('id').limit(1);
+    result.supabase = error ? 'erro' : 'ok';
+  } catch {
+    result.supabase = 'erro';
   }
   try {
-    const token = auth.split(' ')[1];
-    const decoded = Buffer.from(token, 'base64').toString();
-    const usuario = decoded.split(':')[0];
-    const user = USERS[usuario];
-    if (!user) return res.status(401).json({ error: 'Token invalido' });
-    res.json({ usuario, nome: user.nome });
-  } catch (e) {
-    res.status(401).json({ error: 'Token invalido' });
+    const wa = await evolution.verificarConexao();
+    result.whatsapp = wa?.conectado ? 'ok' : 'desconectado';
+  } catch {
+    result.whatsapp = 'erro';
   }
+  const statusHttp = result.supabase === 'ok' ? 200 : 503;
+  res.status(statusHttp).json(result);
 });
+
+// ============================================
+// A PARTIR DAQUI, TODAS AS ROTAS EXIGEM AUTH
+// ============================================
+router.use(exigirAuth);
 
 // ============================================
 // DASHBOARD
@@ -93,6 +139,12 @@ router.post('/clientes', async (req, res) => {
 
   if (!nome || !whatsapp) {
     return res.status(400).json({ error: 'Nome e WhatsApp são obrigatórios' });
+  }
+  if (!validarWhatsapp(whatsapp)) {
+    return res.status(400).json({ error: 'WhatsApp deve ter DDD + numero (ex: 5548999998888)' });
+  }
+  if (cpf && !validarCpf(cpf)) {
+    return res.status(400).json({ error: 'CPF invalido' });
   }
 
   // Verificar se já existe um cliente inativo com esse WhatsApp e reativar
@@ -698,6 +750,186 @@ router.get('/status', async (req, res) => {
     whatsapp,
     timestamp: new Date().toISOString(),
   });
+});
+
+// ============================================
+// KILL SWITCH GLOBAL (pausar sistema inteiro)
+// ============================================
+router.get('/sistema/estado', async (req, res) => {
+  const { estaPausado } = require('../services/sistema');
+  const estado = await estaPausado();
+  res.json(estado);
+});
+
+router.put('/sistema/pausar', async (req, res) => {
+  const { pausar } = require('../services/sistema');
+  const { motivo } = req.body || {};
+  await pausar(motivo, req.usuario.usuario);
+  registrarAuditoria({
+    usuario: req.usuario.usuario,
+    acao: 'sistema_pausar',
+    detalhes: { motivo },
+  }).catch(() => {});
+  res.json({ ok: true, pausado: true });
+});
+
+router.put('/sistema/retomar', async (req, res) => {
+  const { retomar } = require('../services/sistema');
+  await retomar(req.usuario.usuario);
+  registrarAuditoria({
+    usuario: req.usuario.usuario,
+    acao: 'sistema_retomar',
+  }).catch(() => {});
+  res.json({ ok: true, pausado: false });
+});
+
+// ============================================
+// BLOCKLIST: pausar / retomar cobranca de cliente
+// ============================================
+router.put('/clientes/:id/pausar-cobranca', async (req, res) => {
+  const { motivo } = req.body || {};
+  const { data, error } = await supabase
+    .from('clientes')
+    .update({ cobranca_pausada: true, motivo_pausa: motivo || null })
+    .eq('id', req.params.id)
+    .select()
+    .single();
+  if (error) return res.status(400).json({ error: error.message });
+
+  registrarAuditoria({
+    usuario: req.usuario.usuario,
+    acao: 'pausar_cobranca',
+    entidade: 'cliente',
+    entidade_id: req.params.id,
+    detalhes: { motivo },
+  }).catch(() => {});
+  res.json(data);
+});
+
+router.put('/clientes/:id/retomar-cobranca', async (req, res) => {
+  const { data, error } = await supabase
+    .from('clientes')
+    .update({ cobranca_pausada: false, motivo_pausa: null })
+    .eq('id', req.params.id)
+    .select()
+    .single();
+  if (error) return res.status(400).json({ error: error.message });
+
+  registrarAuditoria({
+    usuario: req.usuario.usuario,
+    acao: 'retomar_cobranca',
+    entidade: 'cliente',
+    entidade_id: req.params.id,
+  }).catch(() => {});
+  res.json(data);
+});
+
+// ============================================
+// AUDIT LOG (leitura)
+// ============================================
+router.get('/audit-log', async (req, res) => {
+  const { data, error } = await supabase
+    .from('audit_log')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(200);
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data);
+});
+
+// ============================================
+// BACKUP MANUAL
+// ============================================
+router.post('/acoes/backup', async (req, res) => {
+  try {
+    const { rodarBackupCompleto } = require('../services/backup');
+    const resultado = await rodarBackupCompleto(30);
+    registrarAuditoria({
+      usuario: req.usuario.usuario,
+      acao: 'backup_manual',
+      detalhes: {
+        destino: resultado.destino,
+        linhas: resultado.metadata.total_linhas,
+      },
+    }).catch(() => {});
+    res.json({
+      ok: true,
+      pasta: resultado.destino,
+      linhas: resultado.metadata.total_linhas,
+      tabelas: Object.keys(resultado.metadata.tabelas).length,
+      duracao_ms: resultado.duracao_ms,
+    });
+  } catch (err) {
+    logger.error({ err }, 'Erro no backup manual');
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ============================================
+// EXPORTACAO CSV
+// ============================================
+function toCsvRow(values) {
+  return values
+    .map((v) => {
+      if (v === null || v === undefined) return '';
+      const s = String(v).replace(/"/g, '""');
+      return /[",\n;]/.test(s) ? `"${s}"` : s;
+    })
+    .join(';');
+}
+
+router.get('/export/parcelas', async (req, res) => {
+  const { inicio, fim } = req.query;
+  let q = supabase
+    .from('parcelas')
+    .select(`
+      id, numero, valor, data_vencimento, data_pagamento, status,
+      emprestimos!inner(cliente_id, total_parcelas,
+        clientes!inner(nome, whatsapp, cpf)
+      )
+    `)
+    .order('data_vencimento');
+  if (inicio) q = q.gte('data_vencimento', inicio);
+  if (fim) q = q.lte('data_vencimento', fim);
+
+  const { data, error } = await q;
+  if (error) return res.status(500).json({ error: error.message });
+
+  const linhas = [
+    toCsvRow([
+      'cliente',
+      'whatsapp',
+      'cpf',
+      'parcela',
+      'valor',
+      'vencimento',
+      'pagamento',
+      'status',
+    ]),
+  ];
+  for (const p of data || []) {
+    const cli = p.emprestimos?.clientes || {};
+    linhas.push(
+      toCsvRow([
+        cli.nome,
+        cli.whatsapp,
+        cli.cpf,
+        `${p.numero}/${p.emprestimos?.total_parcelas ?? ''}`,
+        Number(p.valor).toFixed(2).replace('.', ','),
+        p.data_vencimento,
+        p.data_pagamento || '',
+        p.status,
+      ])
+    );
+  }
+
+  const csv = '\uFEFF' + linhas.join('\n');
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="parcelas_${inicio || 'tudo'}_${fim || 'tudo'}.csv"`
+  );
+  res.send(csv);
 });
 
 module.exports = router;

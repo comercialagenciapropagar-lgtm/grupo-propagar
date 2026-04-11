@@ -1991,6 +1991,41 @@
   <div class="toast" id="toastMsg"></div>
 
   <script>
+    // ===== FETCH COM AUTH =====
+    // Monkey-patch em fetch: sempre anexa Authorization: Bearer <token>
+    // nas chamadas para /api/ (exceto /api/login e /api/health).
+    // Se o servidor retornar 401, limpa localStorage e volta para tela de login.
+    (function () {
+      var nativeFetch = window.fetch.bind(window);
+      window.fetch = async function (input, init) {
+        init = init || {};
+        var url = typeof input === 'string' ? input : (input && input.url) || '';
+        var isApi = url.indexOf('/api/') === 0 || url.indexOf('/api/') === (location.origin + '/api/').indexOf('/api/');
+        var isLogin = url.indexOf('/api/login') !== -1;
+        var isHealth = url.indexOf('/api/health') !== -1;
+        if (isApi && !isLogin && !isHealth) {
+          var token = localStorage.getItem('cobrai_token');
+          if (token) {
+            var headers = new Headers(init.headers || (typeof input === 'object' ? input.headers : undefined));
+            if (!headers.has('Authorization')) {
+              headers.set('Authorization', 'Bearer ' + token);
+            }
+            init.headers = headers;
+          }
+        }
+        var res = await nativeFetch(input, init);
+        if (res.status === 401 && isApi && !isLogin) {
+          localStorage.removeItem('cobrai_token');
+          localStorage.removeItem('cobrai_nome');
+          localStorage.removeItem('cobrai_usuario');
+          // Evita loop se ja estamos na tela de login
+          var ls = document.getElementById('login-screen');
+          if (ls) ls.style.display = 'flex';
+        }
+        return res;
+      };
+    })();
+
     // ===== AUTH =====
     function checkAuth() {
       var token = localStorage.getItem('cobrai_token');
