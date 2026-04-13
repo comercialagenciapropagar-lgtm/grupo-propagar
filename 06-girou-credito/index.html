@@ -700,10 +700,13 @@
         data: new Date().toISOString()
       };
 
-      // Salvar no localStorage como backup
-      var leads = JSON.parse(localStorage.getItem('girou_leads') || '[]');
-      leads.push(dados);
-      localStorage.setItem('girou_leads', JSON.stringify(leads));
+      // Enviar para Google Sheets
+      fetch('https://script.google.com/macros/s/AKfycbwuQn2I-4SGmlHlgyu1_-X4B_GMOhVX3wwODH9OO-2itGbgZjpkzFnH3q8yO-eDiP5e/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados)
+      }).catch(function(){});
 
       // Montar mensagem pro WhatsApp
       var msg = '*Nova solicita\u00e7\u00e3o GirouCr\u00e9dito*\n\n';
