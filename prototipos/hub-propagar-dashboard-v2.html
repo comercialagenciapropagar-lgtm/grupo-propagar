@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hub Propagar — Dashboard v2 (Protótipo minimal)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0b0d;
+    --bg-1: #0f0f11;
+    --bg-2: #141417;
+    --bg-3: #1a1a1d;
+    --bg-4: #22222a;
+    --gold: #d4a853;
+    --gold-dim: #b8923e;
+    --text: #e9e9ec;
+    --text-2: #b8b8bf;
+    --muted: #7a7a82;
+    --muted-2: #55555c;
+    --border: rgba(255,255,255,0.07);
+    --border-hi: rgba(255,255,255,0.12);
+    --border-gold: rgba(212,168,83,0.30);
+    --green: #4ade80;
+    --red: #f87171;
+    --orange: #fb923c;
+    --blue: #60a5fa;
+    --purple: #c084fc;
+    --sidebar-w: 196px;
+    --topbar-h: 48px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 13px; }
+  body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.005em;
+  }
+
+  .proto-banner {
+    position: fixed;
+    top: 10px; right: 10px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    color: var(--gold);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    z-index: 1000;
+  }
+
+  /* =========== LOGO SVG =========== */
+  svg.logo { width: 20px; height: 20px; flex-shrink: 0; }
+
+  /* =========== SIDEBAR =========== */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--bg-1);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+  .brand {
+    height: var(--topbar-h);
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border-bottom: 1px solid var(--border);
+  }
+  .brand .word {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .brand .word .dim { color: var(--gold); }
+  .brand .chev {
+    margin-left: auto;
+    color: var(--muted-2);
+    width: 12px; height: 12px;
+  }
+
+  .nav {
+    flex: 1;
+    padding: 8px 6px;
+    overflow-y: auto;
+  }
+  .group-label {
+    padding: 10px 10px 4px;
+    font-size: 10px;
+    color: var(--muted-2);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .nav a {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: var(--text-2);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 450;
+    position: relative;
+  }
+  .nav a:hover { background: var(--bg-3); color: var(--text); }
+  .nav a.active { background: var(--bg-3); color: var(--text); }
+  .nav a.active .ic { color: var(--gold); }
+  .nav .ic { width: 14px; height: 14px; color: var(--muted); flex-shrink: 0; }
+  .nav .count {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .nav a.active .count { color: var(--gold); }
+  .kbd {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted-2);
+    background: var(--bg-2);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .sidebar-foot {
+    padding: 8px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sidebar-foot .av {
+    width: 22px; height: 22px;
+    border-radius: 4px;
+    background: var(--gold);
+    color: #0a0a0a;
+    font-weight: 700;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sidebar-foot .who { font-size: 11px; font-weight: 500; color: var(--text); line-height: 1.2; }
+  .sidebar-foot .who small { display: block; color: var(--muted); font-size: 9px; letter-spacing: 0.05em; font-weight: 500; text-transform: uppercase; }
+  .sidebar-foot .menu {
+    margin-left: auto;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  /* =========== TOPBAR =========== */
+  .topbar {
+    position: fixed;
+    top: 0; left: var(--sidebar-w); right: 0;
+    height: var(--topbar-h);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+    z-index: 50;
+  }
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .breadcrumb svg { width: 11px; height: 11px; }
+  .breadcrumb .current { color: var(--text); font-weight: 500; }
+
+  .search {
+    flex: 1;
+    max-width: 280px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .search input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: inherit;
+    flex: 1;
+    font-size: 11px;
+  }
+  .search input::placeholder { color: var(--muted); }
+  .search svg { width: 12px; height: 12px; }
+
+  .top-spacer { flex: 1; }
+
+  .top-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 28px;
+    padding: 0 10px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text-2);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .top-btn:hover { background: var(--bg-3); color: var(--text); }
+  .top-btn svg { width: 12px; height: 12px; }
+  .top-btn.primary {
+    background: var(--gold);
+    color: #0a0a0a;
+    border: 1px solid var(--gold);
+    font-weight: 600;
+  }
+  .top-btn.primary:hover { background: var(--gold); }
+  .top-btn.icon-only { padding: 0; width: 28px; justify-content: center; position: relative; }
+  .top-btn.icon-only .ind {
+    position: absolute;
+    top: 5px; right: 5px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  /* =========== MAIN =========== */
+  .main {
+    margin-left: var(--sidebar-w);
+    padding: calc(var(--topbar-h) + 20px) 20px 60px;
+    max-width: 1680px;
+  }
+
+  /* PAGE HEADER — sem hero grande, só título + meta */
+  .page-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+  .page-head h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.015em;
+  }
+  .page-head .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .page-head .meta b { color: var(--text); font-weight: 500; }
+
+  /* FILTER BAR — segmented controls compactos */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .seg {
+    display: flex;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 2px;
+  }
+  .seg button {
+    background: transparent;
+    border: none;
+    padding: 4px 10px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: -0.005em;
+  }
+  .seg button.active {
+    background: var(--bg-4);
+    color: var(--text);
+  }
+  .filter-bar .div {
+    width: 1px; height: 16px; background: var(--border);
+  }
+  .filter-bar .chip-soft {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    border: 1px dashed var(--border-hi);
+    border-radius: 5px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .filter-bar .chip-soft:hover { color: var(--text); border-color: var(--border-gold); }
+
+  /* KPI STRIP — mais compacto, estilo tabela */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--bg-1);
+    margin-bottom: 20px;
+  }
+  .kpi-strip .cell {
+    padding: 14px 16px;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .kpi-strip .cell:last-child { border-right: none; }
+  .kpi-strip .cell .label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .kpi-strip .cell .val {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    font-feature-settings: 'tnum';
+    line-height: 1;
+  }
+  .kpi-strip .cell .val .unit {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-left: 2px;
+  }
+  .kpi-strip .cell .delta {
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .delta.up { color: var(--green); }
+  .delta.down { color: var(--red); }
+  .delta.flat { color: var(--muted); }
+  .sparkline {
+    position: absolute;
+    bottom: 0; right: 14px;
+    width: 60px;
+    height: 22px;
+    opacity: 0.4;
+  }
+
+  /* CONTENT GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .panel {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-head h3 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.005em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel-head h3 .badge {
+    background: var(--bg-3);
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .panel-head .actions { display: flex; gap: 6px; }
+  .panel-head a {
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .panel-head a:hover { color: var(--gold); }
+
+  /* CHART COMPACTO */
+  .chart {
+    padding: 12px 14px 18px;
+    height: 240px;
+    position: relative;
+  }
+  .chart .legend {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 10px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .chart .legend i {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    margin-right: 5px;
+    vertical-align: 0;
+  }
+  .chart-box {
+    position: relative;
+    height: calc(100% - 24px);
+  }
+  .chart-box .axis-y {
+    position: absolute;
+    left: 0; top: 0; bottom: 14px;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted-2);
+    width: 34px;
+  }
+  .chart-box .plot {
+    position: absolute;
+    left: 34px; right: 4px; top: 0; bottom: 14px;
+    background-image:
+      linear-gradient(to top, var(--border) 1px, transparent 1px);
+    background-size: 100% 25%;
+  }
+  .chart-box .axis-x {
+    position: absolute;
+    left: 34px; right: 4px; bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted-2);
+  }
+
+  /* TABLE LOJAS (o grande diferencial do v2) */
+  .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .tbl thead th {
+    padding: 8px 14px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .tbl thead th.num { text-align: right; }
+  .tbl tbody td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-2);
+    vertical-align: middle;
+    font-feature-settings: 'tnum';
+  }
+  .tbl tbody td.num { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 500; color: var(--text); }
+  .tbl tbody tr:last-child td { border-bottom: none; }
+  .tbl tbody tr:hover { background: var(--bg-2); }
+  .tbl .mark-cell {
+    display: flex; align-items: center; gap: 9px;
+  }
+  .tbl .mini-logo {
+    width: 22px; height: 22px;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--gold);
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  .tbl .mark-cell b { color: var(--text); font-weight: 500; }
+  .tbl .mark-cell small { color: var(--muted); display: block; font-size: 10px; font-weight: 400; font-family: 'JetBrains Mono', monospace; margin-top: 1px; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .pill .dot { width: 5px; height: 5px; border-radius: 50%; }
+  .pill.green { background: rgba(74,222,128,0.08); color: var(--green); }
+  .pill.green .dot { background: var(--green); }
+  .pill.red { background: rgba(248,113,113,0.08); color: var(--red); }
+  .pill.red .dot { background: var(--red); }
+  .pill.orange { background: rgba(251,146,60,0.08); color: var(--orange); }
+  .pill.orange .dot { background: var(--orange); }
+  .pill.muted { background: var(--bg-3); color: var(--muted); }
+  .pill.muted .dot { background: var(--muted); }
+
+  .trend-up { color: var(--green); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .trend-down { color: var(--red); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .trend-flat { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+  .gest-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+  }
+  .gest-chip .av {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--bg-3);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    border: 1px solid var(--border);
+  }
+
+  /* VENCENDO — list compacta */
+  .alert-list { padding: 4px 0; }
+  .alert-row {
+    display: grid;
+    grid-template-columns: 54px 1fr auto;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .alert-row:last-child { border-bottom: none; }
+  .alert-row .days {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1;
+  }
+  .alert-row .days small { display: block; font-size: 9px; font-weight: 400; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+  .alert-row.critical .days { color: var(--red); }
+  .alert-row.warn .days { color: var(--orange); }
+  .alert-row .name { font-size: 12px; color: var(--text); font-weight: 500; }
+  .alert-row .sub { font-size: 11px; color: var(--muted); margin-top: 1px; font-family: 'JetBrains Mono', monospace; }
+  .alert-row .act { color: var(--gold); font-size: 11px; text-decoration: none; font-weight: 500; }
+
+  /* BOTTOM GRID — activity + ranking */
+  .grid-2-eq {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .evt-row {
+    display: grid;
+    grid-template-columns: 52px 1fr 22px;
+    gap: 10px;
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    align-items: center;
+  }
+  .evt-row:last-child { border-bottom: none; }
+  .evt-row .t { font-family: 'JetBrains Mono', monospace; color: var(--muted-2); font-size: 10px; }
+  .evt-row .d { color: var(--text-2); line-height: 1.4; }
+  .evt-row .d b { color: var(--text); font-weight: 500; }
+  .evt-row .d .g { color: var(--gold); font-weight: 500; }
+  .evt-row .who {
+    width: 20px; height: 20px;
+    border-radius: 4px;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    color: var(--gold);
+    font-size: 9px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .rank-row {
+    display: grid;
+    grid-template-columns: 24px 1fr 40px 70px;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .rank-row:last-child { border-bottom: none; }
+  .rank-row .pos {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 11px;
+  }
+  .rank-row:first-child .pos { color: var(--gold); }
+  .rank-row .nm { font-size: 12px; color: var(--text); font-weight: 500; }
+  .rank-row .nm small { display: block; color: var(--muted); font-size: 10px; font-weight: 400; margin-top: 1px; font-family: 'JetBrains Mono', monospace; }
+  .rank-row .sc {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    text-align: right;
+  }
+  .rank-row .bar {
+    height: 4px;
+    background: var(--bg-3);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .rank-row .bar i {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--gold);
+    border-radius: 2px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1200px) {
+    .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+    .kpi-strip .cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .grid-2, .grid-2-eq { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 760px) {
+    .sidebar { display: none; }
+    .topbar { left: 0; padding: 0 12px; }
+    .main { margin-left: 0; padding: calc(var(--topbar-h) + 16px) 12px 40px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- LOGO SVG -->
+  <svg width="0" height="0" style="position:absolute;">
+    <defs>
+      <symbol id="pmark" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="27" fill="none" stroke="currentColor" stroke-width="3"/>
+        <path d="M 16 32 Q 20 26 25 26" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        <path d="M 16 32 Q 22 20 32 19" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        <path d="M 16 32 Q 24 14 39 14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="16" cy="32" r="4" fill="currentColor"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="proto-banner">v2 · minimal · protótipo</div>
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="logo" style="color: var(--gold);"><use href="#pmark"/></svg>
+      <div class="word">hub<span class="dim">·propagar</span></div>
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+
+    <nav class="nav">
+      <div class="group-label">Operação</div>
+      <a class="active" href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard<span class="kbd">⌘1</span></a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>Input Diário<span class="kbd">⌘2</span></a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>Input em Lote</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/><path d="M1 21v-2a4 4 0 014-4h6a4 4 0 014 4v2"/></svg>Clientes<span class="count">28</span></a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Contratos</a>
+
+      <div class="group-label">Pessoas</div>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="6"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Rankings</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Ocorrências<span class="count">3</span></a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Desafios</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Demandas<span class="count">7</span></a>
+
+      <div class="group-label">Conhecimento</div>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>FAQ</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="10 9 15 12 10 15"/></svg>Cursos</a>
+
+      <div class="group-label">Financeiro</div>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/></svg>Controle</a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Folha</a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="av">R</div>
+      <div class="who">Roberto<small>admin</small></div>
+      <svg class="menu" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+    </div>
+  </aside>
+
+  <!-- ============ TOPBAR ============ -->
+  <header class="topbar">
+    <div class="breadcrumb">
+      <span>Propagar</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <span class="current">Dashboard</span>
+    </div>
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input placeholder="Buscar…" />
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted-2); background: var(--bg-3); padding: 1px 5px; border-radius: 3px;">⌘K</span>
+    </div>
+    <div class="top-spacer"></div>
+    <button class="top-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Abril 2026
+    </button>
+    <button class="top-btn icon-only" title="Notificações">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span class="ind"></span>
+    </button>
+    <button class="top-btn primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Input
+    </button>
+  </header>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <div class="page-head">
+      <h1>Dashboard</h1>
+      <div class="meta">atualizado <b>agora</b> · 14 lojas · 8 gestores · mês fecha em <b>15 dias</b></div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <div class="seg">
+        <button>7d</button>
+        <button>30d</button>
+        <button class="active">mês</button>
+        <button>trimestre</button>
+        <button>ano</button>
+      </div>
+      <div class="div"></div>
+      <div class="chip-soft">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Gestor: todos
+      </div>
+      <div class="chip-soft">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Status: ativas
+      </div>
+      <div style="margin-left: auto; display: flex; gap: 6px;">
+        <button class="top-btn" style="height: 26px; font-size: 10px;">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Exportar
+        </button>
+      </div>
+    </div>
+
+    <!-- KPI STRIP -->
+    <section class="kpi-strip">
+      <div class="cell">
+        <div class="label">MRR agência</div>
+        <div class="val">R$ 142<span class="unit">,8k</span></div>
+        <div class="delta up">↗ +8,4% MoM</div>
+        <svg class="sparkline" viewBox="0 0 60 22" preserveAspectRatio="none">
+          <polyline points="0,16 10,14 20,15 30,10 40,12 50,7 60,4" fill="none" stroke="#4ade80" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="cell">
+        <div class="label">Meta mês</div>
+        <div class="val">82<span class="unit">%</span></div>
+        <div class="delta flat">R$ 25k p/ fechar</div>
+        <svg class="sparkline" viewBox="0 0 60 22" preserveAspectRatio="none">
+          <polyline points="0,18 15,15 30,10 45,8 60,6" fill="none" stroke="#d4a853" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="cell">
+        <div class="label">Vendas geradas</div>
+        <div class="val">R$ 2,1<span class="unit">Mi</span></div>
+        <div class="delta up">↗ +12,3% MoM</div>
+        <svg class="sparkline" viewBox="0 0 60 22" preserveAspectRatio="none">
+          <polyline points="0,15 10,12 20,14 30,8 40,10 50,5 60,3" fill="none" stroke="#4ade80" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="cell">
+        <div class="label">CAC médio</div>
+        <div class="val">R$ 156</div>
+        <div class="delta down">↘ -4,1% MoM</div>
+        <svg class="sparkline" viewBox="0 0 60 22" preserveAspectRatio="none">
+          <polyline points="0,6 15,9 30,8 45,12 60,14" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="cell">
+        <div class="label">Churn 90d</div>
+        <div class="val">2,1<span class="unit">%</span></div>
+        <div class="delta down">↗ +0,6pp · 1 saída</div>
+        <svg class="sparkline" viewBox="0 0 60 22" preserveAspectRatio="none">
+          <polyline points="0,14 15,12 30,13 45,8 60,5" fill="none" stroke="#f87171" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- CHART + VENCENDO -->
+    <section class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Evolução · investimento × vendas <span class="badge">últimos 30 dias</span></h3>
+          <div class="actions">
+            <div class="seg">
+              <button class="active">diário</button>
+              <button>semanal</button>
+            </div>
+          </div>
+        </div>
+        <div class="chart">
+          <div class="legend">
+            <span><i style="background:#d4a853"></i>investimento</span>
+            <span><i style="background:#4ade80"></i>vendas geradas</span>
+            <span><i style="background:#f87171"></i>ocorrências</span>
+          </div>
+          <div class="chart-box">
+            <div class="axis-y">
+              <span>0</span><span>500</span><span>1k</span><span>1,5k</span><span>2k</span>
+            </div>
+            <div class="plot">
+              <svg width="100%" height="100%" viewBox="0 0 600 190" preserveAspectRatio="none" style="display:block;">
+                <defs>
+                  <linearGradient id="vfill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#4ade80" stop-opacity="0.22"/>
+                    <stop offset="100%" stop-color="#4ade80" stop-opacity="0"/>
+                  </linearGradient>
+                  <linearGradient id="gfill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#d4a853" stop-opacity="0.18"/>
+                    <stop offset="100%" stop-color="#d4a853" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <!-- investimento (dourado) -->
+                <path d="M0,140 L20,130 L40,132 L60,115 L80,118 L100,100 L120,105 L140,88 L160,92 L180,78 L200,82 L220,65 L240,72 L260,60 L280,55 L300,62 L320,48 L340,52 L360,40 L380,45 L400,35 L420,42 L440,30 L460,34 L480,25 L500,30 L520,22 L540,28 L560,18 L580,22 L600,15 L600,190 L0,190 Z" fill="url(#gfill)"/>
+                <polyline points="0,140 20,130 40,132 60,115 80,118 100,100 120,105 140,88 160,92 180,78 200,82 220,65 240,72 260,60 280,55 300,62 320,48 340,52 360,40 380,45 400,35 420,42 440,30 460,34 480,25 500,30 520,22 540,28 560,18 580,22 600,15" fill="none" stroke="#d4a853" stroke-width="1.6"/>
+                <!-- vendas (verde) -->
+                <path d="M0,160 L20,155 L40,150 L60,148 L80,140 L100,145 L120,135 L140,130 L160,125 L180,120 L200,115 L220,108 L240,110 L260,100 L280,95 L300,98 L320,85 L340,88 L360,78 L380,72 L400,68 L420,62 L440,58 L460,52 L480,48 L500,45 L520,40 L540,38 L560,32 L580,28 L600,24 L600,190 L0,190 Z" fill="url(#vfill)"/>
+                <polyline points="0,160 20,155 40,150 60,148 80,140 100,145 120,135 140,130 160,125 180,120 200,115 220,108 240,110 260,100 280,95 300,98 320,85 340,88 360,78 380,72 400,68 420,62 440,58 460,52 480,48 500,45 520,40 540,38 560,32 580,28 600,24" fill="none" stroke="#4ade80" stroke-width="1.4"/>
+                <!-- ocorrências markers -->
+                <circle cx="160" cy="92" r="3.5" fill="#f87171"/>
+                <circle cx="320" cy="48" r="3.5" fill="#f87171"/>
+                <circle cx="480" cy="25" r="3.5" fill="#f87171"/>
+              </svg>
+            </div>
+            <div class="axis-x">
+              <span>01</span><span>05</span><span>10</span><span>15</span><span>20</span><span>25</span><span>30</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Vencendo <span class="badge">próximos 30d</span></h3>
+          <a href="#">ver todos →</a>
+        </div>
+        <div class="alert-list">
+          <div class="alert-row critical">
+            <div class="days">03<small>dias</small></div>
+            <div>
+              <div class="name">Ótica Vision Plus</div>
+              <div class="sub">#042 · R$ 4.800/mês</div>
+            </div>
+            <a class="act" href="#">renovar</a>
+          </div>
+          <div class="alert-row warn">
+            <div class="days">12<small>dias</small></div>
+            <div>
+              <div class="name">Padaria Bom Pão</div>
+              <div class="sub">#031 · R$ 2.200/mês</div>
+            </div>
+            <a class="act" href="#">renovar</a>
+          </div>
+          <div class="alert-row warn">
+            <div class="days">24<small>dias</small></div>
+            <div>
+              <div class="name">Clínica Sorriso</div>
+              <div class="sub">#028 · R$ 3.500/mês · upsell</div>
+            </div>
+            <a class="act" href="#">abrir</a>
+          </div>
+          <div class="alert-row">
+            <div class="days">28<small>dias</small></div>
+            <div>
+              <div class="name">IMOBI Holding</div>
+              <div class="sub">#019 · R$ 18.500/mês · anual</div>
+            </div>
+            <a class="act" href="#">abrir</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABELA DE LOJAS (core do v2) -->
+    <section class="panel" style="margin-bottom: 20px;">
+      <div class="panel-head">
+        <h3>Lojas · performance do mês <span class="badge">14 ativas</span></h3>
+        <div class="actions">
+          <a href="#">ordenar por score ↓</a>
+        </div>
+      </div>
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Empresa</th>
+            <th>Gestor</th>
+            <th class="num">IVM</th>
+            <th class="num">Msgs</th>
+            <th class="num">Vendas</th>
+            <th class="num">CAC</th>
+            <th class="num">Conv.</th>
+            <th>Status</th>
+            <th class="num">vs mês ant.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="mark-cell"><div class="mini-logo">I</div><div><b>IMOBI Holding</b><small>@imobi.holding</small></div></div></td>
+            <td><span class="gest-chip"><span class="av">M</span>Marcelo</span></td>
+            <td class="num">R$ 48k</td>
+            <td class="num">2.840</td>
+            <td class="num">R$ 284k</td>
+            <td class="num">R$ 168</td>
+            <td class="num">10,1%</td>
+            <td><span class="pill green"><span class="dot"></span>ACIMA</span></td>
+            <td class="num trend-up">↗ +18,4%</td>
+          </tr>
+          <tr>
+            <td><div class="mark-cell"><div class="mini-logo">V</div><div><b>Ótica Vision Plus</b><small>@oticavisionplus</small></div></div></td>
+            <td><span class="gest-chip"><span class="av">B</span>Bianca</span></td>
+            <td class="num">R$ 12k</td>
+            <td class="num">180</td>
+            <td class="num">R$ 38k</td>
+            <td class="num">R$ 312</td>
+            <td class="num">3,2%</td>
+            <td><span class="pill red"><span class="dot"></span>ATENÇÃO</span></td>
+            <td class="num trend-down">↘ -22,1%</td>
+          </tr>
+          <tr>
+            <td><div class="mark-cell"><div class="mini-logo">B</div><div><b>Padaria Bom Pão</b><small>@padariabompao</small></div></div></td>
+            <td><span class="gest-chip"><span class="av">J</span>João</span></td>
+            <td class="num">R$ 4,2k</td>
+            <td class="num">1.450</td>
+            <td class="num">R$ 52k</td>
+            <td class="num">R$ 44</td>
+            <td class="num">6,6%</td>
+            <td><span class="pill green"><span class="dot"></span>NO RITMO</span></td>
+            <td class="num trend-up">↗ +4,2%</td>
+          </tr>
+          <tr>
+            <td><div class="mark-cell"><div class="mini-logo">S</div><div><b>Clínica Sorriso</b><small>@clinicasorriso</small></div></div></td>
+            <td><span class="gest-chip"><span class="av">M</span>Marcelo</span></td>
+            <td class="num">R$ 8,8k</td>
+            <td class="num">720</td>
+            <td class="num">R$ 71k</td>
+            <td class="num">R$ 124</td>
+            <td class="num">9,9%</td>
+            <td><span class="pill muted"><span class="dot"></span>OBSERVAR</span></td>
+            <td class="num trend-flat">↔ +0,8%</td>
+          </tr>
+          <tr>
+            <td><div class="mark-cell"><div class="mini-logo">T</div><div><b>Tráfego Manaus</b><small>@trafegomanaus</small></div></div></td>
+            <td><span class="gest-chip"><span class="av">R</span>Ricardo</span></td>
+            <td class="num">R$ 22k</td>
+            <td class="num">2.105</td>
+            <td class="num">R$ 198k</td>
+            <td class="num">R$ 94</td>
+            <td class="num">11,2%</td>
+            <td><span class="pill green"><span class="dot"></span>ACIMA</span></td>
+            <td class="num trend-up">↗ +14,6%</td>
+          </tr>
+          <tr>
+            <td><div class="mark-cell"><div class="mini-logo">G</div><div><b>GirouCrédito</b><small>@giroucredito</small></div></div></td>
+            <td><span class="gest-chip"><span class="av">B</span>Bianca</span></td>
+            <td class="num">R$ 14k</td>
+            <td class="num">320</td>
+            <td class="num">R$ 44k</td>
+            <td class="num">R$ 218</td>
+            <td class="num">4,1%</td>
+            <td><span class="pill red"><span class="dot"></span>QUEDA</span></td>
+            <td class="num trend-down">↘ -14,2%</td>
+          </tr>
+          <tr>
+            <td><div class="mark-cell"><div class="mini-logo">P</div><div><b>Pet Vida</b><small>@petvida</small></div></div></td>
+            <td><span class="gest-chip"><span class="av">C</span>Camila</span></td>
+            <td class="num">R$ 5,6k</td>
+            <td class="num">680</td>
+            <td class="num">R$ 38k</td>
+            <td class="num">R$ 82</td>
+            <td class="num">7,2%</td>
+            <td><span class="pill orange"><span class="dot"></span>REVISAR</span></td>
+            <td class="num trend-flat">↔ -1,1%</td>
+          </tr>
+          <tr>
+            <td><div class="mark-cell"><div class="mini-logo">R</div><div><b>Restaurante Seu Jorge</b><small>@rest.seujorge</small></div></div></td>
+            <td><span class="gest-chip"><span class="av">J</span>João</span></td>
+            <td class="num">R$ 3,8k</td>
+            <td class="num">485</td>
+            <td class="num">R$ 44k</td>
+            <td class="num">R$ 68</td>
+            <td class="num">8,2%</td>
+            <td><span class="pill green"><span class="dot"></span>NO RITMO</span></td>
+            <td class="num trend-up">↗ +6,8%</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- BOTTOM -->
+    <section class="grid-2-eq">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Movimento <span class="badge">24h</span></h3>
+          <a href="#">ver tudo →</a>
+        </div>
+        <div>
+          <div class="evt-row">
+            <div class="t">09:42</div>
+            <div class="d"><b>Bianca</b> abriu ocorrência em <span class="g">Ótica Vision Plus</span></div>
+            <div class="who">B</div>
+          </div>
+          <div class="evt-row">
+            <div class="t">08:15</div>
+            <div class="d"><b>Marcelo</b> lançou input de <b>6 lojas</b> (R$ 18,2k IVM)</div>
+            <div class="who">M</div>
+          </div>
+          <div class="evt-row">
+            <div class="t">07:58</div>
+            <div class="d"><b>João</b> fechou demanda <span class="g">#412 · Criativo semana 16</span></div>
+            <div class="who">J</div>
+          </div>
+          <div class="evt-row">
+            <div class="t">07:12</div>
+            <div class="d">Contrato <span class="g">#042 · Vision Plus</span> entrou em alerta</div>
+            <div class="who">A</div>
+          </div>
+          <div class="evt-row">
+            <div class="t">ontem</div>
+            <div class="d"><b>Ricardo</b> promovido a <span class="g">gerente</span></div>
+            <div class="who">R</div>
+          </div>
+          <div class="evt-row">
+            <div class="t">ontem</div>
+            <div class="d"><b>Camila</b> registrou 4 inputs · média <b>R$ 2,1k IVM</b></div>
+            <div class="who">C</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Ranking <span class="badge">score · abr/26</span></h3>
+          <div class="actions">
+            <div class="seg">
+              <button class="active">score</button>
+              <button>vendas</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="rank-row">
+            <div class="pos">01</div>
+            <div class="nm">Marcelo Nunes<small>gerente · 4 lojas</small></div>
+            <div class="bar"><i style="width: 98%"></i></div>
+            <div class="sc">9,8</div>
+          </div>
+          <div class="rank-row">
+            <div class="pos">02</div>
+            <div class="nm">Ricardo Alves<small>gestor · 3 lojas</small></div>
+            <div class="bar"><i style="width: 92%"></i></div>
+            <div class="sc">9,2</div>
+          </div>
+          <div class="rank-row">
+            <div class="pos">03</div>
+            <div class="nm">João Pedro<small>gestor · 2 lojas</small></div>
+            <div class="bar"><i style="width: 86%"></i></div>
+            <div class="sc">8,6</div>
+          </div>
+          <div class="rank-row">
+            <div class="pos">04</div>
+            <div class="nm">Bianca Lima<small>gestor · 3 lojas</small></div>
+            <div class="bar"><i style="width: 74%"></i></div>
+            <div class="sc">7,4</div>
+          </div>
+          <div class="rank-row">
+            <div class="pos">05</div>
+            <div class="nm">Camila Souza<small>gestor · 2 lojas</small></div>
+            <div class="bar"><i style="width: 71%"></i></div>
+            <div class="sc">7,1</div>
+          </div>
+          <div class="rank-row">
+            <div class="pos">06</div>
+            <div class="nm">Pedro Silva<small>gestor · 2 lojas</small></div>
+            <div class="bar"><i style="width: 64%"></i></div>
+            <div class="sc">6,4</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

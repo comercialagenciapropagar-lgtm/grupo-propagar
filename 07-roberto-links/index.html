@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roberto Ara&uacute;jo &mdash; Qual &eacute; o seu caso?</title>
+  <meta name="description" content="Roberto Araújo — A verdade que ninguém fala sobre negócios.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='%23111'/><text x='50' y='70' font-size='56' text-anchor='middle' fill='%23fff' font-weight='bold' font-family='system-ui'>R</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #050505;
+      --surface: rgba(255,255,255,0.04);
+      --surface-hover: rgba(255,255,255,0.07);
+      --glass: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.1);
+      --glass-border-hover: rgba(255,255,255,0.18);
+      --text: #f0f0f0;
+      --text-mid: rgba(240,240,240,0.72);
+      --text-dim: rgba(240,240,240,0.4);
+      --glow: rgba(255,255,255,0.06);
+      --whatsapp: #25D366;
+      --whatsapp-dark: #1da851;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 20px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* BACKGROUND TEXTURE */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,255,255,0.03) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 110%, rgba(255,255,255,0.02) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NOISE OVERLAY */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+      z-index: 1;
+      padding: 48px 0 40px;
+    }
+
+    /* ====== HEADER ====== */
+    .header {
+      text-align: center;
+      margin-bottom: 44px;
+      opacity: 0;
+      animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+    }
+
+    .avatar-ring {
+      width: 108px;
+      height: 108px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      padding: 3px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+      position: relative;
+    }
+
+    .avatar-ring::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent 60%);
+      z-index: -1;
+      filter: blur(8px);
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+      background: linear-gradient(145deg, #1a1a1a, #111);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .tagline {
+      font-size: 15px;
+      color: var(--text-mid);
+      max-width: 320px;
+      margin: 0 auto 16px;
+      line-height: 1.55;
+      letter-spacing: -0.1px;
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 100px;
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-dim);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .verified-badge svg {
+      opacity: 0.5;
+    }
+
+    /* ====== DIVIDER ====== */
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      margin: 0 auto 32px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease 0.3s forwards;
+    }
+
+    /* ====== QUESTION ====== */
+    .question {
+      text-align: center;
+      margin-bottom: 20px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.4px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease 0.35s forwards;
+    }
+
+    /* ====== LINK CARDS ====== */
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 44px;
+    }
+
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 16px 18px;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+
+      /* stagger animation */
+      opacity: 0;
+      transform: translateY(16px);
+      animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .link-card:nth-child(1) { animation-delay: 0.4s; }
+    .link-card:nth-child(2) { animation-delay: 0.48s; }
+    .link-card:nth-child(3) { animation-delay: 0.56s; }
+    .link-card:nth-child(4) { animation-delay: 0.64s; }
+
+    .link-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .link-card:hover {
+      background: var(--surface-hover);
+      border-color: var(--glass-border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.08);
+    }
+
+    .link-card:hover::before { opacity: 1; }
+
+    .link-card:active {
+      transform: translateY(0) scale(0.99);
+      transition-duration: 0.1s;
+    }
+
+    .link-icon {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .link-card:hover .link-icon {
+      background: rgba(255,255,255,0.1);
+      transform: scale(1.05);
+    }
+
+    .link-text {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .link-label {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      margin-bottom: 2px;
+      color: #fff;
+    }
+
+    .link-desc {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.4;
+      letter-spacing: 0;
+    }
+
+    .link-arrow {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      color: rgba(255,255,255,0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .link-card:hover .link-arrow {
+      color: rgba(255,255,255,0.5);
+      transform: translateX(3px);
+    }
+
+    /* ====== SOCIAL ICONS ====== */
+    .social {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease 0.75s forwards;
+    }
+
+    .social a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .social a:hover {
+      background: var(--surface-hover);
+      border-color: var(--glass-border-hover);
+      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+
+    .social a:active {
+      transform: translateY(0);
+    }
+
+    /* ====== FOOTER ====== */
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.15);
+      letter-spacing: 0.5px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease 0.85s forwards;
+    }
+
+    /* ====== ANIMATIONS ====== */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ====== REDUCED MOTION ====== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ====== TOUCH DEVICES ====== */
+    @media (hover: none) {
+      .link-card:hover {
+        transform: none;
+        box-shadow: none;
+      }
+      .link-card:active {
+        background: var(--surface-hover);
+        border-color: var(--glass-border-hover);
+        transform: scale(0.98);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="avatar-ring">
+        <div class="avatar">
+          <img src="foto.jpg" alt="Roberto Ara&uacute;jo">
+        </div>
+      </div>
+      <h1 class="name">Roberto Ara&uacute;jo</h1>
+      <p class="tagline">A verdade que ningu&eacute;m fala sobre neg&oacute;cios.</p>
+      <span class="verified-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Empres&aacute;rio &amp; Mentor
+      </span>
+    </header>
+
+    <div class="divider"></div>
+
+    <!-- QUESTION -->
+    <p class="question">Qual &eacute; o seu caso?</p>
+
+    <!-- LINKS SEGMENTADOS POR PERSONA -->
+    <nav class="links" aria-label="Opções de contato">
+
+      <a class="link-card" href="https://wa.me/5548999597067?text=Roberto%2C%20tenho%20um%20neg%C3%B3cio%20local%20e%20quero%20escalar." target="_blank" rel="noopener">
+        <div class="link-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7l2 7-3 2a16 16 0 006 6l2-3 7 2v7a2 2 0 01-2 2A18 18 0 013 7a2 2 0 012-2"/><path d="M15 3h6v6"/><path d="M21 3l-7 7"/></svg>
+        </div>
+        <div class="link-text">
+          <div class="link-label">Tenho um neg&oacute;cio e quero escalar</div>
+          <div class="link-desc">Faturando, mas travado no pr&oacute;ximo n&iacute;vel.</div>
+        </div>
+        <svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+      </a>
+
+      <a class="link-card" href="https://wa.me/5548999597067?text=Roberto%2C%20sou%20prestador%20de%20servi%C3%A7o%20e%20quero%20cobrar%20mais." target="_blank" rel="noopener">
+        <div class="link-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div class="link-text">
+          <div class="link-label">Presto servi&ccedil;o e quero cobrar mais</div>
+          <div class="link-desc">Entrega resultado, mas n&atilde;o consegue subir o pre&ccedil;o.</div>
+        </div>
+        <svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+      </a>
+
+      <a class="link-card" href="https://wa.me/5548999597067?text=Roberto%2C%20cansei%20de%20guru%20e%20quero%20conselho%20real." target="_blank" rel="noopener">
+        <div class="link-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="link-text">
+          <div class="link-label">Cansei de guru. Quero conselho real.</div>
+          <div class="link-desc">Sem f&oacute;rmula m&aacute;gica. Conversa direta.</div>
+        </div>
+        <svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+      </a>
+
+      <a class="link-card" href="https://wa.me/5548999597067?text=Roberto%2C%20quero%20contratar%20palestra%20ou%20consultoria." target="_blank" rel="noopener">
+        <div class="link-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a4 4 0 00-8 0v2"/><path d="M12 14v0"/></svg>
+        </div>
+        <div class="link-text">
+          <div class="link-label">Quero contratar palestra ou consultoria</div>
+          <div class="link-desc">Pra evento, empresa ou mentoria individual.</div>
+        </div>
+        <svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+      </a>
+
+    </nav>
+
+    <!-- REDES SOCIAIS -->
+    <div class="social">
+      <a href="https://www.instagram.com/orobertoaraujo/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@orobertoaraujo" target="_blank" rel="noopener" aria-label="TikTok">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.87a8.28 8.28 0 004.76 1.5V6.92a4.84 4.84 0 01-1-.23z"/></svg>
+      </a>
+    </div>
+
+    <footer class="footer">&copy; Roberto Ara&uacute;jo</footer>
+
+  </div>
+
+</body>
+</html>

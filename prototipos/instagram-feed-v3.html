@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Grupo Propagar — Feed v3 (com A Flecha)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Archivo+Black&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-2: #111111;
+    --bg-3: #181818;
+    --gold: #d4a853;
+    --gold-dim: #b8923e;
+    --gold-bright: #f0d48a;
+    --text: #f5f0e6;
+    --muted: #888;
+    --border: rgba(212, 168, 83, 0.22);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #050505;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+  }
+
+  .page-wrap { max-width: 1080px; margin: 0 auto; }
+
+  .protot-header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(212,168,83,0.15);
+  }
+  .protot-label {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  .protot-title {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 36px;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .protot-sub { color: var(--muted); font-size: 13px; margin-top: 8px; }
+
+  /* ===== PERFIL ===== */
+  .profile {
+    background: var(--bg);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 4px;
+  }
+  .avatar {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #1a1a1a 0%, #050505 100%);
+    border: 3px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px rgba(212,168,83,0.08);
+    padding: 26px;
+  }
+  .avatar svg { width: 100%; height: 100%; }
+
+  .profile-info h1 {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .profile-info .bio-strong {
+    color: var(--gold);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+  .profile-info .bio {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 4px;
+  }
+  .stats { display: flex; gap: 28px; margin-top: 14px; }
+  .stats div { font-size: 12px; color: var(--muted); }
+  .stats div strong { color: var(--text); font-weight: 700; font-size: 14px; margin-right: 4px; }
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    padding: 14px 0;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background: var(--bg);
+    border-radius: 0 0 12px 12px;
+    margin-bottom: 16px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .tabs .active { color: var(--gold); border-top: 2px solid var(--gold); margin-top: -15px; padding-top: 13px; }
+
+  /* ===== GRID ===== */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  .post {
+    aspect-ratio: 1 / 1;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg);
+    cursor: pointer;
+    transition: transform 0.25s ease;
+  }
+  .post:hover { transform: scale(0.995); }
+
+  .tag {
+    position: absolute;
+    top: 10px; left: 10px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.6);
+    color: var(--gold);
+    border: 1px solid var(--border);
+    text-transform: uppercase;
+    z-index: 5;
+    font-weight: 700;
+    backdrop-filter: blur(6px);
+  }
+
+  /* ===== TEMPLATE A — Autoridade ===== */
+  .template-a {
+    background:
+      radial-gradient(circle at 80% 20%, rgba(212,168,83,0.10) 0%, transparent 55%),
+      linear-gradient(180deg, #0f0f0f 0%, #050505 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 28px;
+  }
+  .template-a::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.8;
+  }
+  .template-a .mark-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .template-a .mark-top svg { height: 18px; width: auto; }
+  .template-a .mark-top .lbl {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .template-a .statement {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 36px;
+    line-height: 1.02;
+    color: var(--text);
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+  }
+  .template-a .statement em {
+    color: var(--gold);
+    font-style: normal;
+  }
+  .template-a .footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .template-a .footer-row .handle { color: var(--gold); font-weight: 700; }
+
+  /* ===== TEMPLATE E — Educativo ===== */
+  .template-e {
+    background: linear-gradient(180deg, #0a0a0a 0%, #141414 100%);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .template-e::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 24px; right: 24px;
+    height: 2px;
+    background: var(--gold);
+    opacity: 0.55;
+  }
+  .template-e .topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .template-e .topline .mark-inline svg { height: 12px; width: auto; }
+  .template-e .number {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 96px;
+    color: var(--gold);
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+  }
+  .template-e .number .slash {
+    color: rgba(212,168,83,0.3);
+    font-size: 52px;
+    margin-left: 2px;
+  }
+  .template-e .headline {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 17px;
+    color: var(--text);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  .template-e .sub {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-top: auto;
+    padding-top: 6px;
+  }
+  .template-e .swipe {
+    position: absolute;
+    bottom: 14px;
+    right: 18px;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .template-e .swipe::after { content: '→'; font-size: 11px; }
+
+  /* ===== TEMPLATE B — Bastidor ===== */
+  .template-b { background: var(--bg); padding: 0; }
+  .template-b .photo { position: absolute; inset: 0; }
+  .photo-team {
+    background:
+      radial-gradient(ellipse at 30% 40%, rgba(212,168,83,0.18) 0%, transparent 45%),
+      linear-gradient(135deg, #1f1a10 0%, #0a0a0a 60%),
+      repeating-linear-gradient(45deg, rgba(212,168,83,0.03) 0 2px, transparent 2px 6px);
+  }
+  .photo-desk {
+    background:
+      radial-gradient(ellipse at 70% 60%, rgba(212,168,83,0.15) 0%, transparent 50%),
+      linear-gradient(170deg, #0f0f0f 0%, #1a160c 100%),
+      repeating-linear-gradient(-30deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 8px);
+  }
+  .photo-result {
+    background:
+      radial-gradient(circle at 50% 80%, rgba(212,168,83,0.22) 0%, transparent 55%),
+      linear-gradient(200deg, #111 0%, #060606 100%);
+  }
+  .template-b .overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.85) 100%);
+    pointer-events: none;
+  }
+  .template-b .frame {
+    position: absolute; inset: 12px;
+    border: 1px solid rgba(212,168,83,0.3);
+    pointer-events: none;
+  }
+  .template-b .caption {
+    position: absolute;
+    bottom: 20px;
+    left: 24px;
+    right: 24px;
+    z-index: 3;
+  }
+  .template-b .caption .eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .template-b .caption h3 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 21px;
+    color: var(--text);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  /* Brand corner — cunhas ao invés de círculo */
+  .template-b .brand-corner {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    backdrop-filter: blur(6px);
+    z-index: 3;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .template-b .brand-corner svg { height: 14px; width: auto; }
+  .template-b .brand-corner .bc-txt {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: -0.01em;
+  }
+
+  /* ===== LEGENDA ===== */
+  .legend {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .legend-item {
+    background: var(--bg);
+    border: 1px solid rgba(212,168,83,0.15);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .legend-item .key {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 32px;
+    color: var(--gold);
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+  .legend-item .label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 8px 0 4px;
+    font-weight: 700;
+  }
+  .legend-item .desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 720px) {
+    .profile { flex-direction: column; text-align: center; padding: 24px; gap: 20px; }
+    .stats { justify-content: center; }
+    .tabs { gap: 30px; }
+    .template-a .statement { font-size: 24px; }
+    .template-e .number { font-size: 60px; }
+    .template-e .headline { font-size: 13px; }
+    .template-b .caption h3 { font-size: 15px; }
+    .legend { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- SVG reutilizáveis — só as cunhas (p/ uso em círculo do avatar e cantos) -->
+  <svg width="0" height="0" style="position:absolute;">
+    <defs>
+      <!-- Apenas as 3 cunhas, centralizadas pra caber em qualquer recipiente -->
+      <symbol id="wedges" viewBox="0 0 100 100">
+        <polygon points="8,28 38,50 8,72" fill="currentColor" opacity="0.5"/>
+        <polygon points="34,22 66,50 34,78" fill="currentColor" opacity="0.78"/>
+        <polygon points="62,14 94,50 62,86" fill="currentColor"/>
+      </symbol>
+      <!-- Lockup horizontal: cunhas + PROPAGAR -->
+      <symbol id="lockup" viewBox="0 0 320 100">
+        <polygon points="4,20 26,50 4,80" fill="currentColor" opacity="0.55"/>
+        <polygon points="24,18 50,50 24,82" fill="currentColor" opacity="0.8"/>
+        <polygon points="44,14 74,50 44,86" fill="currentColor"/>
+        <text x="88" y="68" font-family="'Archivo Black', sans-serif" font-size="44" fill="#f5f0e6" letter-spacing="-1">PROPAGAR</text>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="page-wrap">
+
+    <div class="protot-header">
+      <span class="protot-label">Feed v3 · A Flecha aplicada</span>
+      <h2 class="protot-title">PROPAGAR NO INSTAGRAM</h2>
+      <p class="protot-sub">Mesma estrutura AEB / BAE / EBA, agora com o logomark de cunhas + tipografia Archivo Black</p>
+    </div>
+
+    <!-- PERFIL -->
+    <div class="profile">
+      <div class="avatar"><svg style="color: var(--gold);"><use href="#wedges"/></svg></div>
+      <div class="profile-info">
+        <h1>ogrupopropagar</h1>
+        <div class="bio-strong">+R$60Mi gerados em vendas para clientes em 2024</div>
+        <p class="bio">
+          Holding: Marketing e Tecnologia<br />
+          Empresas: @trafegomanaus · gestão de campanhas<br />
+          Palhoça, SC
+        </p>
+        <div class="stats">
+          <div><strong>40</strong>posts</div>
+          <div><strong>3.933</strong>seguidores</div>
+          <div><strong>1.176</strong>seguindo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <span class="active">Publicações</span>
+      <span>Reels</span>
+      <span>Marcações</span>
+    </div>
+
+    <!-- GRID 3x3 -->
+    <div class="grid">
+
+      <!-- LINHA 1 -->
+      <div class="post template-a">
+        <span class="tag">A · autoridade</span>
+        <div class="mark-top">
+          <svg style="color: var(--gold);"><use href="#wedges"/></svg>
+          <span class="lbl">PROPAGAR</span>
+        </div>
+        <div class="statement">Quem é <em>visto</em> é lembrado.</div>
+        <div class="footer-row">
+          <span>posicionamento</span>
+          <span class="handle">@ogrupopropagar</span>
+        </div>
+      </div>
+
+      <div class="post template-e">
+        <span class="tag">E · educativo</span>
+        <div class="topline">
+          <span>Diagnóstico</span>
+          <span class="mark-inline"><svg style="color: var(--gold);"><use href="#wedges"/></svg></span>
+        </div>
+        <div class="number">01<span class="slash">/03</span></div>
+        <div class="headline">Antes de rodar ad, olhe o funil.</div>
+        <div class="sub">Tráfego em cima de processo comercial fraco queima verba.</div>
+        <span class="swipe">ver mais</span>
+      </div>
+
+      <div class="post template-b">
+        <div class="photo photo-team"></div>
+        <div class="overlay"></div>
+        <div class="frame"></div>
+        <span class="tag">B · bastidor</span>
+        <div class="brand-corner">
+          <svg style="color: var(--gold);"><use href="#wedges"/></svg>
+          <span class="bc-txt">PROPAGAR</span>
+        </div>
+        <div class="caption">
+          <div class="eyebrow">bastidor · time</div>
+          <h3>O time por trás dos R$60Mi.</h3>
+        </div>
+      </div>
+
+      <!-- LINHA 2 -->
+      <div class="post template-b">
+        <div class="photo photo-desk"></div>
+        <div class="overlay"></div>
+        <div class="frame"></div>
+        <span class="tag">B · bastidor</span>
+        <div class="brand-corner">
+          <svg style="color: var(--gold);"><use href="#wedges"/></svg>
+          <span class="bc-txt">PROPAGAR</span>
+        </div>
+        <div class="caption">
+          <div class="eyebrow">estúdio · palhoça sc</div>
+          <h3>Operação em tempo real.</h3>
+        </div>
+      </div>
+
+      <div class="post template-a">
+        <span class="tag">A · autoridade</span>
+        <div class="mark-top">
+          <svg style="color: var(--gold);"><use href="#wedges"/></svg>
+          <span class="lbl">PROPAGAR</span>
+        </div>
+        <div class="statement">Tráfego sem estratégia é <em>só boleto.</em></div>
+        <div class="footer-row">
+          <span>verdade incômoda</span>
+          <span class="handle">@ogrupopropagar</span>
+        </div>
+      </div>
+
+      <div class="post template-e">
+        <span class="tag">E · educativo</span>
+        <div class="topline">
+          <span>Métricas</span>
+          <span class="mark-inline"><svg style="color: var(--gold);"><use href="#wedges"/></svg></span>
+        </div>
+        <div class="number">02<span class="slash">/03</span></div>
+        <div class="headline">3 números fecham o mês.</div>
+        <div class="sub">CAC, LTV e ROAS contam a história que a planilha esconde.</div>
+        <span class="swipe">ver mais</span>
+      </div>
+
+      <!-- LINHA 3 -->
+      <div class="post template-e">
+        <span class="tag">E · educativo</span>
+        <div class="topline">
+          <span>Fundamento</span>
+          <span class="mark-inline"><svg style="color: var(--gold);"><use href="#wedges"/></svg></span>
+        </div>
+        <div class="number">03<span class="slash">/03</span></div>
+        <div class="headline">Mercado não lembra? cliente some.</div>
+        <div class="sub">Presença consistente é moeda. Sumiu, perdeu.</div>
+        <span class="swipe">ver mais</span>
+      </div>
+
+      <div class="post template-b">
+        <div class="photo photo-result"></div>
+        <div class="overlay"></div>
+        <div class="frame"></div>
+        <span class="tag">B · bastidor</span>
+        <div class="brand-corner">
+          <svg style="color: var(--gold);"><use href="#wedges"/></svg>
+          <span class="bc-txt">PROPAGAR</span>
+        </div>
+        <div class="caption">
+          <div class="eyebrow">resultado · cliente imobi</div>
+          <h3>R$200k → R$1,4Mi em 8 meses.</h3>
+        </div>
+      </div>
+
+      <div class="post template-a">
+        <span class="tag">A · autoridade</span>
+        <div class="mark-top">
+          <svg style="color: var(--gold);"><use href="#wedges"/></svg>
+          <span class="lbl">PROPAGAR</span>
+        </div>
+        <div class="statement">Marketing <em>não é gasto.</em> É alavanca.</div>
+        <div class="footer-row">
+          <span>princípio</span>
+          <span class="handle">@ogrupopropagar</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LEGENDA -->
+    <div class="legend">
+      <div class="legend-item">
+        <div class="key">A</div>
+        <div class="label">Autoridade</div>
+        <div class="desc">Cunhas + "PROPAGAR" no topo como assinatura. Archivo Black dominando a frase. Peso máximo.</div>
+      </div>
+      <div class="legend-item">
+        <div class="key">E</div>
+        <div class="label">Educativo</div>
+        <div class="desc">Cunhas pequenas como selo no topo direito. Numeração em Archivo Black toma conta do quadro.</div>
+      </div>
+      <div class="legend-item">
+        <div class="key">B</div>
+        <div class="label">Bastidor</div>
+        <div class="desc">Brand corner retangular com cunhas + "PROPAGAR" em caps. Funciona como placa/etiqueta de autoria.</div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

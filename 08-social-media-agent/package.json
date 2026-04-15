@@ -1,0 +1,22 @@
+{
+  "name": "roberto-social-media-agent",
+  "version": "1.0.0",
+  "description": "Agente de social media do Roberto Araújo — gera, agenda e monitora conteúdo no Instagram",
+  "type": "module",
+  "scripts": {
+    "gerar-semana": "node src/gerar-semana.js",
+    "agendar": "node src/agendar-post.js",
+    "metricas": "node src/metricas.js",
+    "publicar": "node src/publicar.js",
+    "calendario": "node src/calendario.js",
+    "auto": "node src/auto-publicar.js"
+  },
+  "keywords": [],
+  "author": "Roberto Araújo",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@vercel/blob": "^2.3.3",
+    "puppeteer": "^24.40.0"
+  }
+}

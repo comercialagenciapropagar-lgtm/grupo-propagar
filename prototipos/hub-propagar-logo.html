@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hub Propagar — Identidade Visual (Protótipo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505;
+    --bg-2: #0a0a0a;
+    --bg-3: #111;
+    --card: #0e0e0e;
+    --gold: #d4a853;
+    --gold-dim: #b8923e;
+    --gold-bright: #f0d48a;
+    --ivory: #f5f0e6;
+    --text: #f5f0e6;
+    --muted: #888;
+    --muted-2: #5a5a5a;
+    --border: rgba(212,168,83,0.18);
+    --border-soft: rgba(255,255,255,0.05);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 40px 24px 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+
+  .proto-label {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+  h1.title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    margin-bottom: 8px;
+  }
+  .subtitle { color: var(--muted); font-size: 13px; max-width: 580px; line-height: 1.5; }
+
+  .section {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .section .sub {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* ============= HERO LOGO ============= */
+  .hero-logo {
+    background: radial-gradient(circle at 50% 40%, rgba(212,168,83,0.08) 0%, transparent 60%), var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: 18px;
+    padding: 80px 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .hero-logo svg { height: 120px; width: auto; margin-bottom: 28px; }
+  .hero-logo .wordmark {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    line-height: 1;
+    display: flex;
+    align-items: baseline;
+  }
+  .hero-logo .wordmark .dim { color: var(--gold); }
+  .hero-logo .tagline {
+    margin-top: 14px;
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  /* ============= GRID DE VARIAÇÕES ============= */
+  .variations {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .var {
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 28px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 200px;
+    gap: 18px;
+  }
+  .var.light { background: var(--ivory); }
+  .var.mono-dark { background: #000; }
+  .var.outline { background: var(--bg-2); border: 1px dashed var(--border); }
+
+  .var .cap {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .var.light .cap { color: #8a7a5a; }
+  .var.mono-dark .cap { color: #aaa; }
+
+  .var .slot { display: flex; align-items: center; justify-content: center; flex: 1; }
+
+  /* ============= ESCALA ============= */
+  .scale-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 36px;
+    padding: 40px 32px;
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    justify-content: center;
+  }
+  .scale-item { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .scale-item .px { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); }
+
+  /* ============= USO EM CONTEXTO ============= */
+  .context-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .ctx {
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .ctx .frame-cap {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  /* browser tab mock */
+  .tab {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px 8px 0 0;
+    padding: 8px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #ccc;
+  }
+  .tab svg { width: 14px; height: 14px; }
+
+  /* login card mock */
+  .login-mock {
+    background: var(--bg-2);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 40px 32px;
+    max-width: 320px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .login-mock .wordmark-sm {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 900;
+    margin: 16px 0 4px;
+  }
+  .login-mock .wordmark-sm .dim { color: var(--gold); }
+  .login-mock .sub { font-size: 11px; color: var(--muted); margin-bottom: 22px; }
+  .login-mock input {
+    width: 100%;
+    background: var(--bg-3);
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+  .login-mock button {
+    width: 100%;
+    background: var(--gold);
+    color: #0a0a0a;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+
+  /* sidebar mock */
+  .sidebar-mock {
+    background: var(--bg-2);
+    border-right: 1px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 18px 16px;
+    width: 200px;
+  }
+  .sidebar-mock .brand-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 14px;
+  }
+  .sidebar-mock .brand-row .word {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+  }
+  .sidebar-mock .brand-row .sub {
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .sidebar-mock .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 8px;
+    font-size: 11px;
+    color: var(--muted);
+    border-radius: 6px;
+  }
+  .sidebar-mock .nav-item.active { color: var(--gold); background: rgba(212,168,83,0.08); }
+  .sidebar-mock .nav-item span { width: 10px; height: 10px; border-radius: 2px; background: currentColor; opacity: 0.6; }
+
+  /* rationale */
+  .rationale {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .rat {
+    padding: 20px;
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+  }
+  .rat .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .rat h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 10px 0 6px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .rat p { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+  @media (max-width: 900px) {
+    .variations { grid-template-columns: repeat(2, 1fr); }
+    .context-grid, .rationale { grid-template-columns: 1fr; }
+    .scale-row { flex-wrap: wrap; justify-content: flex-start; }
+  }
+
+</style>
+</head>
+<body>
+  <!-- ============================================
+       SVG LOGOMARK — Propagation Signal
+       A arc emitindo a partir de ponto origem +
+       O mark é o "hub" (círculo) com ondas propagando
+       Duotone gold/black, funciona em 16px
+       ============================================ -->
+  <svg width="0" height="0" style="position:absolute;">
+    <defs>
+      <!-- Ícone principal (usa currentColor pro mono) -->
+      <symbol id="pmark" viewBox="0 0 64 64">
+        <!-- Ring externo = hub -->
+        <circle cx="32" cy="32" r="27" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <!-- Arco 1 (menor) -->
+        <path d="M 16 32 Q 20 26 25 26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Arco 2 (médio) -->
+        <path d="M 16 32 Q 22 20 32 19" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Arco 3 (maior) -->
+        <path d="M 16 32 Q 24 14 39 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Ponto origem -->
+        <circle cx="16" cy="32" r="3.5" fill="currentColor"/>
+      </symbol>
+
+      <!-- Versão stacked (vertical) com wordmark integrado — pro uso em avatares/favicon -->
+      <symbol id="pmark-solid" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="30" fill="currentColor"/>
+        <g fill="none" stroke="#050505" stroke-width="2.5" stroke-linecap="round">
+          <path d="M 16 32 Q 20 26 25 26"/>
+          <path d="M 16 32 Q 22 20 32 19"/>
+          <path d="M 16 32 Q 24 14 39 14"/>
+        </g>
+        <circle cx="16" cy="32" r="3.5" fill="#050505"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="wrap">
+
+    <!-- HEADER -->
+    <div>
+      <span class="proto-label">Protótipo de Marca · v1</span>
+      <h1 class="title">Hub Propagar — Identidade</h1>
+      <p class="subtitle">
+        Logomark baseado em propagação: um hub central emitindo ondas a partir de um ponto origem.
+        Tradução direta do que o sistema faz — concentra e espalha sinal pelas lojas.
+      </p>
+    </div>
+
+    <!-- HERO LOGO -->
+    <div class="section" style="margin-top: 32px; padding-top: 0; border: none;">
+      <div class="hero-logo">
+        <svg style="color: var(--gold);"><use href="#pmark"/></svg>
+        <div class="wordmark">hub<span class="dim">·propagar</span></div>
+        <div class="tagline">concentra · propaga · controla</div>
+      </div>
+    </div>
+
+    <!-- VARIAÇÕES -->
+    <section class="section">
+      <div class="section-head">
+        <h2>Variações</h2>
+        <span class="sub">4 usos principais</span>
+      </div>
+      <div class="variations">
+        <div class="var">
+          <div class="cap">Principal · Dourado</div>
+          <div class="slot">
+            <svg width="72" height="72" style="color: var(--gold);"><use href="#pmark"/></svg>
+          </div>
+          <div class="cap" style="color: var(--muted-2);">Dashboard · Login</div>
+        </div>
+        <div class="var light">
+          <div class="cap">Light · Preto</div>
+          <div class="slot">
+            <svg width="72" height="72" style="color: #0a0a0a;"><use href="#pmark"/></svg>
+          </div>
+          <div class="cap" style="color: #8a7a5a;">PDFs · Docs</div>
+        </div>
+        <div class="var mono-dark">
+          <div class="cap">Mono · Branco</div>
+          <div class="slot">
+            <svg width="72" height="72" style="color: #f5f0e6;"><use href="#pmark"/></svg>
+          </div>
+          <div class="cap" style="color:#aaa;">Impressos · Stamp</div>
+        </div>
+        <div class="var">
+          <div class="cap">Sólido · Favicon</div>
+          <div class="slot">
+            <svg width="72" height="72" style="color: var(--gold);"><use href="#pmark-solid"/></svg>
+          </div>
+          <div class="cap" style="color: var(--muted-2);">Aba do browser · App icon</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ESCALA -->
+    <section class="section">
+      <div class="section-head">
+        <h2>Escala · de 16px a 128px</h2>
+        <span class="sub">mantém legibilidade</span>
+      </div>
+      <div class="scale-row">
+        <div class="scale-item">
+          <svg width="16" height="16" style="color: var(--gold);"><use href="#pmark"/></svg>
+          <span class="px">16px</span>
+        </div>
+        <div class="scale-item">
+          <svg width="24" height="24" style="color: var(--gold);"><use href="#pmark"/></svg>
+          <span class="px">24px</span>
+        </div>
+        <div class="scale-item">
+          <svg width="32" height="32" style="color: var(--gold);"><use href="#pmark"/></svg>
+          <span class="px">32px</span>
+        </div>
+        <div class="scale-item">
+          <svg width="48" height="48" style="color: var(--gold);"><use href="#pmark"/></svg>
+          <span class="px">48px</span>
+        </div>
+        <div class="scale-item">
+          <svg width="72" height="72" style="color: var(--gold);"><use href="#pmark"/></svg>
+          <span class="px">72px</span>
+        </div>
+        <div class="scale-item">
+          <svg width="128" height="128" style="color: var(--gold);"><use href="#pmark"/></svg>
+          <span class="px">128px</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- USO EM CONTEXTO -->
+    <section class="section">
+      <div class="section-head">
+        <h2>Uso em contexto</h2>
+        <span class="sub">aplicação real</span>
+      </div>
+
+      <div class="context-grid">
+        <!-- LOGIN -->
+        <div class="ctx">
+          <div class="frame-cap">Tela de login</div>
+          <div class="login-mock">
+            <svg width="56" height="56" style="color: var(--gold);"><use href="#pmark"/></svg>
+            <div class="wordmark-sm">hub<span class="dim">·propagar</span></div>
+            <div class="sub">entre com sua conta</div>
+            <input placeholder="seu@email.com" />
+            <input type="password" placeholder="senha" />
+            <button>Entrar</button>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="ctx" style="display: flex; align-items: center; justify-content: center;">
+          <div>
+            <div class="frame-cap">Sidebar do sistema</div>
+            <div class="sidebar-mock">
+              <div class="brand-row">
+                <svg width="28" height="28" style="color: var(--gold);"><use href="#pmark"/></svg>
+                <div>
+                  <div class="word">hub·propagar</div>
+                  <div class="sub">gestão · propagar</div>
+                </div>
+              </div>
+              <div class="nav-item active"><span></span>Dashboard</div>
+              <div class="nav-item"><span></span>Input Diário</div>
+              <div class="nav-item"><span></span>Clientes</div>
+              <div class="nav-item"><span></span>Contratos</div>
+              <div class="nav-item"><span></span>Rankings</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BROWSER TAB -->
+        <div class="ctx">
+          <div class="frame-cap">Aba do browser · favicon 16px</div>
+          <div style="margin-top: 6px; display:flex; align-items: flex-end; gap: 0;">
+            <div class="tab">
+              <svg width="14" height="14" style="color: var(--gold);"><use href="#pmark-solid"/></svg>
+              Hub Propagar — Dashboard
+              <span style="color: #666; margin-left: 4px;">×</span>
+            </div>
+            <div class="tab" style="opacity: 0.5; margin-left: 4px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+              Outro site
+              <span style="color: #666; margin-left: 4px;">×</span>
+            </div>
+          </div>
+          <div style="height: 60px; background: var(--bg-3); border: 1px solid #2a2a2a; border-top: none; border-radius: 0 0 8px 8px; padding: 10px 14px; color: #666; font-family: 'JetBrains Mono', monospace; font-size: 10px;">
+            ↩ hubpropagar.vercel.app/dashboard
+          </div>
+        </div>
+
+        <!-- CARD DE RELATÓRIO -->
+        <div class="ctx">
+          <div class="frame-cap">Capa de relatório PDF</div>
+          <div style="background: #f5f0e6; color: #0a0a0a; border-radius: 10px; padding: 32px; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between; font-family: 'Playfair Display', serif;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg width="36" height="36" style="color: #0a0a0a;"><use href="#pmark"/></svg>
+              <div style="font-size: 14px; font-weight: 800;">hub<span style="color: #b8923e;">·propagar</span></div>
+            </div>
+            <div>
+              <p style="font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: #b8923e; font-family: 'Inter', sans-serif; font-weight: 700; margin-bottom: 6px;">Relatório Mensal · Abr/2026</p>
+              <h3 style="font-size: 24px; font-weight: 900; line-height: 1.1;">Fechamento operacional do mês.</h3>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RACIONAL -->
+    <section class="section">
+      <div class="section-head">
+        <h2>Racional do design</h2>
+        <span class="sub">por que funciona</span>
+      </div>
+      <div class="rationale">
+        <div class="rat">
+          <div class="num">01</div>
+          <h3>Tradução literal do nome</h3>
+          <p>"Propagar" é emitir em todas as direções. A marca mostra exatamente isso: um ponto origem emitindo 3 ondas progressivas contidas num hub. O desenho é o que o sistema faz, não uma metáfora solta.</p>
+        </div>
+        <div class="rat">
+          <div class="num">02</div>
+          <h3>Funciona em 16px</h3>
+          <p>Sem contorno fino, sem serifa, sem letra dentro. O círculo com 3 arcos mantém leitura no favicon e escala até 128px sem perder identidade. Um mark, não um logo cheio de detalhes que some.</p>
+        </div>
+        <div class="rat">
+          <div class="num">03</div>
+          <h3>Conversa com a marca Propagar</h3>
+          <p>Mesmo dourado #d4a853 do feed do Instagram e do Hub atual. Tipografia do wordmark em Playfair pra puxar autoridade. O sistema ganha identidade própria sem brigar com a agência-mãe — é o "aplicativo da Propagar", não uma marca paralela.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

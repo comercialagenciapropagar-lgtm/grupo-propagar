@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banners GirouCrédito — Campanhas Uber</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 70px;
+      padding: 50px 20px 100px;
+      font-family: 'Inter', sans-serif;
+    }
+    .section-title {
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: -30px;
+    }
+    .section-title span { color: #22c55e; }
+    .label {
+      color: #888;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: -40px;
+    }
+    .tip {
+      color: #555;
+      font-size: 12px;
+      margin-top: -50px;
+      max-width: 1080px;
+      text-align: center;
+      font-family: monospace;
+    }
+
+    /* ======================================================
+       BANNER 1 — NEGATIVADO TAMBÉM PEGA
+       ====================================================== */
+    .banner1 {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+      background: #0a0b14;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .banner1::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(34,197,94,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .banner1::after {
+      content: '';
+      position: absolute;
+      bottom: -150px;
+      left: -150px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .banner1 .logo {
+      position: absolute;
+      top: 50px;
+      left: 80px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 30px;
+      color: #fff;
+      z-index: 3;
+    }
+    .banner1 .logo span { color: #22c55e; }
+    .banner1 .badge {
+      position: absolute;
+      top: 60px;
+      right: 80px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #22c55e;
+      color: #000;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      z-index: 3;
+    }
+    .banner1 .content {
+      position: absolute;
+      top: 50%;
+      left: 80px;
+      right: 80px;
+      transform: translateY(-50%);
+      z-index: 2;
+    }
+    .banner1 .tag-nao {
+      display: inline-block;
+      background: rgba(239,68,68,0.12);
+      border: 2px solid rgba(239,68,68,0.5);
+      color: #ef4444;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+    }
+    .banner1 .tag-nao::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      right: 5%;
+      height: 3px;
+      background: #ef4444;
+      transform: rotate(-2deg);
+    }
+    .banner1 h1 {
+      font-size: 108px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 0.95;
+      letter-spacing: -2px;
+      margin-bottom: 28px;
+    }
+    .banner1 h1 em {
+      color: #22c55e;
+      font-style: normal;
+    }
+    .banner1 .sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 26px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.4;
+      max-width: 780px;
+      font-weight: 400;
+      margin-bottom: 40px;
+    }
+    .banner1 .sub strong {
+      color: #fff;
+      font-weight: 700;
+    }
+    .banner1 .cta {
+      position: absolute;
+      bottom: 70px;
+      left: 80px;
+      right: 80px;
+      background: #22c55e;
+      color: #000;
+      padding: 32px 40px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 3;
+    }
+    .banner1 .cta-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .banner1 .cta-arrow {
+      font-size: 40px;
+      font-weight: 800;
+    }
+    .banner1 .disclaimer {
+      position: absolute;
+      bottom: 20px;
+      left: 80px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      z-index: 3;
+    }
+
+    /* ======================================================
+       BANNER 2 — SINAL VERMELHO
+       ====================================================== */
+    .banner2 {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+      background: #0a0b14;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .banner2 .bg-stripe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 240px;
+      background: linear-gradient(180deg, rgba(239,68,68,0.2) 0%, transparent 100%);
+    }
+    .banner2 .logo {
+      position: absolute;
+      top: 50px;
+      left: 80px;
+      font-weight: 800;
+      font-size: 30px;
+      color: #fff;
+      z-index: 3;
+    }
+    .banner2 .logo span { color: #22c55e; }
+    .banner2 .badge {
+      position: absolute;
+      top: 60px;
+      right: 80px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #22c55e;
+      color: #000;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      z-index: 3;
+    }
+
+    /* Semáforo visual */
+    .banner2 .traffic-light {
+      position: absolute;
+      top: 180px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 340px;
+      background: #1a1a1a;
+      border: 4px solid #2a2a2a;
+      border-radius: 24px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      box-shadow: 0 0 80px rgba(239,68,68,0.3);
+    }
+    .banner2 .light {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #2a2a2a;
+    }
+    .banner2 .light.red {
+      background: radial-gradient(circle at 35% 35%, #ff6b6b, #ef4444 60%);
+      box-shadow: 0 0 60px rgba(239,68,68,0.8), inset 0 0 20px rgba(0,0,0,0.3);
+    }
+    .banner2 .light.yellow { background: #2a2a2a; }
+    .banner2 .light.green { background: #2a2a2a; }
+
+    .banner2 .content {
+      position: absolute;
+      top: 580px;
+      left: 80px;
+      right: 80px;
+      z-index: 2;
+    }
+    .banner2 h1 {
+      font-size: 116px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 0.92;
+      letter-spacing: -3px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .banner2 h1 em {
+      color: #22c55e;
+      font-style: normal;
+    }
+    .banner2 .sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 28px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.4;
+      font-weight: 400;
+      text-align: center;
+    }
+    .banner2 .cta {
+      position: absolute;
+      bottom: 70px;
+      left: 80px;
+      right: 80px;
+      background: #22c55e;
+      color: #000;
+      padding: 32px 40px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 3;
+    }
+    .banner2 .cta-text {
+      font-size: 32px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .banner2 .cta-arrow {
+      font-size: 40px;
+      font-weight: 800;
+    }
+    .banner2 .disclaimer {
+      position: absolute;
+      bottom: 20px;
+      left: 80px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      z-index: 3;
+    }
+
+    /* ======================================================
+       BANNER 3 — A META NÃO FECHOU O ALUGUEL
+       ====================================================== */
+    .banner3 {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+      background: #0a0b14;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .banner3::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(34,197,94,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(34,197,94,0.05) 0%, transparent 50%);
+    }
+    .banner3 .logo {
+      position: absolute;
+      top: 50px;
+      left: 80px;
+      font-weight: 800;
+      font-size: 30px;
+      color: #fff;
+      z-index: 3;
+    }
+    .banner3 .logo span { color: #22c55e; }
+    .banner3 .badge {
+      position: absolute;
+      top: 60px;
+      right: 80px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #22c55e;
+      color: #000;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      z-index: 3;
+    }
+
+    .banner3 .headline-block {
+      position: absolute;
+      top: 180px;
+      left: 80px;
+      right: 80px;
+      z-index: 2;
+    }
+    .banner3 h1 {
+      font-size: 108px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 0.95;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+    }
+    .banner3 h1 em {
+      color: #22c55e;
+      font-style: normal;
+    }
+    .banner3 .sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 26px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.4;
+      max-width: 800px;
+      font-weight: 400;
+    }
+
+    /* "Recibo" estilizado */
+    .banner3 .bill {
+      position: absolute;
+      bottom: 240px;
+      left: 80px;
+      right: 80px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 30px 40px;
+      font-family: 'Inter', sans-serif;
+      z-index: 2;
+    }
+    .banner3 .bill-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px dashed rgba(255,255,255,0.1);
+      font-size: 22px;
+      color: rgba(255,255,255,0.8);
+    }
+    .banner3 .bill-row:last-child {
+      border-bottom: none;
+      padding-top: 16px;
+      font-weight: 800;
+    }
+    .banner3 .bill-row .label-item { color: rgba(255,255,255,0.9); }
+    .banner3 .bill-row .value { font-variant-numeric: tabular-nums; }
+    .banner3 .bill-row.total .label-item { color: #fff; font-size: 24px; }
+    .banner3 .bill-row.total .value { color: #ef4444; font-size: 30px; }
+
+    .banner3 .cta {
+      position: absolute;
+      bottom: 70px;
+      left: 80px;
+      right: 80px;
+      background: #22c55e;
+      color: #000;
+      padding: 32px 40px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 3;
+    }
+    .banner3 .cta-text {
+      font-size: 32px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .banner3 .cta-arrow {
+      font-size: 40px;
+      font-weight: 800;
+    }
+    .banner3 .disclaimer {
+      position: absolute;
+      bottom: 20px;
+      left: 80px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      z-index: 3;
+    }
+
+    /* Responsive preview (reduz os banners pra caber no navegador) */
+    @media (max-width: 1200px) {
+      .banner1, .banner2, .banner3 {
+        transform: scale(0.65);
+        transform-origin: top center;
+        margin-bottom: -380px;
+      }
+    }
+    @media (max-width: 700px) {
+      .banner1, .banner2, .banner3 {
+        transform: scale(0.33);
+        margin-bottom: -720px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== BANNER 1 ==================== -->
+  <div class="section-title">Banner 1 — <span>"Banco disse não? A gente diz sim."</span></div>
+  <div class="label">Feed 1080 × 1080</div>
+  <div class="banner1">
+    <div class="logo">Girou<span>Crédito</span></div>
+    <div class="badge">⚡ Negativado também pega</div>
+    <div class="content">
+      <span class="tag-nao">Banco disse não</span>
+      <h1>A GENTE<br><em>DIZ SIM.</em></h1>
+      <p class="sub">Empréstimo feito só pra motorista de app.<br><strong>Sem consulta Serasa.</strong> Tudo pelo WhatsApp.</p>
+    </div>
+    <div class="cta">
+      <span class="cta-text">Pedir pelo WhatsApp</span>
+      <span class="cta-arrow">→</span>
+    </div>
+    <div class="disclaimer">Sujeito a análise</div>
+  </div>
+  <div class="tip">Abrir no Chrome → Print em tela cheia → Recortar 1080×1080 OU screenshot via DevTools (Cmd+Shift+P → "Capture node screenshot")</div>
+
+  <!-- ==================== BANNER 2 ==================== -->
+  <div class="section-title">Banner 2 — <span>"Mais rápido que um sinal vermelho."</span></div>
+  <div class="label">Feed 1080 × 1080</div>
+  <div class="banner2">
+    <div class="bg-stripe"></div>
+    <div class="logo">Girou<span>Crédito</span></div>
+    <div class="badge">⚡ Aprovação express</div>
+    <div class="traffic-light">
+      <div class="light red"></div>
+      <div class="light yellow"></div>
+      <div class="light green"></div>
+    </div>
+    <div class="content">
+      <h1>MAIS RÁPIDO<br>QUE UM<br><em>SINAL VERMELHO.</em></h1>
+      <p class="sub">Pede pelo WhatsApp. PIX cai na conta em minutos.</p>
+    </div>
+    <div class="cta">
+      <span class="cta-text">Pedir agora</span>
+      <span class="cta-arrow">→</span>
+    </div>
+    <div class="disclaimer">Sujeito a análise</div>
+  </div>
+  <div class="tip">Mesma dica: Cmd+Shift+P → "Capture node screenshot"</div>
+
+  <!-- ==================== BANNER 3 ==================== -->
+  <div class="section-title">Banner 3 — <span>"A meta não fechou o aluguel?"</span></div>
+  <div class="label">Feed 1080 × 1080</div>
+  <div class="banner3">
+    <div class="logo">Girou<span>Crédito</span></div>
+    <div class="badge">⚡ Enquanto a conta aperta</div>
+    <div class="headline-block">
+      <h1>A META NÃO<br>FECHOU O<br><em>ALUGUEL?</em></h1>
+      <p class="sub">Empréstimo pra manter o carro na rua. Pro motorista não parar de girar.</p>
+    </div>
+    <div class="bill">
+      <div class="bill-row">
+        <span class="label-item">Aluguel do carro</span>
+        <span class="value">R$ 1.200</span>
+      </div>
+      <div class="bill-row">
+        <span class="label-item">Combustível</span>
+        <span class="value">R$ 900</span>
+      </div>
+      <div class="bill-row">
+        <span class="label-item">Manutenção</span>
+        <span class="value">R$ 400</span>
+      </div>
+      <div class="bill-row total">
+        <span class="label-item">Sobrou no fim do mês</span>
+        <span class="value">R$ 0</span>
+      </div>
+    </div>
+    <div class="cta">
+      <span class="cta-text">Pedir pelo WhatsApp</span>
+      <span class="cta-arrow">→</span>
+    </div>
+    <div class="disclaimer">Sujeito a análise</div>
+  </div>
+  <div class="tip">Mesma dica: Cmd+Shift+P → "Capture node screenshot"</div>
+
+</body>
+</html>

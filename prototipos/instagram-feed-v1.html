@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Grupo Propagar — Feed Instagram v1 (Protótipo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-2: #111111;
+    --bg-3: #181818;
+    --gold: #d4a853;
+    --gold-dim: #b8923e;
+    --gold-bright: #f0d48a;
+    --text: #f5f0e6;
+    --muted: #888;
+    --border: rgba(212, 168, 83, 0.22);
+    --border-strong: rgba(212, 168, 83, 0.55);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #050505;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+  }
+
+  .page-wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  /* ===== CABEÇALHO DO PROTÓTIPO ===== */
+  .protot-header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(212,168,83,0.15);
+  }
+  .protot-label {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  .protot-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .protot-sub {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 8px;
+  }
+
+  /* ===== PERFIL SIMULADO ===== */
+  .profile {
+    background: var(--bg);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 4px;
+  }
+  .avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #1a1a1a 0%, #050505 100%);
+    border: 3px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px rgba(212,168,83,0.08);
+  }
+  .profile-info h1 {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .profile-info .bio-strong {
+    color: var(--gold);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+  .profile-info .bio {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 4px;
+  }
+  .stats {
+    display: flex;
+    gap: 28px;
+    margin-top: 14px;
+  }
+  .stats div { font-size: 12px; color: var(--muted); }
+  .stats div strong { color: var(--text); font-weight: 700; font-size: 14px; margin-right: 4px; }
+
+  /* ===== ABAS ===== */
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    padding: 14px 0;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background: var(--bg);
+    border-radius: 0 0 12px 12px;
+    margin-bottom: 16px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .tabs .active { color: var(--gold); border-top: 2px solid var(--gold); margin-top: -15px; padding-top: 13px; }
+
+  /* ===== GRID 3x3 ===== */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+  .post {
+    aspect-ratio: 1 / 1;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg);
+    cursor: pointer;
+    transition: transform 0.25s ease;
+  }
+  .post:hover { transform: scale(0.995); }
+
+  /* Etiqueta de tipo (só no protótipo pra leitura — remover na versão real) */
+  .tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.6);
+    color: var(--gold);
+    border: 1px solid var(--border);
+    text-transform: uppercase;
+    z-index: 5;
+    font-weight: 700;
+    backdrop-filter: blur(6px);
+  }
+
+  /* ================== TEMPLATE A — AUTORIDADE ================== */
+  .template-a {
+    background:
+      radial-gradient(circle at 80% 20%, rgba(212,168,83,0.10) 0%, transparent 55%),
+      linear-gradient(180deg, #0f0f0f 0%, #050505 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 28px;
+  }
+  .template-a::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.8;
+  }
+  .template-a .logo-mini {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--gold);
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .template-a .statement {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .template-a .statement em {
+    color: var(--gold);
+    font-style: italic;
+  }
+  .template-a .footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .template-a .footer-row .handle { color: var(--gold); }
+
+  /* ================== TEMPLATE E — EDUCATIVO ================== */
+  .template-e {
+    background:
+      linear-gradient(180deg, #0a0a0a 0%, #141414 100%);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .template-e::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 24px; right: 24px;
+    height: 2px;
+    background: var(--gold);
+    opacity: 0.55;
+  }
+  .template-e .topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .template-e .number {
+    font-family: 'Playfair Display', serif;
+    font-size: 90px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+  }
+  .template-e .number .slash {
+    color: rgba(212,168,83,0.25);
+    font-size: 50px;
+    margin-left: 4px;
+  }
+  .template-e .headline {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .template-e .sub {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-top: auto;
+    padding-top: 6px;
+  }
+  .template-e .swipe {
+    position: absolute;
+    bottom: 14px;
+    right: 18px;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .template-e .swipe::after { content: '→'; font-size: 11px; }
+
+  /* ================== TEMPLATE B — BASTIDOR ================== */
+  .template-b {
+    background: var(--bg);
+    padding: 0;
+  }
+  .template-b .photo {
+    position: absolute;
+    inset: 0;
+  }
+  /* foto placeholder via gradient pattern (simulando foto real) */
+  .photo-team {
+    background:
+      radial-gradient(ellipse at 30% 40%, rgba(212,168,83,0.18) 0%, transparent 45%),
+      linear-gradient(135deg, #1f1a10 0%, #0a0a0a 60%),
+      repeating-linear-gradient(45deg, rgba(212,168,83,0.03) 0 2px, transparent 2px 6px);
+  }
+  .photo-desk {
+    background:
+      radial-gradient(ellipse at 70% 60%, rgba(212,168,83,0.15) 0%, transparent 50%),
+      linear-gradient(170deg, #0f0f0f 0%, #1a160c 100%),
+      repeating-linear-gradient(-30deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 8px);
+  }
+  .photo-result {
+    background:
+      radial-gradient(circle at 50% 80%, rgba(212,168,83,0.22) 0%, transparent 55%),
+      linear-gradient(200deg, #111 0%, #060606 100%);
+  }
+  .template-b .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.85) 100%);
+    pointer-events: none;
+  }
+  .template-b .frame {
+    position: absolute;
+    inset: 12px;
+    border: 1px solid rgba(212,168,83,0.3);
+    pointer-events: none;
+  }
+  .template-b .caption {
+    position: absolute;
+    bottom: 20px;
+    left: 24px;
+    right: 24px;
+    z-index: 3;
+  }
+  .template-b .caption .eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .template-b .caption h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .template-b .brand-corner {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--gold);
+    width: 30px; height: 30px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    z-index: 3;
+  }
+
+  /* ===== LEGENDA DO PROTÓTIPO ===== */
+  .legend {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .legend-item {
+    background: var(--bg);
+    border: 1px solid rgba(212,168,83,0.15);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .legend-item .key {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .legend-item .label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 8px 0 4px;
+    font-weight: 700;
+  }
+  .legend-item .desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ===== RITMO DIAGONAL (visualizador do grid) ===== */
+  .rhythm {
+    margin-top: 32px;
+    padding: 20px;
+    background: var(--bg);
+    border: 1px dashed rgba(212,168,83,0.25);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .rhythm .matrix {
+    display: grid;
+    grid-template-columns: repeat(3, 28px);
+    grid-template-rows: repeat(3, 28px);
+    gap: 3px;
+  }
+  .rhythm .cell {
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    font-family: 'Playfair Display', serif;
+  }
+  .cell-a { background: var(--gold); color: #0a0a0a; }
+  .cell-e { background: rgba(212,168,83,0.22); color: var(--gold); border: 1px solid var(--border); }
+  .cell-b { background: rgba(255,255,255,0.06); color: #aaa; }
+  .rhythm .explain { font-size: 12px; color: var(--muted); line-height: 1.6; flex: 1; }
+  .rhythm .explain b { color: var(--text); }
+
+  @media (max-width: 720px) {
+    .profile { flex-direction: column; text-align: center; padding: 24px; gap: 20px; }
+    .stats { justify-content: center; }
+    .tabs { gap: 30px; }
+    .template-a .statement { font-size: 24px; }
+    .template-e .number { font-size: 60px; }
+    .template-e .headline { font-size: 13px; }
+    .template-b .caption h3 { font-size: 14px; }
+    .legend { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="page-wrap">
+
+    <div class="protot-header">
+      <span class="protot-label">Protótipo v1 · Design Squad</span>
+      <h2 class="protot-title">Grupo Propagar — Feed Instagram</h2>
+      <p class="protot-sub">Sistema visual em 3 templates com rotação diagonal</p>
+    </div>
+
+    <!-- PERFIL SIMULADO -->
+    <div class="profile">
+      <div class="avatar">a</div>
+      <div class="profile-info">
+        <h1>ogrupopropagar</h1>
+        <div class="bio-strong">+R$60Mi gerados em vendas para clientes em 2024</div>
+        <p class="bio">
+          Holding: Marketing e Tecnologia<br />
+          Empresas: @trafegomanaus · gestão de campanhas<br />
+          Palhoça, SC
+        </p>
+        <div class="stats">
+          <div><strong>40</strong>posts</div>
+          <div><strong>3.933</strong>seguidores</div>
+          <div><strong>1.176</strong>seguindo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <span class="active">Publicações</span>
+      <span>Reels</span>
+      <span>Marcações</span>
+    </div>
+
+    <!-- GRID 3x3 — rotação diagonal A E B / B A E / E B A -->
+    <div class="grid">
+
+      <!-- LINHA 1 -->
+      <div class="post template-a">
+        <span class="tag">A · autoridade</span>
+        <div class="logo-mini">a</div>
+        <div class="statement">Quem é visto é <em>lembrado.</em></div>
+        <div class="footer-row">
+          <span>posicionamento</span>
+          <span class="handle">@ogrupopropagar</span>
+        </div>
+      </div>
+
+      <div class="post template-e">
+        <span class="tag">E · educativo</span>
+        <div class="topline">
+          <span>Diagnóstico</span>
+          <span>arraste →</span>
+        </div>
+        <div class="number">01<span class="slash">/03</span></div>
+        <div class="headline">Antes de rodar ad, olhe o funil.</div>
+        <div class="sub">Tráfego em cima de processo comercial fraco queima verba.</div>
+        <span class="swipe">ver mais</span>
+      </div>
+
+      <div class="post template-b">
+        <div class="photo photo-team"></div>
+        <div class="overlay"></div>
+        <div class="frame"></div>
+        <span class="tag">B · bastidor</span>
+        <div class="brand-corner">a</div>
+        <div class="caption">
+          <div class="eyebrow">bastidor · time</div>
+          <h3>O time por trás dos R$60Mi gerados.</h3>
+        </div>
+      </div>
+
+      <!-- LINHA 2 -->
+      <div class="post template-b">
+        <div class="photo photo-desk"></div>
+        <div class="overlay"></div>
+        <div class="frame"></div>
+        <span class="tag">B · bastidor</span>
+        <div class="brand-corner">a</div>
+        <div class="caption">
+          <div class="eyebrow">estúdio · palhoça sc</div>
+          <h3>Operação de campanha em tempo real.</h3>
+        </div>
+      </div>
+
+      <div class="post template-a">
+        <span class="tag">A · autoridade</span>
+        <div class="logo-mini">a</div>
+        <div class="statement">Tráfego sem estratégia é <em>só boleto.</em></div>
+        <div class="footer-row">
+          <span>verdade incômoda</span>
+          <span class="handle">@ogrupopropagar</span>
+        </div>
+      </div>
+
+      <div class="post template-e">
+        <span class="tag">E · educativo</span>
+        <div class="topline">
+          <span>Métricas</span>
+          <span>arraste →</span>
+        </div>
+        <div class="number">02<span class="slash">/03</span></div>
+        <div class="headline">3 números que dizem se o mês fechou.</div>
+        <div class="sub">CAC, LTV e ROAS contam a história que a planilha esconde.</div>
+        <span class="swipe">ver mais</span>
+      </div>
+
+      <!-- LINHA 3 -->
+      <div class="post template-e">
+        <span class="tag">E · educativo</span>
+        <div class="topline">
+          <span>Fundamento</span>
+          <span>arraste →</span>
+        </div>
+        <div class="number">03<span class="slash">/03</span></div>
+        <div class="headline">Se o mercado não lembra de você, o cliente também não.</div>
+        <div class="sub">Presença consistente é moeda. Sumiu, perdeu.</div>
+        <span class="swipe">ver mais</span>
+      </div>
+
+      <div class="post template-b">
+        <div class="photo photo-result"></div>
+        <div class="overlay"></div>
+        <div class="frame"></div>
+        <span class="tag">B · bastidor</span>
+        <div class="brand-corner">a</div>
+        <div class="caption">
+          <div class="eyebrow">resultado · cliente imobi</div>
+          <h3>De R$200k/mês para R$1,4Mi em 8 meses.</h3>
+        </div>
+      </div>
+
+      <div class="post template-a">
+        <span class="tag">A · autoridade</span>
+        <div class="logo-mini">a</div>
+        <div class="statement">Marketing não é gasto. <em>É alavanca.</em></div>
+        <div class="footer-row">
+          <span>princípio</span>
+          <span class="handle">@ogrupopropagar</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LEGENDA / DESIGN SYSTEM -->
+    <div class="legend">
+      <div class="legend-item">
+        <div class="key">A</div>
+        <div class="label">Autoridade</div>
+        <div class="desc">Frase de impacto, dourado sobre preto. Playfair 34pt, itálico na chave. Posicionamento e princípios.</div>
+      </div>
+      <div class="legend-item">
+        <div class="key">E</div>
+        <div class="label">Educativo</div>
+        <div class="desc">Numeração grande em Playfair, headline curto, CTA "arraste →". Carrosséis e séries de 3 em 3.</div>
+      </div>
+      <div class="legend-item">
+        <div class="key">B</div>
+        <div class="label">Bastidor</div>
+        <div class="desc">Foto (time, estúdio, resultado), moldura dourada fina, brand mark no canto. Humaniza e prova.</div>
+      </div>
+    </div>
+
+    <!-- RITMO -->
+    <div class="rhythm">
+      <div class="matrix">
+        <div class="cell cell-a">A</div><div class="cell cell-e">E</div><div class="cell cell-b">B</div>
+        <div class="cell cell-b">B</div><div class="cell cell-a">A</div><div class="cell cell-e">E</div>
+        <div class="cell cell-e">E</div><div class="cell cell-b">B</div><div class="cell cell-a">A</div>
+      </div>
+      <p class="explain">
+        <b>Ritmo diagonal AEB / BAE / EBA.</b>
+        Cada linha e cada coluna contém os 3 tipos — o feed nunca concentra dois posts iguais adjacentes. O olho do visitante reconhece a marca em qualquer scroll e o calendário editorial fica previsível: 3 autoridades, 3 educativos e 3 bastidores a cada 9 posts.
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>

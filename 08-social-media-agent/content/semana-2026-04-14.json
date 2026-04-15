@@ -1,0 +1,140 @@
+{
+  "tema_do_arco": "5 verdades que o empresário não quer ouvir",
+  "data_inicio": "2026-04-14",
+  "gerado_em": "2026-04-13T12:00:00.000Z",
+  "posicionamento_resumo": {
+    "tagline": "A verdade que ninguém fala sobre negócios",
+    "tom": "Opinativo, provocador, autêntico, convicto, coloquial",
+    "regra_de_ouro": "Se todo mundo concordar, você está sendo fraco"
+  },
+  "dias": {
+    "SEG": {
+      "pilar": "OPINIÃO FORTE",
+      "energia": "Alta",
+      "tipo": "Opinião forte — começa a semana batendo de frente",
+      "roteiro": {
+        "hook": "Empresário que faz tudo sozinho não é herói. É gargalo.",
+        "argumento": "Eu já fui esse cara. Achava que ninguém fazia tão bem quanto eu. Resultado? Empresa que não crescia porque dependia 100% de mim. No dia que eu saí da operação e coloquei gente pra fazer o que eu fazia — mesmo que 70% tão bem quanto eu — o negócio dobrou. Sabe por quê? Porque eu parei de ser funcionário da minha própria empresa e virei empresário de verdade.",
+        "nocaute": "Enquanto você tá fazendo tudo, ninguém tá pensando no crescimento. Inclusive você."
+      },
+      "legenda": "Você é o dono ou o funcionário mais caro da sua empresa?\n\nTem empresário que se orgulha de fazer tudo. Atende, vende, posta, faz o financeiro.\n\nIsso não é dedicação. É prisão.\n\n#empresario #opiniaoimpopular #marketingdeverdade",
+      "hashtags": "#empresario #opiniaoimpopular #marketingdeverdade",
+      "horario_sugerido": "18:00",
+      "status": "pronto",
+      "gancho_banco": 18
+    },
+    "TER": {
+      "pilar": "VERDADES INCONVENIENTES",
+      "energia": "Construção",
+      "tipo": "Verdade inconveniente sobre o mercado",
+      "roteiro": {
+        "hook": "Tráfego pago é gasolina. Se não tem fogo, só vai gastar combustível.",
+        "argumento": "O empresário chega pra mim e fala: 'Roberto, quero investir 10 mil em tráfego'. Aí eu pergunto: 'Qual tua oferta?' Silêncio. 'Qual tua taxa de conversão?' Silêncio. 'Quantos leads você precisa pra fechar um?' Silêncio. O cara quer jogar dinheiro em anúncio sem saber se o negócio converte. Isso não é marketing. É rifa. Você tá rifando seu dinheiro.",
+        "nocaute": "Antes de investir 1 real em tráfego, responde: se eu trouxer 100 pessoas pro teu negócio hoje, quantas compram? Se não sabe, o problema não é tráfego."
+      },
+      "legenda": "A verdade que gestor de tráfego não te conta: se sua oferta é fraca, mais tráfego só acelera o prejuízo.\n\nAntes de investir em anúncio, investe em oferta.\n\n#trafegopago #marketingdeverdade #empresario",
+      "hashtags": "#trafegopago #marketingdeverdade #empresario",
+      "horario_sugerido": "18:00",
+      "status": "pronto",
+      "gancho_banco": 10
+    },
+    "QUA": {
+      "pilar": "BASTIDORES REAIS",
+      "energia": "Prova",
+      "tipo": "Bastidor real — mostra decisão, número, erro",
+      "roteiro": {
+        "hook": "Essa semana eu recusei um cliente que queria me pagar 8 mil por mês.",
+        "argumento": "O cara chegou com grana, querendo contratar. Mas quando eu vi o negócio dele, entendi: ele não precisava de marketing. Precisava arrumar a casa. O produto tinha reclamação, o atendimento era ruim, a entrega atrasava. Se eu jogasse tráfego ali, ia multiplicar os problemas, não o lucro. Falei: 'Volta daqui 3 meses com isso resolvido.' Ele ficou puto. Mas é isso: eu prefiro perder dinheiro do que perder reputação.",
+        "nocaute": "Dinheiro fácil que destrói sua reputação é o investimento mais caro que existe."
+      },
+      "legenda": "Recusei R$8 mil porque o negócio não tava pronto.\n\nNem todo dinheiro vale a pena. Quando o produto é ruim, marketing só acelera a morte.\n\nPrefiro perder o contrato do que perder a credibilidade.\n\n#bastidores #empresario #marketingdeverdade",
+      "hashtags": "#bastidores #empresario #marketingdeverdade",
+      "horario_sugerido": "18:00",
+      "status": "pronto",
+      "gancho_banco": null
+    },
+    "QUI": {
+      "pilar": "REFLEXÕES DE CAMPO",
+      "energia": "Reflexão",
+      "tipo": "Pensamento de campo — insight do dia",
+      "roteiro": {
+        "hook": "Cobrar barato não é estratégia. É medo de ser rejeitado.",
+        "argumento": "Hoje num call com um mentorado, ele falou: 'Mas Roberto, se eu cobrar mais caro o cliente vai embora.' Eu respondi: 'Ótimo. Vai embora o cliente errado.' Sabe o que acontece quando você cobra mais? Atrai gente que valoriza. Gente que paga e não reclama. Gente que respeita seu trabalho. E o melhor: você trabalha menos, com mais lucro e mais paz. O preço certo incomoda você. Mas atrai o cliente certo.",
+        "nocaute": "Preço alto não espanta cliente bom. Espanta cliente ruim. E isso é a melhor coisa que pode acontecer pro seu negócio."
+      },
+      "legenda": "O medo de cobrar mais caro é o medo de descobrir o que você realmente vale.\n\nPreço baixo atrai problema. Preço justo atrai respeito.\n\n#precificacao #empresario #opiniaoimpopular",
+      "hashtags": "#precificacao #empresario #opiniaoimpopular",
+      "horario_sugerido": "18:00",
+      "status": "pronto",
+      "gancho_banco": 16
+    },
+    "SEX": {
+      "pilar": "OPINIÃO FORTE",
+      "energia": "Polêmica",
+      "tipo": "A opinião mais forte da semana — a que vai gerar mais debate",
+      "roteiro": {
+        "hook": "A maioria dos eventos de empreendedorismo são clubes de gente que não faz nada.",
+        "argumento": "Você vai num evento, paga 5 mil, tira foto com palco bonito, posta no stories, volta motivado. Aí segunda-feira chega e tá tudo igual. Mesma empresa, mesmo faturamento, mesmos problemas. Sabe por quê? Porque evento vende sensação de progresso. Não é progresso real. Progresso real é feio. É sentar na cadeira e resolver o problema que você tá fugindo há 6 meses. Mas isso não dá like, né?",
+        "nocaute": "Se o evento não mudou seu faturamento em 30 dias, não foi investimento. Foi entretenimento caro."
+      },
+      "legenda": "Eventos de empreendedorismo viraram parques de diversão pra adulto que não quer trabalhar.\n\nMotivação de palco dura 48 horas. Estratégia dura anos.\n\nPara de ir em evento. Vai resolver o problema que você tá fugindo.\n\n#empreendedorismo #opiniaoimpopular #empresario",
+      "hashtags": "#empreendedorismo #opiniaoimpopular #empresario",
+      "horario_sugerido": "18:00",
+      "status": "pronto",
+      "gancho_banco": 43
+    }
+  },
+  "stories_semana": [
+    {
+      "dia": "SEG",
+      "tipo": "Enquete de opinião",
+      "conteudo": "Fundo preto, texto branco:\n\"Empresário que faz tudo sozinho é dedicado ou tá preso?\"\n\nEnquete: DEDICADO | PRESO"
+    },
+    {
+      "dia": "TER",
+      "tipo": "Pensamento em tempo real",
+      "conteudo": "Gravar falando pra câmera (selfie, informal):\n\"Acabei de sair de uma call com um cara que gasta 15 mil por mês em tráfego e não sabe quanto custa cada lead dele. QUINZE MIL. É assustador.\""
+    },
+    {
+      "dia": "QUA",
+      "tipo": "Bastidor",
+      "conteudo": "Print da tela (borrar dados sensíveis) mostrando métricas de um cliente:\n\"Isso aqui é o que acontece quando você arruma a oferta ANTES de investir em tráfego. Os números falam.\""
+    },
+    {
+      "dia": "QUI",
+      "tipo": "Reação",
+      "conteudo": "Fundo preto, texto branco:\n\"Vi um guru hoje dizendo que precisa cobrar barato pra 'ganhar mercado'. Esse cara nunca teve empresa na vida.\"\n\n+ Caixa de perguntas: \"Qual o pior conselho de negócio que já te deram?\""
+    },
+    {
+      "dia": "SEX",
+      "tipo": "Opinião rápida",
+      "conteudo": "Fundo preto, texto branco:\n\"Se o último evento que você foi não mudou seu faturamento, para de ir em evento e vai trabalhar.\"\n\n+ Enquete: CONCORDO | ME OFENDI"
+    },
+    {
+      "dia": "SAB",
+      "tipo": "Pessoal + negócio",
+      "conteudo": "Gravar informal (pode ser em casa/fim de semana):\n\"Sábado e tô aqui pensando numa coisa. A parte mais difícil de empreender não é trabalhar muito. É tomar decisão sozinho. Ninguém te prepara pra solidão de ser dono.\""
+    },
+    {
+      "dia": "DOM",
+      "tipo": "Pergunta aberta",
+      "conteudo": "Fundo preto, texto branco:\n\"Semana que vem vou destruir 5 mitos sobre vendas. Qual mito sobre vendas mais te irrita?\"\n\nCaixa de perguntas aberta — gera conteúdo pra próxima semana"
+    }
+  ],
+  "instrucoes": {
+    "estrutura": {
+      "hook": "[0-3s] OPINIÃO BOMBÁSTICA — a frase que para o scroll",
+      "argumento": "[3-30s] ARGUMENTO — por que você pensa isso, com exemplo real",
+      "nocaute": "[30-60s] NOCAUTE — a frase final que não tem resposta"
+    },
+    "regras": [
+      "Máximo 15 palavras no hook",
+      "Fale pro empresário",
+      "NUNCA comece com 'Nesse vídeo...' ou '3 passos pra...'",
+      "NÃO TEM CTA NO FINAL",
+      "Fale como conversa, não como palestra",
+      "Não se desculpe — sem 'na minha opinião'"
+    ]
+  },
+  "proximo_arco": "5 mitos sobre vendas que todo empresário acredita"
+}

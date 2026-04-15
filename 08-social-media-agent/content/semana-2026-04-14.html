@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semana 14/04 — 5 verdades que o empresário não quer ouvir</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0a0a0a;
+      --card: #141414;
+      --border: rgba(255,255,255,0.08);
+      --text: #f0f0f0;
+      --dim: rgba(240,240,240,0.5);
+      --seg: #ef4444;
+      --ter: #f97316;
+      --qua: #eab308;
+      --qui: #22c55e;
+      --sex: #8b5cf6;
+      --sab: #06b6d4;
+      --dom: #ec4899;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px 20px 60px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 700px; margin: 0 auto; }
+
+    h1 { font-size: 28px; font-weight: 800; letter-spacing: -1px; margin-bottom: 6px; }
+    .subtitle { color: var(--dim); font-size: 14px; margin-bottom: 40px; }
+
+    .day-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .day-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .day-badge {
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #000;
+    }
+    .day-badge.seg { background: var(--seg); }
+    .day-badge.ter { background: var(--ter); }
+    .day-badge.qua { background: var(--qua); }
+    .day-badge.qui { background: var(--qui); }
+    .day-badge.sex { background: var(--sex); color: #fff; }
+    .day-badge.sab { background: var(--sab); }
+    .day-badge.dom { background: var(--dom); }
+
+    .day-pilar {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .roteiro-section { margin-bottom: 14px; }
+    .roteiro-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--dim);
+      margin-bottom: 4px;
+    }
+    .hook {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+    .argumento {
+      font-size: 15px;
+      color: rgba(240,240,240,0.8);
+      line-height: 1.7;
+      margin-bottom: 16px;
+      padding-left: 16px;
+      border-left: 2px solid rgba(255,255,255,0.1);
+    }
+    .nocaute {
+      font-size: 16px;
+      font-weight: 700;
+      font-style: italic;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .legenda-box {
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-top: 12px;
+    }
+    .legenda-box .roteiro-label { margin-bottom: 6px; }
+    .legenda-text {
+      font-size: 14px;
+      color: rgba(240,240,240,0.7);
+      white-space: pre-line;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.06);
+      margin: 40px 0;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 20px;
+    }
+
+    .story-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 12px;
+    }
+    .story-dia {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: #000;
+    }
+    .story-content { flex: 1; }
+    .story-tipo {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dim);
+      margin-bottom: 4px;
+    }
+    .story-texto {
+      font-size: 14px;
+      color: rgba(240,240,240,0.8);
+      white-space: pre-line;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>5 verdades que o empresário não quer ouvir</h1>
+    <p class="subtitle">Semana 14-18 de abril 2026 — @orobertoaraujo</p>
+
+    <!-- SEG -->
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-badge seg">SEG</span>
+        <span class="day-pilar">Opinião Forte — 18h</span>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Hook (0-3s)</div>
+        <div class="hook">"Empresário que faz tudo sozinho não é herói. É gargalo."</div>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Argumento (3-30s)</div>
+        <div class="argumento">Eu já fui esse cara. Achava que ninguém fazia tão bem quanto eu. Resultado? Empresa que não crescia porque dependia 100% de mim. No dia que eu saí da operação e coloquei gente pra fazer o que eu fazia — mesmo que 70% tão bem quanto eu — o negócio dobrou. Sabe por quê? Porque eu parei de ser funcionário da minha própria empresa e virei empresário de verdade.</div>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Nocaute (30-60s)</div>
+        <div class="nocaute">"Enquanto você tá fazendo tudo, ninguém tá pensando no crescimento. Inclusive você."</div>
+      </div>
+      <div class="legenda-box">
+        <div class="roteiro-label">Legenda</div>
+        <div class="legenda-text">Você é o dono ou o funcionário mais caro da sua empresa?
+
+Tem empresário que se orgulha de fazer tudo. Atende, vende, posta, faz o financeiro.
+
+Isso não é dedicação. É prisão.
+
+#empresario #opiniaoimpopular #marketingdeverdade</div>
+      </div>
+    </div>
+
+    <!-- TER -->
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-badge ter">TER</span>
+        <span class="day-pilar">Verdade Inconveniente — 18h</span>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Hook (0-3s)</div>
+        <div class="hook">"Tráfego pago é gasolina. Se não tem fogo, só vai gastar combustível."</div>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Argumento (3-30s)</div>
+        <div class="argumento">O empresário chega pra mim e fala: 'Roberto, quero investir 10 mil em tráfego'. Aí eu pergunto: 'Qual tua oferta?' Silêncio. 'Qual tua taxa de conversão?' Silêncio. 'Quantos leads você precisa pra fechar um?' Silêncio. O cara quer jogar dinheiro em anúncio sem saber se o negócio converte. Isso não é marketing. É rifa. Você tá rifando seu dinheiro.</div>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Nocaute (30-60s)</div>
+        <div class="nocaute">"Antes de investir 1 real em tráfego, responde: se eu trouxer 100 pessoas pro teu negócio hoje, quantas compram? Se não sabe, o problema não é tráfego."</div>
+      </div>
+      <div class="legenda-box">
+        <div class="roteiro-label">Legenda</div>
+        <div class="legenda-text">A verdade que gestor de tráfego não te conta: se sua oferta é fraca, mais tráfego só acelera o prejuízo.
+
+Antes de investir em anúncio, investe em oferta.
+
+#trafegopago #marketingdeverdade #empresario</div>
+      </div>
+    </div>
+
+    <!-- QUA -->
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-badge qua">QUA</span>
+        <span class="day-pilar">Bastidor Real — 18h</span>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Hook (0-3s)</div>
+        <div class="hook">"Essa semana eu recusei um cliente que queria me pagar 8 mil por mês."</div>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Argumento (3-30s)</div>
+        <div class="argumento">O cara chegou com grana, querendo contratar. Mas quando eu vi o negócio dele, entendi: ele não precisava de marketing. Precisava arrumar a casa. O produto tinha reclamação, o atendimento era ruim, a entrega atrasava. Se eu jogasse tráfego ali, ia multiplicar os problemas, não o lucro. Falei: 'Volta daqui 3 meses com isso resolvido.' Ele ficou puto. Mas é isso: eu prefiro perder dinheiro do que perder reputação.</div>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Nocaute (30-60s)</div>
+        <div class="nocaute">"Dinheiro fácil que destrói sua reputação é o investimento mais caro que existe."</div>
+      </div>
+      <div class="legenda-box">
+        <div class="roteiro-label">Legenda</div>
+        <div class="legenda-text">Recusei R$8 mil porque o negócio não tava pronto.
+
+Nem todo dinheiro vale a pena. Quando o produto é ruim, marketing só acelera a morte.
+
+Prefiro perder o contrato do que perder a credibilidade.
+
+#bastidores #empresario #marketingdeverdade</div>
+      </div>
+    </div>
+
+    <!-- QUI -->
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-badge qui">QUI</span>
+        <span class="day-pilar">Reflexão de Campo — 18h</span>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Hook (0-3s)</div>
+        <div class="hook">"Cobrar barato não é estratégia. É medo de ser rejeitado."</div>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Argumento (3-30s)</div>
+        <div class="argumento">Hoje num call com um mentorado, ele falou: 'Mas Roberto, se eu cobrar mais caro o cliente vai embora.' Eu respondi: 'Ótimo. Vai embora o cliente errado.' Sabe o que acontece quando você cobra mais? Atrai gente que valoriza. Gente que paga e não reclama. Gente que respeita seu trabalho. E o melhor: você trabalha menos, com mais lucro e mais paz. O preço certo incomoda você. Mas atrai o cliente certo.</div>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Nocaute (30-60s)</div>
+        <div class="nocaute">"Preço alto não espanta cliente bom. Espanta cliente ruim. E isso é a melhor coisa que pode acontecer pro seu negócio."</div>
+      </div>
+      <div class="legenda-box">
+        <div class="roteiro-label">Legenda</div>
+        <div class="legenda-text">O medo de cobrar mais caro é o medo de descobrir o que você realmente vale.
+
+Preço baixo atrai problema. Preço justo atrai respeito.
+
+#precificacao #empresario #opiniaoimpopular</div>
+      </div>
+    </div>
+
+    <!-- SEX -->
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-badge sex">SEX</span>
+        <span class="day-pilar">Polêmica da Semana — 18h</span>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Hook (0-3s)</div>
+        <div class="hook">"A maioria dos eventos de empreendedorismo são clubes de gente que não faz nada."</div>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Argumento (3-30s)</div>
+        <div class="argumento">Você vai num evento, paga 5 mil, tira foto com palco bonito, posta no stories, volta motivado. Aí segunda-feira chega e tá tudo igual. Mesma empresa, mesmo faturamento, mesmos problemas. Sabe por quê? Porque evento vende sensação de progresso. Não é progresso real. Progresso real é feio. É sentar na cadeira e resolver o problema que você tá fugindo há 6 meses. Mas isso não dá like, né?</div>
+      </div>
+      <div class="roteiro-section">
+        <div class="roteiro-label">Nocaute (30-60s)</div>
+        <div class="nocaute">"Se o evento não mudou seu faturamento em 30 dias, não foi investimento. Foi entretenimento caro."</div>
+      </div>
+      <div class="legenda-box">
+        <div class="roteiro-label">Legenda</div>
+        <div class="legenda-text">Eventos de empreendedorismo viraram parques de diversão pra adulto que não quer trabalhar.
+
+Motivação de palco dura 48 horas. Estratégia dura anos.
+
+Para de ir em evento. Vai resolver o problema que você tá fugindo.
+
+#empreendedorismo #opiniaoimpopular #empresario</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- STORIES -->
+    <h2>Stories da Semana</h2>
+
+    <div class="story-card">
+      <div class="story-dia" style="background: var(--seg);">SEG</div>
+      <div class="story-content">
+        <div class="story-tipo">Enquete de opinião</div>
+        <div class="story-texto">Fundo preto, texto branco:
+"Empresário que faz tudo sozinho é dedicado ou tá preso?"
+
+Enquete: DEDICADO | PRESO</div>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-dia" style="background: var(--ter);">TER</div>
+      <div class="story-content">
+        <div class="story-tipo">Pensamento em tempo real</div>
+        <div class="story-texto">Gravar falando pra câmera (selfie, informal):
+"Acabei de sair de uma call com um cara que gasta 15 mil por mês em tráfego e não sabe quanto custa cada lead dele. QUINZE MIL. É assustador."</div>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-dia" style="background: var(--qua);">QUA</div>
+      <div class="story-content">
+        <div class="story-tipo">Bastidor</div>
+        <div class="story-texto">Print da tela (borrar dados sensíveis) mostrando métricas de um cliente:
+"Isso aqui é o que acontece quando você arruma a oferta ANTES de investir em tráfego. Os números falam."</div>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-dia" style="background: var(--qui);">QUI</div>
+      <div class="story-content">
+        <div class="story-tipo">Reação</div>
+        <div class="story-texto">Fundo preto, texto branco:
+"Vi um guru hoje dizendo que precisa cobrar barato pra 'ganhar mercado'. Esse cara nunca teve empresa na vida."
+
++ Caixa de perguntas: "Qual o pior conselho de negócio que já te deram?"</div>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-dia" style="background: var(--sex);">SEX</div>
+      <div class="story-content">
+        <div class="story-tipo">Opinião rápida</div>
+        <div class="story-texto">Fundo preto, texto branco:
+"Se o último evento que você foi não mudou seu faturamento, para de ir em evento e vai trabalhar."
+
++ Enquete: CONCORDO | ME OFENDI</div>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-dia" style="background: var(--sab);">SAB</div>
+      <div class="story-content">
+        <div class="story-tipo">Pessoal + negócio</div>
+        <div class="story-texto">Gravar informal (pode ser em casa/fim de semana):
+"Sábado e tô aqui pensando numa coisa. A parte mais difícil de empreender não é trabalhar muito. É tomar decisão sozinho. Ninguém te prepara pra solidão de ser dono."</div>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-dia" style="background: var(--dom);">DOM</div>
+      <div class="story-content">
+        <div class="story-tipo">Pergunta aberta (prepara próxima semana)</div>
+        <div class="story-texto">Fundo preto, texto branco:
+"Semana que vem vou destruir 5 mitos sobre vendas. Qual mito sobre vendas mais te irrita?"
+
+Caixa de perguntas aberta — gera conteúdo pra próxima semana</div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

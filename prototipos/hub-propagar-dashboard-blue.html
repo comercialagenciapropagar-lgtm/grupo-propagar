@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hub Propagar — Dashboard (paleta Propagar azul)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Archivo+Black&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Base escura */
+    --bg: #050810;
+    --bg-1: #0a0f1c;
+    --bg-2: #101728;
+    --bg-3: #162035;
+    --bg-4: #1e2b44;
+    /* Azul Propagar (sampleado do Instagram) */
+    --blue: #2a5299;              /* primário — core do avatar e posts */
+    --blue-deep: #1a3268;         /* sombra/pressed */
+    --blue-bright: #5b8dc7;       /* hover/highlight */
+    --blue-soft: #3b6fa0;         /* intermediário */
+    --blue-glow: rgba(42, 82, 153, 0.25);
+    --blue-border: rgba(91, 141, 199, 0.3);
+    --blue-border-soft: rgba(91, 141, 199, 0.15);
+
+    --text: #f2f5fa;
+    --text-2: #cdd3de;
+    --muted: #7e8698;
+    --muted-2: #4a5068;
+    --border: var(--blue-border);
+    --border-soft: rgba(255,255,255,0.06);
+
+    --green: #34d399;
+    --red: #f87171;
+    --orange: #fb923c;
+    --purple: #c084fc;
+    --gold-accent: #d4a853;  /* dourado passa a ser ACENTO raro, não primário */
+
+    --sidebar-w: 220px;
+    --topbar-h: 64px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 14px; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .proto-banner {
+    position: fixed;
+    top: 10px; right: 10px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    color: var(--blue-bright);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    z-index: 1000;
+    backdrop-filter: blur(6px);
+  }
+
+  /* LOGO FLECHA em azul */
+  svg.logo-flecha { width: 28px; height: auto; color: var(--blue-bright); }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--bg-1);
+    border-right: 1px solid var(--border-soft);
+    display: flex;
+    flex-direction: column;
+  }
+  .brand {
+    padding: 20px 16px 18px;
+    border-bottom: 1px solid var(--border-soft);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand .brand-txt {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .brand .brand-txt .dim { color: var(--blue-bright); }
+  .brand .brand-txt .sub {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    font-weight: 600;
+  }
+
+  .nav { flex: 1; padding: 14px 10px; overflow-y: auto; }
+  .nav-group-label {
+    font-size: 9px;
+    color: var(--muted-2);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 12px 10px 6px;
+  }
+  .nav a {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 9px 11px;
+    border-radius: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 1px;
+    position: relative;
+  }
+  .nav a:hover { color: var(--text-2); background: rgba(91,141,199,0.05); }
+  .nav a.active {
+    color: var(--blue-bright);
+    background: var(--blue-glow);
+  }
+  .nav a.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px; bottom: 8px;
+    width: 2px;
+    background: var(--blue-bright);
+    border-radius: 2px;
+  }
+  .nav .ico { width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; opacity: 0.9; }
+  .nav .count {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--blue-glow);
+    color: var(--blue-bright);
+    padding: 1px 6px;
+    border-radius: 999px;
+  }
+
+  .sidebar-footer { padding: 12px; border-top: 1px solid var(--border-soft); }
+  .user-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--bg-2);
+    border: 1px solid var(--border-soft);
+  }
+  .user-pill .avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue-bright) 0%, var(--blue) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 12px;
+  }
+  .user-pill .info { flex: 1; line-height: 1.1; min-width: 0; }
+  .user-pill .name { font-size: 12px; font-weight: 600; color: var(--text); }
+  .user-pill .role-txt { font-size: 10px; color: var(--blue-bright); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* TOPBAR */
+  .topbar {
+    position: fixed;
+    top: 0; left: var(--sidebar-w); right: 0;
+    height: var(--topbar-h);
+    background: rgba(5,8,16,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-soft);
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    gap: 24px;
+    z-index: 50;
+  }
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+  .breadcrumb .sep { color: var(--muted-2); }
+  .breadcrumb .current { color: var(--blue-bright); font-weight: 600; }
+
+  .search {
+    flex: 1;
+    max-width: 360px;
+    background: var(--bg-2);
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .search input { background: transparent; border: none; outline: none; color: var(--text); font-family: inherit; flex: 1; font-size: 12px; }
+  .search .kbd { background: var(--bg-3); border: 1px solid var(--border-soft); border-radius: 4px; padding: 1px 6px; font-size: 10px; color: var(--muted-2); font-family: 'JetBrains Mono', monospace; }
+
+  .role-switch {
+    display: flex;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .role-switch button {
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  body[data-role="admin"] .role-switch .rs-admin { background: var(--blue); color: #fff; }
+  body[data-role="gestor"] .role-switch .rs-gestor { background: var(--blue); color: #fff; }
+
+  .top-actions { display: flex; align-items: center; gap: 10px; }
+  .icon-btn {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    background: var(--bg-2);
+    border: 1px solid var(--border-soft);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+  }
+  .icon-btn:hover { color: var(--blue-bright); border-color: var(--border); }
+  .icon-btn .dot {
+    position: absolute;
+    top: 7px; right: 7px;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--blue-bright);
+    box-shadow: 0 0 0 2px var(--bg-2);
+  }
+  .btn-primary {
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+    box-shadow: 0 4px 14px var(--blue-glow);
+  }
+  .btn-primary:hover { background: var(--blue-bright); }
+
+  /* MAIN */
+  .main {
+    margin-left: var(--sidebar-w);
+    padding: calc(var(--topbar-h) + 24px) 32px 80px;
+    max-width: 1600px;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: end;
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .hero .kicker {
+    font-size: 11px;
+    color: var(--blue-bright);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 em { font-style: italic; color: var(--blue-bright); font-weight: 700; }
+  .hero .lede { font-size: 13px; color: var(--muted); margin-top: 10px; max-width: 520px; line-height: 1.5; }
+
+  body[data-role="gestor"] .hero-admin { display: none; }
+  body[data-role="admin"] .hero-gestor { display: none; }
+
+  .month-pills {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-2);
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--border-soft);
+  }
+  .month-pills button {
+    background: transparent;
+    border: none;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    text-transform: uppercase;
+  }
+  .month-pills .active { background: var(--blue); color: #fff; }
+
+  /* KPI GRID */
+  body[data-role="gestor"] .kpi-admin { display: none; }
+  body[data-role="admin"] .kpi-gestor { display: none; }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .kpi {
+    background: linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue-bright), transparent);
+    opacity: 0.5;
+  }
+  .kpi .label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .kpi .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .kpi .value .unit { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; color: var(--muted); margin-left: 4px; }
+  .kpi .delta {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .delta.up { color: var(--green); }
+  .delta.down { color: var(--red); }
+  .delta.neutral { color: var(--muted); }
+  .delta .trend { background: var(--bg-3); padding: 1px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+  .kpi.highlight {
+    background: linear-gradient(180deg, var(--blue-glow) 0%, var(--bg-1) 100%);
+    border-color: var(--border);
+  }
+  .kpi .mini-bar {
+    margin-top: 14px;
+    height: 3px;
+    background: var(--bg-3);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .kpi .mini-bar i {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--blue-bright);
+    border-radius: 2px;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .section-head h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .section-head h2 .count { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--muted); font-weight: 500; margin-left: 10px; letter-spacing: 0; }
+  .chip {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 999px;
+    background: var(--bg-2);
+    border: 1px solid var(--border-soft);
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .chip.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+  /* CHARTS ROW */
+  .row-chart {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  body[data-role="gestor"] .row-chart-admin { display: none; }
+  body[data-role="admin"] .row-chart-gestor { display: none; }
+
+  .card {
+    background: linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .card h3 .note { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--muted); font-weight: 500; margin-left: 8px; }
+
+  .admin-charts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 16px;
+  }
+  .admin-chart {
+    padding: 14px 18px 12px;
+    border-right: 1px solid var(--border-soft);
+  }
+  .admin-chart:last-child { border-right: none; }
+  .admin-chart .title {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .admin-chart .big-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .admin-chart .big-value .unit { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 500; color: var(--muted); margin-left: 3px; }
+  .admin-chart .big-delta {
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .admin-chart.green .big-delta { color: var(--green); }
+  .admin-chart.red .big-delta { color: var(--red); }
+  .admin-chart.blue .big-delta { color: var(--blue-bright); }
+  .admin-chart .plot { height: 86px; margin-top: 12px; position: relative; }
+  .admin-chart .axis-x {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted-2);
+    letter-spacing: 0.05em;
+  }
+
+  /* GESTOR chart */
+  .gestor-chart-area {
+    position: relative;
+    height: 260px;
+    margin-top: 18px;
+  }
+  .gestor-chart-area .grid-bg {
+    position: absolute;
+    inset: 0 0 22px 34px;
+    background-image: linear-gradient(to top, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 100% 20%;
+  }
+  .gestor-chart-area .axis-y {
+    position: absolute;
+    left: 0; top: 0; bottom: 22px;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted-2);
+    width: 34px;
+  }
+  .gestor-chart-area .plot {
+    position: absolute;
+    left: 34px; right: 4px; top: 0; bottom: 22px;
+  }
+  .gestor-chart-area .axis-x {
+    position: absolute;
+    left: 34px; right: 4px; bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted-2);
+  }
+  .legend-row {
+    display: flex;
+    gap: 14px;
+    margin-top: 14px;
+    font-size: 11px;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .legend-row span i {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    margin-right: 6px;
+    vertical-align: -1px;
+  }
+
+  /* ALERT LIST */
+  .alert-list { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+  .alert {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    background: var(--bg-3);
+    border: 1px solid var(--border-soft);
+    border-left: 3px solid var(--blue-bright);
+    border-radius: 8px;
+  }
+  .alert.critical { border-left-color: var(--red); }
+  .alert.warn { border-left-color: var(--orange); }
+  .alert.ok { border-left-color: var(--green); }
+  .alert .days { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .alert .days b { color: var(--text); font-weight: 700; display: block; font-size: 16px; font-family: 'Playfair Display', serif; }
+  .alert .body { flex: 1; }
+  .alert .body .name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .alert .body .meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* STORES */
+  .store-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .store {
+    background: linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .store .top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .store .mark {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    color: var(--blue-bright);
+    font-size: 16px;
+  }
+  .store .status {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .status.green { background: rgba(52,211,153,0.1); color: var(--green); }
+  .status.red { background: rgba(248,113,113,0.1); color: var(--red); }
+  .status.neutral { background: rgba(255,255,255,0.05); color: var(--muted); }
+
+  .store h4 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .store .handle { font-size: 11px; color: var(--muted); margin-bottom: 16px; font-family: 'JetBrains Mono', monospace; }
+  .store-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .store-metrics div { background: var(--bg-3); border-radius: 8px; padding: 8px 10px; }
+  .store-metrics .mlabel { font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted-2); font-weight: 700; margin-bottom: 2px; }
+  .store-metrics .mval { font-family: 'Playfair Display', serif; font-weight: 800; color: var(--text); font-size: 15px; line-height: 1; }
+  .store-metrics .mval small { font-family: 'Inter', sans-serif; font-size: 10px; color: var(--muted); font-weight: 500; }
+
+  .store-footer {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .store-footer .gestor-chip { display: flex; align-items: center; gap: 6px; }
+  .store-footer .gestor-chip i {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue-bright), var(--blue));
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 9px;
+    font-style: normal;
+  }
+  .store-footer a { color: var(--blue-bright); text-decoration: none; font-weight: 600; }
+
+  body[data-role="gestor"] .store-admin-only { display: none; }
+
+  /* Nota de paleta */
+  .palette-note {
+    margin-top: 40px;
+    padding: 18px 22px;
+    background: linear-gradient(90deg, var(--blue-glow) 0%, transparent 100%);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--blue-bright);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .palette-note .swatch {
+    display: flex;
+    gap: 6px;
+  }
+  .palette-note .sw {
+    width: 36px; height: 36px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+  }
+  .palette-note .sw::after {
+    content: attr(data-hex);
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .palette-note p { font-size: 13px; color: var(--muted); line-height: 1.5; flex: 1; min-width: 260px; }
+  .palette-note p b { color: var(--text); }
+
+  @media (max-width: 1200px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .row-chart { grid-template-columns: 1fr; }
+    .store-grid { grid-template-columns: repeat(2, 1fr); }
+    .admin-charts { grid-template-columns: 1fr; }
+    .admin-chart { border-right: none; border-bottom: 1px solid var(--border-soft); }
+  }
+  @media (max-width: 760px) {
+    .sidebar { display: none; }
+    .topbar { left: 0; padding: 0 16px; }
+    .main { margin-left: 0; padding: calc(var(--topbar-h) + 16px) 16px 40px; }
+    .hero { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 32px; }
+    .kpi-grid, .store-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body data-role="admin">
+
+  <!-- Flecha SVG -->
+  <svg width="0" height="0" style="position:absolute;">
+    <defs>
+      <symbol id="wedges" viewBox="0 0 100 100">
+        <polygon points="8,28 38,50 8,72" fill="currentColor" opacity="0.5"/>
+        <polygon points="34,22 66,50 34,78" fill="currentColor" opacity="0.78"/>
+        <polygon points="62,14 94,50 62,86" fill="currentColor"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="proto-banner">paleta azul propagar · teste</div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="logo-flecha"><use href="#wedges"/></svg>
+      <div class="brand-txt">HUB<span class="dim">·PROPAGAR</span>
+        <span class="sub">gestão propagar</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-group-label">Operação</div>
+      <a class="active" href="#"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></span>Dashboard</a>
+      <a href="#"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></span>Input Diário</a>
+      <a href="#"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></span>Input em Lote</a>
+      <a href="#"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M1 21v-2a4 4 0 014-4h6a4 4 0 014 4v2"/></svg></span>Clientes<span class="count">28</span></a>
+      <a href="#"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>Contratos</a>
+
+      <div class="nav-group-label">Pessoas</div>
+      <a href="#"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="6"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg></span>Rankings</a>
+      <a href="#"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></span>Ocorrências<span class="count">3</span></a>
+      <a href="#"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>Demandas<span class="count">7</span></a>
+
+      <div class="nav-group-label">Conhecimento</div>
+      <a href="#"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></span>FAQ</a>
+      <a href="#"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="10 9 15 12 10 15"/></svg></span>Cursos</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-pill">
+        <div class="avatar" id="userAvatar">R</div>
+        <div class="info">
+          <div class="name" id="userName">Roberto Araújo</div>
+          <div class="role-txt" id="userRole">Admin · CEO</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="breadcrumb">
+      <span>Propagar</span>
+      <span class="sep">/</span>
+      <span class="current">Dashboard</span>
+    </div>
+    <div class="search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input placeholder="Buscar cliente, loja, ocorrência…" />
+      <span class="kbd">⌘K</span>
+    </div>
+
+    <div class="role-switch">
+      <button class="rs-admin" onclick="setRole('admin')">Admin</button>
+      <button class="rs-gestor" onclick="setRole('gestor')">Gestor</button>
+    </div>
+
+    <div class="top-actions">
+      <button class="icon-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot"></span></button>
+      <button class="btn-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Novo Input</button>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <section class="hero hero-admin">
+      <div>
+        <div class="kicker">Abril · 2026 · panorama executivo</div>
+        <h1>Mês no <em>ritmo</em>. Meta em 82%.</h1>
+        <p class="lede">
+          14 lojas ativas, R$ 2,1Mi em vendas geradas pros clientes e 3 contratos vencendo em 30 dias.
+          O mês vira se a carteira nova fechar na semana.
+        </p>
+      </div>
+      <div class="month-pills">
+        <button>Jan</button><button>Fev</button><button>Mar</button>
+        <button class="active">Abr</button><button>Mai</button><button>Jun</button>
+      </div>
+    </section>
+
+    <section class="hero hero-gestor">
+      <div>
+        <div class="kicker">Abril · 2026 · sua carteira</div>
+        <h1>Seus <em>3 clientes</em>. Um pedindo atenção.</h1>
+        <p class="lede">
+          Você cuida de IMOBI Holding, Ótica Vision Plus e GirouCrédito. IMOBI acima da meta,
+          Vision Plus em alerta de queda. Veja a evolução diária de cada um abaixo.
+        </p>
+      </div>
+      <div class="month-pills">
+        <button>Jan</button><button>Fev</button><button>Mar</button>
+        <button class="active">Abr</button><button>Mai</button><button>Jun</button>
+      </div>
+    </section>
+
+    <!-- KPIs ADMIN -->
+    <section class="kpi-grid kpi-admin">
+      <div class="kpi highlight">
+        <div class="label">MRR Agência <span>◆</span></div>
+        <div class="value">R$ 142<span class="unit">.800</span></div>
+        <div class="delta up">▲ <span class="trend">+8,4%</span> vs mar/26</div>
+        <div class="mini-bar"><i style="width: 82%"></i></div>
+      </div>
+      <div class="kpi">
+        <div class="label">Meta Mensal <span>◆</span></div>
+        <div class="value">82<span class="unit">%</span></div>
+        <div class="delta neutral">R$ 117k / 143k · faltam R$ 25k</div>
+        <div class="mini-bar"><i style="width: 82%; background: var(--green);"></i></div>
+      </div>
+      <div class="kpi">
+        <div class="label">Novos Clientes <span>◆</span></div>
+        <div class="value">4<span class="unit">/mês</span></div>
+        <div class="delta up">▲ <span class="trend">+33%</span> · melhor mês do ano</div>
+        <div class="mini-bar"><i style="width: 80%"></i></div>
+      </div>
+      <div class="kpi">
+        <div class="label">Churn 90d <span>◆</span></div>
+        <div class="value">2,1<span class="unit">%</span></div>
+        <div class="delta down">▲ <span class="trend">+0,6pp</span> · 1 cliente saiu</div>
+        <div class="mini-bar"><i style="width: 21%; background: var(--red);"></i></div>
+      </div>
+    </section>
+
+    <!-- KPIs GESTOR -->
+    <section class="kpi-grid kpi-gestor">
+      <div class="kpi highlight">
+        <div class="label">Vendas Clientes <span>◆</span></div>
+        <div class="value">R$ 366<span class="unit">k</span></div>
+        <div class="delta up">▲ <span class="trend">+4,1%</span> vs mar/26</div>
+        <div class="mini-bar"><i style="width: 74%"></i></div>
+      </div>
+      <div class="kpi">
+        <div class="label">IVM Total <span>◆</span></div>
+        <div class="value">R$ 74<span class="unit">k</span></div>
+        <div class="delta neutral">distribuído nas 3 lojas</div>
+        <div class="mini-bar"><i style="width: 66%"></i></div>
+      </div>
+      <div class="kpi">
+        <div class="label">CAC Médio Carteira <span>◆</span></div>
+        <div class="value">R$ 208</div>
+        <div class="delta down">▼ <span class="trend">-4,1%</span> vs mar/26</div>
+        <div class="mini-bar"><i style="width: 42%; background: var(--green);"></i></div>
+      </div>
+      <div class="kpi">
+        <div class="label">Score Mensal <span>◆</span></div>
+        <div class="value">7,4<span class="unit">/10</span></div>
+        <div class="delta neutral">4º no ranking do time</div>
+        <div class="mini-bar"><i style="width: 74%"></i></div>
+      </div>
+    </section>
+
+    <!-- CHARTS ADMIN -->
+    <section class="row-chart row-chart-admin">
+      <div class="card">
+        <div class="section-head" style="margin-bottom: 4px;">
+          <h3>MRR, Churn e Novos Clientes <span class="note">· evolução mensal</span></h3>
+          <div style="display:flex; gap:6px;">
+            <button class="chip active">12m</button>
+            <button class="chip">6m</button>
+            <button class="chip">YTD</button>
+          </div>
+        </div>
+
+        <div class="admin-charts">
+          <div class="admin-chart green">
+            <div class="title">MRR Mensal</div>
+            <div class="big-value">R$ 142,8<span class="unit">k</span></div>
+            <div class="big-delta">↗ +8,4% vs mês anterior</div>
+            <div class="plot">
+              <svg width="100%" height="100%" viewBox="0 0 200 86" preserveAspectRatio="none" style="display:block;">
+                <defs>
+                  <linearGradient id="mrrFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#34d399" stop-opacity="0.32"/>
+                    <stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0,70 L18,66 L36,62 L54,64 L72,55 L90,52 L108,48 L126,44 L144,40 L162,36 L180,30 L200,22 L200,86 L0,86 Z" fill="url(#mrrFill)"/>
+                <polyline points="0,70 18,66 36,62 54,64 72,55 90,52 108,48 126,44 144,40 162,36 180,30 200,22" fill="none" stroke="#34d399" stroke-width="1.8"/>
+                <circle cx="200" cy="22" r="3.5" fill="#34d399"/>
+                <circle cx="200" cy="22" r="6" fill="none" stroke="#34d399" stroke-width="1.5" opacity="0.4"/>
+              </svg>
+            </div>
+            <div class="axis-x"><span>mai/25</span><span>out/25</span><span>abr/26</span></div>
+          </div>
+
+          <div class="admin-chart red">
+            <div class="title">Churn 90d</div>
+            <div class="big-value">2,1<span class="unit">%</span></div>
+            <div class="big-delta">↗ +0,6pp vs mês anterior</div>
+            <div class="plot">
+              <svg width="100%" height="100%" viewBox="0 0 200 86" preserveAspectRatio="none" style="display:block;">
+                <defs>
+                  <linearGradient id="churnFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#f87171" stop-opacity="0.28"/>
+                    <stop offset="100%" stop-color="#f87171" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0,72 L20,68 L40,74 L60,70 L80,76 L100,72 L120,70 L140,68 L160,62 L180,58 L200,48 L200,86 L0,86 Z" fill="url(#churnFill)"/>
+                <polyline points="0,72 20,68 40,74 60,70 80,76 100,72 120,70 140,68 160,62 180,58 200,48" fill="none" stroke="#f87171" stroke-width="1.8"/>
+                <line x1="0" y1="40" x2="200" y2="40" stroke="#f87171" stroke-width="1" stroke-dasharray="3 3" opacity="0.35"/>
+                <text x="196" y="37" font-family="'JetBrains Mono', monospace" font-size="7" fill="#f87171" opacity="0.7" text-anchor="end">meta 3%</text>
+                <circle cx="200" cy="48" r="3.5" fill="#f87171"/>
+              </svg>
+            </div>
+            <div class="axis-x"><span>mai/25</span><span>out/25</span><span>abr/26</span></div>
+          </div>
+
+          <div class="admin-chart blue">
+            <div class="title">Novos Clientes</div>
+            <div class="big-value">4<span class="unit">em abr</span></div>
+            <div class="big-delta">↗ melhor mês dos últimos 12</div>
+            <div class="plot">
+              <svg width="100%" height="100%" viewBox="0 0 200 86" preserveAspectRatio="none" style="display:block;">
+                <g fill="#5b8dc7" opacity="0.45">
+                  <rect x="2" y="62" width="14" height="24"/>
+                  <rect x="18" y="56" width="14" height="30"/>
+                  <rect x="34" y="66" width="14" height="20"/>
+                  <rect x="50" y="52" width="14" height="34"/>
+                  <rect x="66" y="60" width="14" height="26"/>
+                  <rect x="82" y="50" width="14" height="36"/>
+                  <rect x="98" y="58" width="14" height="28"/>
+                  <rect x="114" y="48" width="14" height="38"/>
+                  <rect x="130" y="54" width="14" height="32"/>
+                  <rect x="146" y="46" width="14" height="40"/>
+                  <rect x="162" y="52" width="14" height="34"/>
+                </g>
+                <rect x="178" y="30" width="14" height="56" fill="#5b8dc7"/>
+                <text x="185" y="25" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="600" fill="#5b8dc7" text-anchor="middle">4</text>
+              </svg>
+            </div>
+            <div class="axis-x"><span>mai/25</span><span>out/25</span><span>abr/26</span></div>
+          </div>
+        </div>
+
+        <div class="legend-row" style="padding: 10px 18px 4px; border-top: 1px solid var(--border-soft); margin-top: 12px;">
+          <span><i style="background:#34d399"></i>MRR cresceu 3 meses seguidos</span>
+          <span><i style="background:#f87171"></i>Churn subiu pela 1ª vez no ano</span>
+          <span><i style="background:#5b8dc7"></i>Novos clientes acelerando</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-head" style="margin-bottom: 4px;">
+          <h3>Vencendo <span class="note">· 30 dias</span></h3>
+          <a class="chip" style="text-decoration:none;">Ver todos</a>
+        </div>
+        <div class="alert-list">
+          <div class="alert critical">
+            <div class="days"><b>03</b>dias</div>
+            <div class="body">
+              <div class="name">Ótica Vision Plus</div>
+              <div class="meta">Contrato #042 · R$ 4.800/mês · renovação pendente</div>
+            </div>
+          </div>
+          <div class="alert warn">
+            <div class="days"><b>12</b>dias</div>
+            <div class="body">
+              <div class="name">Padaria Bom Pão</div>
+              <div class="meta">Contrato #031 · R$ 2.200/mês</div>
+            </div>
+          </div>
+          <div class="alert warn">
+            <div class="days"><b>24</b>dias</div>
+            <div class="body">
+              <div class="name">Clínica Sorriso</div>
+              <div class="meta">Contrato #028 · R$ 3.500/mês · upsell</div>
+            </div>
+          </div>
+          <div class="alert ok">
+            <div class="days"><b>28</b>dias</div>
+            <div class="body">
+              <div class="name">IMOBI Holding</div>
+              <div class="meta">Contrato #019 · R$ 18.500/mês · anual</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHARTS GESTOR -->
+    <section class="row-chart row-chart-gestor">
+      <div class="card">
+        <div class="section-head" style="margin-bottom: 4px;">
+          <h3>Evolução dos seus clientes <span class="note">· vendas diárias · abril/26</span></h3>
+          <div style="display:flex; gap:6px;">
+            <button class="chip active">Vendas</button>
+            <button class="chip">IVM</button>
+            <button class="chip">CAC</button>
+          </div>
+        </div>
+
+        <div class="gestor-chart-area">
+          <div class="grid-bg"></div>
+          <div class="axis-y">
+            <span>0</span><span>15k</span><span>30k</span><span>45k</span><span>60k</span>
+          </div>
+          <div class="plot">
+            <svg width="100%" height="100%" viewBox="0 0 600 240" preserveAspectRatio="none" style="display:block;">
+              <defs>
+                <linearGradient id="c1fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5b8dc7" stop-opacity="0.26"/><stop offset="100%" stop-color="#5b8dc7" stop-opacity="0"/></linearGradient>
+              </defs>
+              <!-- IMOBI (azul bright — acima da meta) -->
+              <path d="M0,180 C50,170 100,160 150,150 C200,140 250,120 300,110 C350,100 400,80 450,70 C500,60 550,40 600,30 L600,240 L0,240 Z" fill="url(#c1fill)"/>
+              <polyline points="0,180 50,170 100,160 150,150 200,140 250,120 300,110 350,100 400,80 450,70 500,60 550,40 600,30" fill="none" stroke="#5b8dc7" stroke-width="2.4"/>
+
+              <!-- Ótica Vision (vermelho — queda) -->
+              <polyline points="0,200 50,195 100,190 150,200 200,205 250,215 300,218 350,220 400,225 450,228 500,226 550,230 600,232" fill="none" stroke="#f87171" stroke-width="2"/>
+
+              <!-- GirouCrédito (roxo — observar) -->
+              <polyline points="0,175 50,178 100,180 150,185 200,190 250,195 300,200 350,205 400,210 450,215 500,215 550,220 600,224" fill="none" stroke="#c084fc" stroke-width="2"/>
+
+              <circle cx="600" cy="30" r="4" fill="#5b8dc7"/>
+              <circle cx="600" cy="232" r="4" fill="#f87171"/>
+              <circle cx="600" cy="224" r="4" fill="#c084fc"/>
+
+              <text x="580" y="20" font-family="'Inter'" font-size="10" font-weight="600" fill="#5b8dc7" text-anchor="end">IMOBI · R$ 284k</text>
+              <text x="580" y="246" font-family="'Inter'" font-size="10" font-weight="600" fill="#f87171" text-anchor="end">Vision · R$ 38k</text>
+              <text x="580" y="216" font-family="'Inter'" font-size="10" font-weight="600" fill="#c084fc" text-anchor="end">Girou · R$ 44k</text>
+            </svg>
+          </div>
+          <div class="axis-x">
+            <span>01</span><span>05</span><span>10</span><span>15</span><span>20</span><span>25</span><span>30</span>
+          </div>
+        </div>
+
+        <div class="legend-row" style="padding-top: 14px;">
+          <span><i style="background:#5b8dc7"></i>IMOBI Holding · +18% mês · <b style="color:var(--green)">acima da meta</b></span>
+          <span><i style="background:#f87171"></i>Ótica Vision Plus · -22% · <b style="color:var(--red)">em queda</b></span>
+          <span><i style="background:#c084fc"></i>GirouCrédito · -14% · <b style="color:var(--red)">observar</b></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-head" style="margin-bottom: 4px;">
+          <h3>Suas renovações <span class="note">· 30 dias</span></h3>
+          <a class="chip" style="text-decoration:none;">Todas</a>
+        </div>
+        <div class="alert-list">
+          <div class="alert critical">
+            <div class="days"><b>03</b>dias</div>
+            <div class="body">
+              <div class="name">Ótica Vision Plus</div>
+              <div class="meta">Contrato #042 · renovação crítica · fale c/ cliente</div>
+            </div>
+          </div>
+          <div class="alert ok">
+            <div class="days"><b>28</b>dias</div>
+            <div class="body">
+              <div class="name">IMOBI Holding</div>
+              <div class="meta">Contrato #019 · anual · alta probabilidade renovar</div>
+            </div>
+          </div>
+          <div class="alert warn">
+            <div class="days"><b>45</b>dias</div>
+            <div class="body">
+              <div class="name">GirouCrédito</div>
+              <div class="meta">Contrato #033 · atenção na próxima call</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOJAS -->
+    <section>
+      <div class="section-head">
+        <h2 id="lojasTitle">Lojas ativas <span class="count" id="lojasCount">14 empresas · 8 gestores</span></h2>
+        <div style="display:flex; gap:6px;">
+          <button class="chip active">Todas</button>
+          <button class="chip">Com alerta</button>
+          <button class="chip">Acima da meta</button>
+        </div>
+      </div>
+      <div class="store-grid">
+        <div class="store">
+          <div class="top"><div class="mark">I</div><span class="status green">ACIMA DA META</span></div>
+          <h4>IMOBI Holding</h4>
+          <div class="handle">@imobi.holding</div>
+          <div class="store-metrics">
+            <div><div class="mlabel">IVM</div><div class="mval">48<small>k</small></div></div>
+            <div><div class="mlabel">Vendas</div><div class="mval">284<small>k</small></div></div>
+            <div><div class="mlabel">CAC</div><div class="mval">R$ 168</div></div>
+          </div>
+          <div class="store-footer"><div class="gestor-chip"><i>B</i>Bianca</div><a href="#">Detalhes →</a></div>
+        </div>
+
+        <div class="store">
+          <div class="top"><div class="mark">V</div><span class="status red">ATENÇÃO</span></div>
+          <h4>Ótica Vision Plus</h4>
+          <div class="handle">@oticavisionplus</div>
+          <div class="store-metrics">
+            <div><div class="mlabel">IVM</div><div class="mval">12<small>k</small></div></div>
+            <div><div class="mlabel">Vendas</div><div class="mval">38<small>k</small></div></div>
+            <div><div class="mlabel">CAC</div><div class="mval">R$ 312</div></div>
+          </div>
+          <div class="store-footer"><div class="gestor-chip"><i>B</i>Bianca</div><a href="#">Detalhes →</a></div>
+        </div>
+
+        <div class="store">
+          <div class="top"><div class="mark">G</div><span class="status red">QUEDA 14%</span></div>
+          <h4>GirouCrédito</h4>
+          <div class="handle">@giroucredito</div>
+          <div class="store-metrics">
+            <div><div class="mlabel">IVM</div><div class="mval">14<small>k</small></div></div>
+            <div><div class="mlabel">Vendas</div><div class="mval">44<small>k</small></div></div>
+            <div><div class="mlabel">CAC</div><div class="mval">R$ 218</div></div>
+          </div>
+          <div class="store-footer"><div class="gestor-chip"><i>B</i>Bianca</div><a href="#">Detalhes →</a></div>
+        </div>
+
+        <div class="store store-admin-only">
+          <div class="top"><div class="mark">B</div><span class="status green">NO RITMO</span></div>
+          <h4>Padaria Bom Pão</h4>
+          <div class="handle">@padariabompao</div>
+          <div class="store-metrics">
+            <div><div class="mlabel">IVM</div><div class="mval">4,2<small>k</small></div></div>
+            <div><div class="mlabel">Vendas</div><div class="mval">52<small>k</small></div></div>
+            <div><div class="mlabel">CAC</div><div class="mval">R$ 44</div></div>
+          </div>
+          <div class="store-footer"><div class="gestor-chip"><i>J</i>João</div><a href="#">Detalhes →</a></div>
+        </div>
+
+        <div class="store store-admin-only">
+          <div class="top"><div class="mark">S</div><span class="status neutral">OBSERVAR</span></div>
+          <h4>Clínica Sorriso</h4>
+          <div class="handle">@clinicasorriso</div>
+          <div class="store-metrics">
+            <div><div class="mlabel">IVM</div><div class="mval">8,8<small>k</small></div></div>
+            <div><div class="mlabel">Vendas</div><div class="mval">71<small>k</small></div></div>
+            <div><div class="mlabel">CAC</div><div class="mval">R$ 124</div></div>
+          </div>
+          <div class="store-footer"><div class="gestor-chip"><i>M</i>Marcelo</div><a href="#">Detalhes →</a></div>
+        </div>
+
+        <div class="store store-admin-only">
+          <div class="top"><div class="mark">T</div><span class="status green">ACIMA DA META</span></div>
+          <h4>Tráfego Manaus</h4>
+          <div class="handle">@trafegomanaus</div>
+          <div class="store-metrics">
+            <div><div class="mlabel">IVM</div><div class="mval">22<small>k</small></div></div>
+            <div><div class="mlabel">Vendas</div><div class="mval">198<small>k</small></div></div>
+            <div><div class="mlabel">CAC</div><div class="mval">R$ 94</div></div>
+          </div>
+          <div class="store-footer"><div class="gestor-chip"><i>R</i>Ricardo</div><a href="#">Detalhes →</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nota de paleta -->
+    <div class="palette-note">
+      <div class="swatch">
+        <div class="sw" style="background: #1a3268;" data-hex="#1a3268"></div>
+        <div class="sw" style="background: #2a5299;" data-hex="#2a5299"></div>
+        <div class="sw" style="background: #3b6fa0;" data-hex="#3b6fa0"></div>
+        <div class="sw" style="background: #5b8dc7;" data-hex="#5b8dc7"></div>
+      </div>
+      <p>
+        <b>Paleta Propagar (sampleada do Instagram)</b><br>
+        Azul navy profundo como core, azul navegável mais claro como acento/hover. Base preta puxada pro azul (#050810) pra casar com a paleta. Dourado vira acento raro (só pra premiar algo especial). Verde/vermelho mantidos pra status (alta/queda).
+      </p>
+    </div>
+
+  </main>
+
+  <script>
+    function setRole(r) {
+      document.body.setAttribute('data-role', r);
+      const u = document.getElementById('userAvatar');
+      const n = document.getElementById('userName');
+      const role = document.getElementById('userRole');
+      const lojasTitle = document.getElementById('lojasTitle');
+      const lojasCount = document.getElementById('lojasCount');
+
+      if (r === 'admin') {
+        u.textContent = 'R';
+        u.style.background = 'linear-gradient(135deg, #5b8dc7, #2a5299)';
+        u.style.color = '#fff';
+        n.textContent = 'Roberto Araújo';
+        role.textContent = 'Admin · CEO';
+        lojasTitle.childNodes[0].nodeValue = 'Lojas ativas ';
+        lojasCount.textContent = '14 empresas · 8 gestores';
+      } else {
+        u.textContent = 'B';
+        u.style.background = 'linear-gradient(135deg, #c084fc, #8b5cf6)';
+        u.style.color = '#fff';
+        n.textContent = 'Bianca Lima';
+        role.textContent = 'Gestor de Tráfego';
+        lojasTitle.childNodes[0].nodeValue = 'Sua carteira ';
+        lojasCount.textContent = '3 empresas';
+      }
+    }
+  </script>
+</body>
+</html>
