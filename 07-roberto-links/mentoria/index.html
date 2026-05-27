@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentoria Exclusiva — Roberto Araújo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap');
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: #1a1a1a;
+            --bg-card-hover: #222222;
+            --gold: #d4a853;
+            --gold-light: #f0d48a;
+            --gold-dark: #b8923e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --green: #22c55e;
+            --red: #ef4444;
+            --blue: #3b82f6;
+            --orange: #f97316;
+            --purple: #a855f7;
+            --border: #2a2a2a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }
+
+        /* BOTÃO WHATSAPP FLUTUANTE */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 999;
+            background: #25D366;
+            color: #fff;
+            border-radius: 50px;
+            padding: 14px 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4), 0 0 0 0 rgba(37, 211, 102, 0.7);
+            transition: all 0.3s;
+            animation: pulseWhats 2.5s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(37, 211, 102, 0.6);
+            animation: none;
+        }
+
+        .whatsapp-float svg {
+            width: 22px;
+            height: 22px;
+            fill: #fff;
+        }
+
+        @keyframes pulseWhats {
+            0% { box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4), 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4), 0 0 0 18px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4), 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        /* BOTÃO CTA PRIMÁRIO */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: #000;
+            padding: 1rem 2.2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s;
+            border: 2px solid var(--gold);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 168, 83, 0.4);
+            background: var(--gold-light);
+        }
+
+        .btn-primary svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        @media (max-width: 600px) {
+            .whatsapp-float {
+                bottom: 16px;
+                right: 16px;
+                padding: 12px 18px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: radial-gradient(ellipse at 50% 0%, rgba(212,168,83,0.1) 0%, transparent 50%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, transparent 0%, var(--bg-primary) 100%),
+                repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(255,255,255,0.02) 50px);
+            pointer-events: none;
+        }
+
+        .hero-content { position: relative; z-index: 1; max-width: 850px; }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.4rem 1.4rem;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            background: rgba(212,168,83,0.05);
+        }
+
+        .hero h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            letter-spacing: 4px;
+            line-height: 0.95;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 span { color: var(--gold); }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin: 0 auto 2rem;
+            line-height: 1.7;
+        }
+
+        .hero-tagline {
+            font-style: italic;
+            color: var(--gold-light);
+            font-size: 1.05rem;
+            opacity: 0.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+        }
+
+        .hero-stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .scroll-indicator span {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: scrollPulse 2s infinite;
+        }
+
+        .scroll-indicator small {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+        }
+
+        @keyframês scrollPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+        /* NAV */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10,10,10,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.8rem 0;
+            overflow-x: auto;
+        }
+
+        .nav-inner {
+            display: flex;
+            gap: 0.3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            justify-content: center;
+            flex-wrap: nowrap;
+        }
+
+        .nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav a:hover { color: var(--gold); background: rgba(212,168,83,0.1); }
+
+        /* SECTIONS */
+        .section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .section-header { text-align: center; margin-bottom: 3rem; }
+
+        .section-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: var(--gold);
+            opacity: 0.3;
+            line-height: 1;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            margin: 0.5rem 0;
+        }
+
+        .section-subtitle { color: var(--text-secondary); font-size: 0.95rem; }
+
+        /* CARDS */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--gold-dark);
+            transform: translateY(-2px);
+        }
+
+        .card h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .card p, .card li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+        .card ul { list-style: none; padding: 0; }
+
+        .card ul li { padding: 0.4rem 0; padding-left: 1.2rem; position: relative; }
+
+        .card ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.85rem;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gold);
+        }
+
+        /* FULL CARD */
+        .card-full {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-full h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .card-full p, .card-full li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8; }
+        .card-full ul { list-style: none; padding: 0; }
+        .card-full ul li { padding: 0.5rem 0 0.5rem 1.2rem; position: relative; }
+        .card-full ul li::before { content: ''; position: absolute; left: 0; top: 0.9rem; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+
+        /* TAGS */
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.7rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0.2rem;
+        }
+
+        .tag-gold { background: rgba(212,168,83,0.15); color: var(--gold); }
+        .tag-green { background: rgba(34,197,94,0.15); color: var(--green); }
+        .tag-blue { background: rgba(59,130,246,0.15); color: var(--blue); }
+        .tag-orange { background: rgba(249,115,22,0.15); color: var(--orange); }
+        .tag-purple { background: rgba(168,85,247,0.15); color: var(--purple); }
+        .tag-red { background: rgba(239,68,68,0.15); color: var(--red); }
+
+        /* DIVIDER */
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.3;
+        }
+
+        /* COMPARISON TABLE */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .comparison-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .comparison-card:hover {
+            border-color: var(--gold-dark);
+            transform: translateY(-3px);
+        }
+
+        .comparison-card.featured {
+            border-color: var(--gold);
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212,168,83,0.05) 100%);
+        }
+
+        .comparison-card .badge-corner {
+            position: absolute;
+            top: 18px;
+            right: -32px;
+            background: var(--gold);
+            color: #000;
+            font-size: 0.55rem;
+            font-weight: 800;
+            padding: 0.25rem 2.2rem;
+            transform: rotate(45deg);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .comparison-card .format-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .comparison-card .format-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-card h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-card .desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .comparison-card ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+
+        .comparison-card ul li {
+            padding: 0.6rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .comparison-card ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--green);
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .comparison-card .price-block {
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .comparison-card .price-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+        }
+
+        .comparison-card .price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.8rem;
+            letter-spacing: 1px;
+        }
+
+        .comparison-card .price-installment {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 0.2rem;
+        }
+
+        .comparison-card .price-cash {
+            color: var(--green);
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* TIMELINE */
+        .timeline { position: relative; padding-left: 2rem; }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--gold), var(--gold-dark), transparent);
+        }
+
+        .timeline-item { position: relative; margin-bottom: 2.5rem; padding-left: 1.5rem; }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.35rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--gold);
+            border: 3px solid var(--bg-primary);
+        }
+
+        .timeline-item h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-item .week-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item p, .timeline-item li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+        .timeline-item ul { list-style: none; padding: 0; }
+        .timeline-item ul li { padding: 0.3rem 0 0.3rem 1.2rem; position: relative; }
+        .timeline-item ul li::before { content: ''; position: absolute; left: 0; top: 0.75rem; width: 6px; height: 6px; border-radius: 50%; background: var(--gold-dark); }
+
+        /* ACCORDION */
+        .accordion { margin: 1rem 0; }
+
+        .accordion-item {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background: var(--bg-card);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .accordion-header:hover { background: var(--bg-card-hover); }
+        .accordion-header h4 { font-size: 0.9rem; font-weight: 600; }
+        .accordion-header .icon { color: var(--gold); font-size: 1.2rem; transition: transform 0.3s; }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: var(--bg-secondary);
+        }
+
+        .accordion-body-inner { padding: 1.5rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8; }
+
+        .accordion-item.active .accordion-body { max-height: 1000px; }
+        .accordion-item.active .icon { transform: rotate(45deg); }
+
+        /* TABLE */
+        .table-wrapper { overflow-x: auto; margin: 1rem 0; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+
+        th {
+            background: var(--bg-card);
+            color: var(--gold);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--gold-dark);
+        }
+
+        td { padding: 0.8rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+        tr:hover td { background: rgba(212,168,83,0.03); }
+
+        .check { color: var(--green); font-weight: 700; }
+        .dash { color: var(--text-muted); }
+
+        /* METRIC */
+        .metric-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .metric-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            min-width: 150px;
+            flex: 1;
+            max-width: 220px;
+        }
+
+        .metric-box .number { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--gold); }
+        .metric-box .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-top: 0.3rem; }
+
+        /* CTA */
+        .cta-section {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: radial-gradient(ellipse at 50% 50%, rgba(212,168,83,0.06) 0%, transparent 70%);
+        }
+
+        .cta-section h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero-stats { gap: 1.5rem; }
+            .section { padding: 3rem 1rem; }
+            .section-title { font-size: 1.8rem; }
+            .card-grid, .card-grid-2, .comparison { grid-template-columns: 1fr; }
+            .nav-inner { justify-content: flex-start; }
+            .comparison-card .price { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- WHATSAPP FLUTUANTE -->
+    <a href="https://wa.me/5548999597067?text=Ol%C3%A1%20Roberto%2C%20vim%20da%20p%C3%A1gina%20da%20Mentoria%20Exclusiva%20e%20quero%20agendar%20uma%20call%20de%20diagn%C3%B3stico." target="_blank" rel="noopener" class="whatsapp-float">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span>Falar no WhatsApp</span>
+    </a>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Acesso Exclusivo</div>
+            <h1>MENTORIA <span>EXCLUSIVA</span></h1>
+            <p class="hero-subtitle">Acompanhamento individual e estratégico para empresários que querem estruturar vendas, posicionamento e gestão comercial com profundidade — online ou presencial.</p>
+            <div class="hero-tagline">
+                "Mentoria não é aula. É eu sentando do seu lado e construindo junto até funcionar."
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-number">1:1</div>
+                    <div class="hero-stat-label">Individual</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">2</div>
+                    <div class="hero-stat-label">Formatos</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">100%</div>
+                    <div class="hero-stat-label">Personalizado</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">ROI</div>
+                    <div class="hero-stat-label">Mensurável</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <a href="https://wa.me/5548999597067?text=Ol%C3%A1%20Roberto%2C%20vim%20da%20p%C3%A1gina%20da%20Mentoria%20Exclusiva%20e%20quero%20agendar%20uma%20call%20de%20diagn%C3%B3stico." target="_blank" rel="noopener" class="btn-primary">
+                    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    Agendar diagnóstico
+                </a>
+                <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 1rem; text-transform: uppercase; letter-spacing: 2px;">Vagas limitadas — 5 online / 2 presenciais por mês</p>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+            <small>Role para baixo</small>
+        </div>
+    </section>
+
+    <!-- NAV -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#problema">O Problema</a>
+            <a href="#autoridade">Autoridade</a>
+            <a href="#formatos">Formatos</a>
+            <a href="#online">Online</a>
+            <a href="#presencial">Presencial</a>
+            <a href="#comparativo">Comparativo</a>
+            <a href="#pilares">Pilares</a>
+            <a href="#entregaveis">Entregáveis</a>
+            <a href="#bonus">Bônus</a>
+            <a href="#resultados">Resultados</a>
+            <a href="#prova">Depoimentos</a>
+            <a href="#faq">FAQ</a>
+            <a href="#vagas">Vagas</a>
+            <a href="#garantia">Garantia</a>
+            <a href="#investimento">Investimento</a>
+        </div>
+    </nav>
+
+    <!-- 01 O PROBLEMA -->
+    <section class="section" id="problema">
+        <div class="section-header">
+            <div class="section-number">01</div>
+            <h2 class="section-title">O PROBLEMA QUE ESSA MENTORIA RESOLVE</h2>
+            <p class="section-subtitle">Por que empresários travam mesmo faturando bem</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>VENDE, MAS NÃO ESCALA</h3>
+                <p>Fatura, mas depende 100% do dono. Não tem processo. Não tem previsibilidade. Cada mês e um sufoco diferente.</p>
+            </div>
+            <div class="card">
+                <h3>POSTA, MAS NÃO CONVERTE</h3>
+                <p>Tem presença digital, mas não gera lead qualificado. O conteúdo não esta conectado a um funil. Marketing e vendas não conversam.</p>
+            </div>
+            <div class="card">
+                <h3>TEM EQUIPE, MAS NÃO TEM SISTEMA</h3>
+                <p>Os vendedores não seguem processo. Não tem CRM. Não tem cadência. Leads esfriam, follow-up não acontece, dinheiro fica na mesa.</p>
+            </div>
+        </div>
+
+        <div class="card-full" style="margin-top: 1.5rem; text-align: center;">
+            <h3>A MENTORIA EXCLUSIVA EXISTE PARA RESOLVER ISSO EM PROFUNDIDADE</h3>
+            <p>Não é conteúdo genérico. É diagnóstico individual, estratégia sob medida e implementação acompanhada — no seu ritmo, no seu negócio, com as suas particularidades.</p>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- AUTORIDADE -->
+    <section class="section" id="autoridade">
+        <div class="section-header">
+            <div class="section-number">QUEM</div>
+            <h2 class="section-title">QUEM TÁ DO OUTRO LADO</h2>
+            <p class="section-subtitle">Não é mentor de PowerPoint. É dono de operação que gera resultado todo dia.</p>
+        </div>
+
+        <div class="autoridade-grid">
+            <!-- FOTO -->
+            <div class="autoridade-foto">
+                <img src="/mentoria/roberto-autoridade.jpg" alt="Roberto Araújo — Fundador do Grupo Propagar" />
+                <div class="autoridade-foto-overlay"></div>
+                <div class="autoridade-foto-caption">
+                    <span class="tag tag-gold">Roberto Araújo</span>
+                    <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 2px; color: var(--gold); margin-top: 0.6rem; line-height: 1.15;">FUNDADOR DO GRUPO PROPAGAR</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.3rem; letter-spacing: 1px; text-transform: uppercase;">Um hub de agências</p>
+                    <p style="color: var(--gold-dark); font-size: 0.85rem; margin-top: 0.5rem;">@orobertoaraujo</p>
+                </div>
+            </div>
+
+            <!-- TEXTO + NÚMEROS -->
+            <div style="display: grid; grid-template-rows: auto auto; gap: 1.5rem;">
+                <div class="card-full" style="border-color: var(--gold-dark); margin-bottom: 0;">
+                    <h3>DE MANAUS PRO BRASIL TODO</h3>
+                    <p>Saí de Manaus com pouco dinheiro e criei o <strong style="color: var(--gold);">Grupo Propagar</strong> — um hub de agências de marketing que hoje atende empresas no Brasil inteiro.</p>
+                    <p style="margin-top: 1rem;">Não aprendi a empreender em curso. Aprendi na operação — errando, ajustando, escalando. Hoje mentoro empresários que querem o mesmo: parar de improvisar e construir sistema que funciona sem eles.</p>
+                    <p style="margin-top: 1.2rem; color: var(--gold-light); font-style: italic; font-size: 0.95rem; border-left: 3px solid var(--gold); padding-left: 1rem;">"Mentoria de quem ainda opera. Não de quem só ensina."</p>
+                </div>
+
+                <div class="card-full" style="background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212,168,83,0.08) 100%); border-color: var(--gold); margin-bottom: 0;">
+                    <span class="tag tag-gold">Números reais</span>
+                    <h3 style="color: var(--gold); margin-top: 0.8rem;">O QUE A OPERAÇÃO ENTREGA</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                        <div style="border-right: 1px solid var(--border); padding-right: 1rem;">
+                            <div style="font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--gold); line-height: 1; letter-spacing: 2px;">+500</div>
+                            <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-top: 0.5rem;">Projetos gerenciados na carreira</div>
+                        </div>
+                        <div>
+                            <div style="font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--gold); line-height: 1; letter-spacing: 2px;">R$15MI</div>
+                            <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-top: 0.5rem;">Gerados pra clientes só no último semestre</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-full" style="margin-top: 2rem; text-align: center; background: var(--bg-secondary);">
+            <p style="font-size: 1rem; color: var(--text-primary);">Quando você contrata a Mentoria Exclusiva, você não compra conteúdo reciclado. <strong style="color: var(--gold);">Você entra dentro da mesma operação que gerou R$ 15 milhões pros nossos clientes no último semestre.</strong></p>
+        </div>
+
+        <style>
+            .autoridade-grid {
+                display: grid;
+                grid-template-columns: 1fr 1.3fr;
+                gap: 2rem;
+                align-items: stretch;
+            }
+            .autoridade-foto {
+                position: relative;
+                border-radius: 12px;
+                overflow: hidden;
+                border: 1px solid var(--gold-dark);
+                background: var(--bg-card);
+                min-height: 480px;
+            }
+            .autoridade-foto img {
+                width: 100%;
+                height: 100%;
+                min-height: 480px;
+                object-fit: cover;
+                object-position: center 25%;
+                display: block;
+            }
+            .autoridade-foto-overlay {
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.4) 45%, rgba(10,10,10,0.1) 100%);
+                pointer-events: none;
+            }
+            .autoridade-foto-caption {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 1.8rem;
+                z-index: 2;
+            }
+            @media (max-width: 768px) {
+                .autoridade-grid {
+                    grid-template-columns: 1fr;
+                    gap: 1.2rem;
+                }
+                .autoridade-foto,
+                .autoridade-foto img {
+                    min-height: 420px;
+                }
+                .autoridade-foto img {
+                    object-position: center 20%;
+                }
+            }
+        </style>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 02 FORMATOS -->
+    <section class="section" id="formatos">
+        <div class="section-header">
+            <div class="section-number">02</div>
+            <h2 class="section-title">DOIS FORMATOS, UM OBJETIVO</h2>
+            <p class="section-subtitle">Escolha o formato que melhor se encaixa na sua rotina e no seu momento</p>
+        </div>
+
+        <div class="comparison">
+            <!-- ONLINE -->
+            <div class="comparison-card">
+                <div class="format-icon">💻</div>
+                <div class="format-label">Formato 1</div>
+                <h3>MENTORIA ONLINE</h3>
+                <p class="desc">Para quem quer profundidade e acompanhamento contínuo sem sair da rotina. 12 semanas de transformação estrategica.</p>
+                <ul>
+                    <li>12 encontros semanais ao vivo (1h30)</li>
+                    <li>Calls individuais via Zoom/Google Meet</li>
+                    <li>Gravação de todos os encontros</li>
+                    <li>Suporte diário no WhatsApp</li>
+                    <li>Revisão de CRM entre encontros</li>
+                    <li>Templates e playbooks exclusivos</li>
+                    <li>Correção de rota em tempo real</li>
+                    <li>Acesso vitalício aos materiais</li>
+                </ul>
+            </div>
+
+            <!-- PRESENCIAL -->
+            <div class="comparison-card featured">
+                <div class="badge-corner">Premium</div>
+                <div class="format-icon">🏢</div>
+                <div class="format-label">Formato 2</div>
+                <h3>MENTORIA PRESENCIAL</h3>
+                <p class="desc">Imersão total dentro do seu negócio. Eu vou até você, diagnóstico in loco, implemento junto e treino sua equipe presencialmente.</p>
+                <ul>
+                    <li>2 dias de imersão presencial (8h/dia)</li>
+                    <li>Diagnóstico in loco do negócio</li>
+                    <li>CRM configurado e operando no local</li>
+                    <li>Treinamento presencial da equipe</li>
+                    <li>Playbook comercial montado na hora</li>
+                    <li>Acompanhamento online por 8 semanas após</li>
+                    <li>8 calls de follow-up (1h cada)</li>
+                    <li>Suporte WhatsApp por 90 dias</li>
+                    <li>Todos os templates e materiais</li>
+                    <li>Deslocamento e hospedagem inclusos*</li>
+                </ul>
+            </div>
+        </div>
+
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.75rem; margin-top: 1.5rem;">*Deslocamento e hospedagem inclusos para capitais e regiões metropolitanas. Demais localidades sob consulta.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 03 ONLINE DETALHADO -->
+    <section class="section" id="online">
+        <div class="section-header">
+            <div class="section-number">03</div>
+            <h2 class="section-title">MENTORIA ONLINE — SEMANA A SEMANA</h2>
+            <p class="section-subtitle">12 semanas de implementação progressiva</p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="week-label">Semanas 1-2 — Diagnóstico + Posicionamento</div>
+                <h4>Fundação Estrategica</h4>
+                <ul>
+                    <li>Formulário de diagnóstico profundo</li>
+                    <li>Análise completa do cenário: canais, vendas, equipe, processos</li>
+                    <li>Definição do ICP (Perfil de Cliente Ideal)</li>
+                    <li>Proposta de valor única construída</li>
+                    <li>Posicionamento de marca e narrativa definidos</li>
+                    <li>Metas claras para as 12 semanas</li>
+                </ul>
+            </div>
+            <div class="timeline-item">
+                <div class="week-label">Semanas 3-4 — Conteúdo Estrategico</div>
+                <h4>Presença que Converte</h4>
+                <ul>
+                    <li>Pilares de conteúdo alinhados ao funil de vendas</li>
+                    <li>Grade de publicação semanal</li>
+                    <li>Calendário editorial de 30 dias</li>
+                    <li>Banco de headlines e CTAs</li>
+                    <li>Conteúdo de topo, meio e fundo de funil</li>
+                    <li>Revisão dos primeiros conteúdos produzidos</li>
+                </ul>
+            </div>
+            <div class="timeline-item">
+                <div class="week-label">Semanas 5-6 — Funil + Captação</div>
+                <h4>Máquina de Leads</h4>
+                <ul>
+                    <li>Funil de vendas completo desenhado</li>
+                    <li>Pontos de captação ativos (orgânico + pago)</li>
+                    <li>Landing page ou formulário no ar</li>
+                    <li>Automações de primeiro contato</li>
+                    <li>Regras de qualificação (MQL / SQL)</li>
+                    <li>Primeiros leads entrando no sistema</li>
+                </ul>
+            </div>
+            <div class="timeline-item">
+                <div class="week-label">Semanas 7-8 — CRM Implementado</div>
+                <h4>Sistema Comercial</h4>
+                <ul>
+                    <li>CRM escolhido, configurado e operando</li>
+                    <li>Pipeline personalizado com etapas do seu negócio</li>
+                    <li>Campos, tags e automações configurados</li>
+                    <li>Integrações (WhatsApp, email, calendário)</li>
+                    <li>Alertas de leads parados e follow-up automático</li>
+                    <li>Teste completo do fluxo end-to-end</li>
+                </ul>
+            </div>
+            <div class="timeline-item">
+                <div class="week-label">Semanas 9-10 — Processo + Equipe</div>
+                <h4>Time Alinhado</h4>
+                <ul>
+                    <li>Playbook de vendas documentado</li>
+                    <li>Scripts de abordagem por canal e etapa</li>
+                    <li>Cadência de follow-up estruturada</li>
+                    <li>Treinamento da equipe no CRM</li>
+                    <li>Rotina diária do vendedor definida</li>
+                    <li>Simulações de abordagem e objeções</li>
+                </ul>
+            </div>
+            <div class="timeline-item">
+                <div class="week-label">Semanas 11-12 — Métricas + Escala</div>
+                <h4>Crescimento Previsível</h4>
+                <ul>
+                    <li>Dashboard de KPIs montado</li>
+                    <li>Reunião de pipeline estruturada</li>
+                    <li>Análise de conversão por etapa</li>
+                    <li>Identificação e correção de gargalos</li>
+                    <li>Plano de escala para 90 dias</li>
+                    <li>Call de encerramento com roadmap</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 04 PRESENCIAL DETALHADO -->
+    <section class="section" id="presencial">
+        <div class="section-header">
+            <div class="section-number">04</div>
+            <h2 class="section-title">MENTORIA PRESENCIAL — AGENDA DA IMERSÃO</h2>
+            <p class="section-subtitle">2 dias intensivos no seu negócio + 8 semanas de acompanhamento</p>
+        </div>
+
+        <div class="card-grid-2">
+            <div class="card" style="border-color: var(--gold-dark);">
+                <span class="tag tag-gold">Dia 1 — Diagnóstico + Estratégia</span>
+                <h3>MANHÃ (9h - 12h30)</h3>
+                <ul>
+                    <li>Imersão no negócio: visita a operação</li>
+                    <li>Entrevista com dono + equipe comercial</li>
+                    <li>Mapeamento do processo atual de vendas</li>
+                    <li>Análise de canais, métricas e gargalos</li>
+                    <li>Identificação de dinheiro na mesa (oportunidades imediatas)</li>
+                </ul>
+                <h3 style="margin-top: 1.5rem;">TARDE (14h - 18h)</h3>
+                <ul>
+                    <li>Definição do ICP e proposta de valor</li>
+                    <li>Posicionamento de marca construído</li>
+                    <li>Funil de vendas desenhado no quadro</li>
+                    <li>Pilares de conteúdo e estratégia de captação</li>
+                    <li>Prioridades definidas para o Dia 2</li>
+                </ul>
+            </div>
+            <div class="card" style="border-color: var(--gold-dark);">
+                <span class="tag tag-gold">Dia 2 — Implementação + Treinamento</span>
+                <h3>MANHÃ (9h - 12h30)</h3>
+                <ul>
+                    <li>CRM configurado do zero (pipeline, campos, tags)</li>
+                    <li>Automações ativas (boas-vindas, alertas, follow-up)</li>
+                    <li>Integrações configuradas (WhatsApp, email, calendário)</li>
+                    <li>Playbook de vendas documentado</li>
+                    <li>Scripts de abordagem prontos</li>
+                </ul>
+                <h3 style="margin-top: 1.5rem;">TARDE (14h - 18h)</h3>
+                <ul>
+                    <li>Treinamento presencial da equipe no CRM</li>
+                    <li>Simulação de atendimento completo</li>
+                    <li>Cadência de follow-up na pratica</li>
+                    <li>Dashboard de KPIs configurado</li>
+                    <li>Plano de ação documentado para as próximas 8 semanas</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card-full" style="margin-top: 2rem;">
+            <h3>APÓS A IMERSÃO — 8 SEMANAS DE ACOMPANHAMENTO</h3>
+            <ul>
+                <li><strong>Semanas 1-2:</strong> Ajustes finos no CRM e processo. Primeira revisão de métricas. Correção de rota rápida.</li>
+                <li><strong>Semanas 3-4:</strong> Revisão dos primeiros resultados. Otimização de scripts e cadências. Análise de taxa de conversão.</li>
+                <li><strong>Semanas 5-6:</strong> Acompanhamento de performance da equipe. Novos treinamentos se necessário. Ajuste de automações.</li>
+                <li><strong>Semanas 7-8:</strong> Revisão geral de KPIs. Dashboard atualizado. Plano de escala para os próximos 90 dias. Call de encerramento.</li>
+            </ul>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 05 COMPARATIVO -->
+    <section class="section" id="comparativo">
+        <div class="section-header">
+            <div class="section-number">05</div>
+            <h2 class="section-title">COMPARATIVO ENTRE FORMATOS</h2>
+            <p class="section-subtitle">Veja lado a lado o que cada formato inclui</p>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <tr>
+                    <th style="width: 40%;">Recurso</th>
+                    <th style="text-align: center;">Online</th>
+                    <th style="text-align: center;">Presencial</th>
+                </tr>
+                <tr>
+                    <td>Diagnóstico completo do negócio</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Diagnóstico presencial in loco</td>
+                    <td style="text-align: center;" class="dash">—</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Definição de ICP + Proposta de Valor</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Posicionamento de marca</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Estratégia de conteúdo + calendário</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Funil de vendas completo</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>CRM configurado e operando</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Automações do CRM</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Playbook + Scripts de vendas</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Treinamento da equipe</td>
+                    <td style="text-align: center; color: var(--blue);">Remoto</td>
+                    <td style="text-align: center; color: var(--gold);">Presencial</td>
+                </tr>
+                <tr>
+                    <td>Simulações de atendimento ao vivo</td>
+                    <td style="text-align: center;" class="dash">—</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Dashboard de KPIs</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Encontros ao vivo</td>
+                    <td style="text-align: center; color: var(--blue);">12 calls (1h30)</td>
+                    <td style="text-align: center; color: var(--gold);">2 dias (16h) + 8 calls</td>
+                </tr>
+                <tr>
+                    <td>Suporte WhatsApp</td>
+                    <td style="text-align: center; color: var(--blue);">12 semanas</td>
+                    <td style="text-align: center; color: var(--gold);">90 dias</td>
+                </tr>
+                <tr>
+                    <td>Templates e materiais</td>
+                    <td style="text-align: center;" class="check">✓ Vitalicio</td>
+                    <td style="text-align: center;" class="check">✓ Vitalicio</td>
+                </tr>
+                <tr>
+                    <td>Plano de escala 90 dias</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                    <td style="text-align: center;" class="check">✓</td>
+                </tr>
+                <tr>
+                    <td>Velocidade de implementação</td>
+                    <td style="text-align: center; color: var(--blue);">Progressiva</td>
+                    <td style="text-align: center; color: var(--gold);">Acelerada</td>
+                </tr>
+                <tr style="background: rgba(212,168,83,0.05);">
+                    <td style="font-weight: 700; color: var(--text-primary);">Investimento</td>
+                    <td style="text-align: center;" colspan="2"><a href="#investimento" style="color: var(--gold); text-decoration: none; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Ver valores abaixo ↓</a></td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 06 PILARES -->
+    <section class="section" id="pilares">
+        <div class="section-header">
+            <div class="section-number">06</div>
+            <h2 class="section-title">OS 5 PILARES DA MENTORIA</h2>
+            <p class="section-subtitle">As áreas que serão transformadas no seu negócio</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <span class="tag tag-gold">Pilar 1</span>
+                <h3>POSICIONAMENTO</h3>
+                <ul>
+                    <li>Quem você e no mercado</li>
+                    <li>Por que o cliente escolhe você</li>
+                    <li>Narrativa que diferencia</li>
+                    <li>Autoridade construída com intenção</li>
+                </ul>
+            </div>
+            <div class="card">
+                <span class="tag tag-blue">Pilar 2</span>
+                <h3>CONTEÚDO ESTRATÉGICO</h3>
+                <ul>
+                    <li>Conteúdo que atrai o cliente certo</li>
+                    <li>Cada post tem função no funil</li>
+                    <li>Consistência que gera confiança</li>
+                    <li>Conversão, não vaidade</li>
+                </ul>
+            </div>
+            <div class="card">
+                <span class="tag tag-green">Pilar 3</span>
+                <h3>FUNIL DE VENDAS</h3>
+                <ul>
+                    <li>Caminho claro do lead até a venda</li>
+                    <li>Captação ativa e passiva rodando</li>
+                    <li>Qualificação que economiza tempo</li>
+                    <li>Nenhum lead perdido no caminho</li>
+                </ul>
+            </div>
+            <div class="card">
+                <span class="tag tag-orange">Pilar 4</span>
+                <h3>CRM + PROCESSO</h3>
+                <ul>
+                    <li>Sistema que organiza tudo</li>
+                    <li>Automações que não deixam lead esfriar</li>
+                    <li>Equipe seguindo um processo único</li>
+                    <li>Visibilidade total do pipeline</li>
+                </ul>
+            </div>
+            <div class="card">
+                <span class="tag tag-purple">Pilar 5</span>
+                <h3>DADOS + DECISÃO</h3>
+                <ul>
+                    <li>Dashboard com as métricas que importam</li>
+                    <li>Decisão baseada em número, não achismo</li>
+                    <li>Previsibilidade de faturamento</li>
+                    <li>Escala com controle</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 07 ENTREGÁVEIS -->
+    <section class="section" id="entregaveis">
+        <div class="section-header">
+            <div class="section-number">07</div>
+            <h2 class="section-title">ENTREGÁVEIS</h2>
+            <p class="section-subtitle">Tudo que você recebe — não é só conhecimento, é implementação</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>DOCUMENTOS ESTRATÉGICOS</h3>
+                <ul>
+                    <li>Documento de posicionamento de marca</li>
+                    <li>ICP detalhado e validado</li>
+                    <li>Proposta de valor única escrita</li>
+                    <li>Mapa de funil de vendas completo</li>
+                    <li>Plano de escala 90 dias</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>CONTEÚDO + MARKETING</h3>
+                <ul>
+                    <li>5 pilares de conteúdo definidos</li>
+                    <li>Calendário editorial de 30 dias</li>
+                    <li>Banco de headlines e CTAs</li>
+                    <li>Templates de carrossel e stories</li>
+                    <li>Guia de tom de voz</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>CRM + AUTOMAÇÕES</h3>
+                <ul>
+                    <li>CRM configurado e pronto para usar</li>
+                    <li>Pipeline com etapas personalizadas</li>
+                    <li>Automações ativas e testadas</li>
+                    <li>Integrações funcionando</li>
+                    <li>Dashboard de métricas montado</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>VENDAS + EQUIPE</h3>
+                <ul>
+                    <li>Playbook de vendas completo</li>
+                    <li>Scripts por etapa do funil</li>
+                    <li>Cadência de follow-up documentada</li>
+                    <li>Rotina diária do vendedor</li>
+                    <li>Modelo de reunião de pipeline</li>
+                    <li>Equipe treinada no processo</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- BÔNUS EXCLUSIVOS -->
+    <section class="section" id="bonus" style="background: radial-gradient(ellipse at 50% 0%, rgba(212,168,83,0.08) 0%, transparent 60%);">
+        <div class="section-header">
+            <span class="tag tag-gold" style="font-size: 0.75rem; padding: 0.3rem 1rem; letter-spacing: 2px;">Exclusivo</span>
+            <h2 class="section-title" style="margin-top: 1rem;">+ R$ 14.000 EM BÔNUS</h2>
+            <p class="section-subtitle">Inclusos em qualquer formato — sem custo adicional</p>
+        </div>
+
+        <div class="card-grid-2">
+            <!-- BÔNUS 1 -->
+            <div class="card" style="border-color: var(--gold-dark); position: relative;">
+                <div style="position: absolute; top: 1.5rem; right: 1.5rem; background: var(--gold); color: #000; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;">BÔNUS 01</div>
+                <h3 style="padding-right: 5rem;">AUDITORIA COMERCIAL PRÉ-MENTORIA</h3>
+                <p>Antes de começar, eu mergulho no seu funil, no seu CRM (se tiver) e nas suas conversas de WhatsApp de venda. Entrego um relatório com <strong style="color: var(--gold);">dinheiro na mesa</strong> — oportunidades imediatas que você pode capturar mesmo antes da primeira call.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--border);">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px;">Valor</span>
+                    <span style="font-family: 'Bebas Neue', sans-serif; color: var(--gold); font-size: 1.8rem; letter-spacing: 1px;">R$ 2.000</span>
+                </div>
+            </div>
+
+            <!-- BÔNUS 2 -->
+            <div class="card" style="border-color: var(--gold-dark); position: relative;">
+                <div style="position: absolute; top: 1.5rem; right: 1.5rem; background: var(--gold); color: #000; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;">BÔNUS 02</div>
+                <h3 style="padding-right: 5rem;">PLANO DOS 7 DIAS</h3>
+                <p>Checklist de ações pra implementar na <strong style="color: var(--gold);">primeira semana</strong>, antes mesmo da primeira call. Você já começa colocando a casa em ordem enquanto eu preparo o diagnóstico.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--border);">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px;">Valor</span>
+                    <span style="font-family: 'Bebas Neue', sans-serif; color: var(--gold); font-size: 1.8rem; letter-spacing: 1px;">R$ 1.500</span>
+                </div>
+            </div>
+
+            <!-- BÔNUS 3 -->
+            <div class="card" style="border-color: var(--gold-dark); position: relative;">
+                <div style="position: absolute; top: 1.5rem; right: 1.5rem; background: var(--gold); color: #000; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;">BÔNUS 03</div>
+                <h3 style="padding-right: 5rem;">3 CALLS EM GRUPO — OS 90 DIAS DECISIVOS</h3>
+                <p><strong style="color: var(--gold);">1 call por mês nos primeiros 3 meses</strong>, em grupo pequeno de mentorados. Mês 1: diagnóstico coletivo. Mês 2: revisão de métricas. Mês 3: plano de escala. Network real com donos que faturam R$500k a R$5M/ano.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--border);">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px;">Valor</span>
+                    <span style="font-family: 'Bebas Neue', sans-serif; color: var(--gold); font-size: 1.8rem; letter-spacing: 1px;">R$ 5.000</span>
+                </div>
+            </div>
+
+            <!-- BÔNUS 4 -->
+            <div class="card" style="border-color: var(--gold-dark); position: relative;">
+                <div style="position: absolute; top: 1.5rem; right: 1.5rem; background: var(--gold); color: #000; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;">BÔNUS 04</div>
+                <h3 style="padding-right: 5rem;">2 CALLS DE RESGATE</h3>
+                <p>Depois da mentoria terminar, você tem <strong style="color: var(--gold);">2 calls extras</strong> — uma aos 90 dias, outra aos 180. Pra revisar números, ajustar rota e garantir que o sistema tá rodando.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--border);">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px;">Valor</span>
+                    <span style="font-family: 'Bebas Neue', sans-serif; color: var(--gold); font-size: 1.8rem; letter-spacing: 1px;">R$ 3.000</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- BÔNUS SURPRESA -->
+        <div class="card-full" style="margin-top: 1.5rem; background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212,168,83,0.12) 100%); border: 2px solid var(--gold); position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 1rem; right: -40px; background: var(--gold); color: #000; padding: 0.3rem 3rem; transform: rotate(45deg); font-size: 0.6rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">Bônus Surpresa</div>
+            <span class="tag tag-gold">Bônus 05</span>
+            <h3 style="color: var(--gold); margin-top: 0.8rem;">BIBLIOTECA PROPAGAR</h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8;">Mais de 50 documentos prontos para o seu negócio: <strong style="color: var(--text-primary);">contratos de venda, propostas comerciais, scripts de objeção, playbook de vendas, dashboards prontos, templates de carrossel, e-mails de follow-up</strong>. Só trocar o logo e começar a usar. Essa biblioteca eu construí ao longo de 500+ projetos — você herda tudo.</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--gold-dark);">
+                <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1.5px;">Valor estimado</span>
+                <span style="font-family: 'Bebas Neue', sans-serif; color: var(--gold); font-size: 2.2rem; letter-spacing: 1px;">R$ 2.500</span>
+            </div>
+        </div>
+
+        <!-- TOTAL -->
+        <div class="card-full" style="margin-top: 2rem; text-align: center; background: #000; border: 1px solid var(--gold);">
+            <p style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px;">Valor total dos bônus</p>
+            <div style="font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: var(--gold); letter-spacing: 3px; margin-top: 0.5rem; line-height: 1;">R$ 14.000</div>
+            <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 1rem;">Inclusos em <strong style="color: var(--gold);">qualquer formato</strong> da mentoria — sem cobrança adicional.</p>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 08 RESULTADOS -->
+    <section class="section" id="resultados">
+        <div class="section-header">
+            <div class="section-number">08</div>
+            <h2 class="section-title">O QUE ESPERAR DE RESULTADO</h2>
+            <p class="section-subtitle">Transformações tangíveis ao final da mentoria</p>
+        </div>
+
+        <div class="metric-row">
+            <div class="metric-box">
+                <div class="number">+40%</div>
+                <div class="label">Taxa de Resposta</div>
+            </div>
+            <div class="metric-box">
+                <div class="number">-60%</div>
+                <div class="label">Leads Perdidos</div>
+            </div>
+            <div class="metric-box">
+                <div class="number">+25%</div>
+                <div class="label">Taxa Fechamento</div>
+            </div>
+            <div class="metric-box">
+                <div class="number">100%</div>
+                <div class="label">Processo Definido</div>
+            </div>
+        </div>
+
+        <div class="card-grid-2">
+            <div class="card-full">
+                <h3>ANTES DA MENTORIA</h3>
+                <ul>
+                    <li>Vende na base do improviso</li>
+                    <li>Não sabe de onde vem o lead</li>
+                    <li>Equipe sem padrão de atendimento</li>
+                    <li>Sem CRM ou CRM abandonado</li>
+                    <li>Follow-up inexistente</li>
+                    <li>Faturamento imprevisível</li>
+                    <li>Conteúdo sem estratégia</li>
+                    <li>Dono faz tudo sozinho</li>
+                </ul>
+            </div>
+            <div class="card-full">
+                <h3>DEPOIS DA MENTORIA</h3>
+                <ul>
+                    <li>Processo comercial documentado</li>
+                    <li>Rastreabilidade completa dos leads</li>
+                    <li>Equipe seguindo playbook definido</li>
+                    <li>CRM operando com automações</li>
+                    <li>Cadência de follow-up ativa</li>
+                    <li>Dashboard com previsibilidade</li>
+                    <li>Conteúdo conectado ao funil</li>
+                    <li>Sistema que funciona sem o dono</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PROVA SOCIAL -->
+    <section class="section" id="prova">
+        <div class="section-header">
+            <span class="tag tag-gold" style="font-size: 0.75rem; padding: 0.3rem 1rem; letter-spacing: 2px;">Quem já viveu</span>
+            <h2 class="section-title" style="margin-top: 1rem;">CASES REAIS</h2>
+            <p class="section-subtitle">Não sou eu falando. São eles.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto;">
+            <div style="background: var(--bg-card); border: 1px solid var(--gold-dark); border-radius: 12px; overflow: hidden; padding: 1rem;">
+                <iframe src="https://www.instagram.com/p/C7Os3dCu70S/embed" width="100%" height="620" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true" style="border-radius: 8px; background: #fff;"></iframe>
+            </div>
+            <div style="background: var(--bg-card); border: 1px solid var(--gold-dark); border-radius: 12px; overflow: hidden; padding: 1rem;">
+                <iframe src="https://www.instagram.com/p/DKMdNq2NQKA/embed" width="100%" height="620" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true" style="border-radius: 8px; background: #fff;"></iframe>
+            </div>
+            <div style="background: var(--bg-card); border: 1px solid var(--gold-dark); border-radius: 12px; overflow: hidden; padding: 1rem;">
+                <iframe src="https://www.instagram.com/p/C_9DhGcv95C/embed" width="100%" height="620" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true" style="border-radius: 8px; background: #fff;"></iframe>
+            </div>
+        </div>
+
+        <div class="card-full" style="margin-top: 2rem; text-align: center; background: var(--bg-secondary); max-width: 800px; margin-left: auto; margin-right: auto;">
+            <p style="font-size: 0.95rem; color: var(--text-primary); line-height: 1.8;">
+                Cada um desses cases está publicado no meu perfil <strong style="color: var(--gold);">@orobertoaraujo</strong>. Pode conferir ao vivo — o Instagram não deixa mentir.
+            </p>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 09 FAQ -->
+    <section class="section" id="faq">
+        <div class="section-header">
+            <div class="section-number">09</div>
+            <h2 class="section-title">PERGUNTAS FREQUENTES</h2>
+            <p class="section-subtitle">Dúvidas que todo empresario tem antes de começar</p>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h4>Qual formato é melhor pra mim: online ou presencial?</h4>
+                    <span class="icon">+</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        <p><strong>Online</strong> é ideal se você quer implementar de forma progressiva, tem uma rotina corrida e prefere encontros semanais. O resultado é o mesmo — só muda o ritmo.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Presencial</strong> e pra quem quer acelerar. Em 2 dias eu implemento o que o online faz em 8 semanas. Ideal pra quem já tem equipe e quer tudo rodando rápido.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h4>Preciso já ter equipe comercial?</h4>
+                    <span class="icon">+</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        <p>Nao. A mentoria funciona tanto pra quem vende sozinho quanto pra quem tem equipe. Se você vende sozinho, vamos construir o processo pra que quando você contratar alguém, já tenha tudo pronto. Se já tem equipe, vamos treinar e alinhar todo mundo.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h4>Qual CRM vocês usam?</h4>
+                    <span class="icon">+</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        <p>Depende do seu negócio. Na fase de diagnóstico, avaliamos juntos qual faz mais sentido. Trabalhamos com Kommo, Pipedrive, HubSpot, RD Station CRM, entre outros. A escolha leva em conta: porte do negócio, integração com WhatsApp, orçamento e complexidade do funil.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h4>É se eu já tiver CRM mas não uso direito?</h4>
+                    <span class="icon">+</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        <p>Perfeito — esse é o cenário mais comum. Vamos avaliar se o CRM atual atende, reorganizar o pipeline, configurar automações e treinar a equipe pra usar de verdade. Às vezes o problema não é a ferramenta, é a falta de processo.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h4>Quanto tempo por semana eu preciso dedicar?</h4>
+                    <span class="icon">+</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        <p><strong>Online:</strong> Reserve 3-4 horas por semana (1h30 do encontro + 1h30 a 2h de implementação).</p>
+                        <p style="margin-top: 0.5rem;"><strong>Presencial:</strong> 2 dias inteiros na imersão. Depois, 1-2 horas por semana nas calls de acompanhamento.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h4>Tem garantia?</h4>
+                    <span class="icon">+</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        <p><strong style="color: var(--gold);">Sim. Garantia de 14 dias incondicional.</strong></p>
+                        <p style="margin-top: 0.5rem;">Nos primeiros 14 dias da mentoria, se por qualquer motivo você sentir que não é pra você, devolvo 100% do valor pago. Sem perguntas. Sem burocracia.</p>
+                        <p style="margin-top: 0.5rem;">Depois desses 14 dias, o compromisso é firme: a gente completa as semanas juntos. Você já viu a metodologia, já teve a primeira call, já recebeu a auditoria — e decidiu que faz sentido.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h4>Posso trocar de formato no meio?</h4>
+                    <span class="icon">+</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        <p>Sim. Se você começar no online e quiser fazer a imersão presencial, a gente ajusta o investimento. O valor já pago entra como credito. Flexibilidade faz parte.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h4>Funciona pra qualquer segmento?</h4>
+                    <span class="icon">+</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-inner">
+                        <p>A metodologia se aplica a qualquer negócio que vende serviço ou produto de ticket médio/alto e precisa de processo comercial. Já apliquei em: clínicas, escritórios de advocacia, agências, consultorias, educação, SaaS, varejo premium, construtoras, entre outros.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ESCASSEZ -->
+    <section class="section" id="vagas">
+        <div class="section-header">
+            <span class="tag tag-gold" style="font-size: 0.75rem; padding: 0.3rem 1rem; letter-spacing: 2px;">Aceitação limitada</span>
+            <h2 class="section-title" style="margin-top: 1rem;">NÃO É PRA TODO MUNDO</h2>
+            <p class="section-subtitle">Mentoria individual exige tempo. Eu aceito um número limitado de empresários por mês — pra garantir entrega com profundidade.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 900px; margin: 0 auto;">
+            <div class="card" style="border-color: var(--gold-dark); text-align: center; padding: 2.5rem 1.5rem;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">💻</div>
+                <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);">Online</div>
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: var(--gold); line-height: 1; margin: 0.8rem 0; letter-spacing: 3px;">05</div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1.5px;">vagas por mês</div>
+            </div>
+
+            <div class="card" style="border-color: var(--gold); background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212,168,83,0.05) 100%); text-align: center; padding: 2.5rem 1.5rem;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏢</div>
+                <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold);">Presencial</div>
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: var(--gold); line-height: 1; margin: 0.8rem 0; letter-spacing: 3px;">02</div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1.5px;">vagas por mês</div>
+            </div>
+        </div>
+
+        <div class="card-full" style="margin-top: 2rem; text-align: center; background: var(--bg-secondary); max-width: 800px; margin-left: auto; margin-right: auto;">
+            <p style="font-size: 0.95rem; color: var(--text-primary); line-height: 1.8;">
+                Antes de aceitar qualquer mentorado, eu faço uma <strong style="color: var(--gold);">call de diagnóstico</strong> pra entender o momento do seu negócio e garantir que a mentoria vai servir pra você.
+            </p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.8rem;">
+                Se as vagas do mês estiverem fechadas, você entra na lista de espera com prioridade pro mês seguinte.
+            </p>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- GARANTIA -->
+    <section class="section" id="garantia" style="padding: 4rem 2rem;">
+        <div class="card-full" style="background: linear-gradient(135deg, #000 0%, rgba(212,168,83,0.12) 100%); border: 2px solid var(--gold); text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; right: 0; width: 200px; height: 200px; background: radial-gradient(circle, rgba(212,168,83,0.15) 0%, transparent 70%); border-radius: 50%; transform: translate(50%, -50%);"></div>
+
+            <div style="position: relative; z-index: 1; max-width: 720px; margin: 0 auto;">
+                <div style="font-size: 3.5rem; margin-bottom: 1rem;">🛡️</div>
+                <span class="tag tag-gold" style="font-size: 0.75rem; padding: 0.3rem 1rem; letter-spacing: 2px;">Garantia de 14 dias</span>
+                <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3.2rem); letter-spacing: 3px; margin-top: 1rem; line-height: 1;">
+                    100% DO SEU DINHEIRO<br>DE VOLTA. <span style="color: var(--gold);">SEM PERGUNTAS.</span>
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 1rem; margin-top: 1.5rem; line-height: 1.7;">
+                    Nos primeiros <strong style="color: var(--text-primary);">14 dias</strong> da mentoria, se por qualquer motivo você sentir que não é pra você, devolvo <strong style="color: var(--gold);">100% do valor pago</strong>. Sem burocracia. Sem justificativa. Sem perguntas.
+                </p>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 1rem; line-height: 1.7;">
+                    Depois desses 14 dias, o compromisso é firme: a gente completa o processo juntos.
+                </p>
+
+                <div style="display: inline-block; margin-top: 2rem; padding: 1rem 2rem; border: 1px solid var(--gold-dark); border-radius: 8px; background: rgba(0,0,0,0.4);">
+                    <p style="color: var(--gold-light); font-style: italic; font-size: 1rem; font-weight: 500; margin: 0;">"Você não corre risco. Eu corro."</p>
+                    <p style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; margin-top: 0.5rem;">— Roberto Araújo</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 10 INVESTIMENTO -->
+    <section class="section" id="investimento">
+        <div class="section-header">
+            <div class="section-number">10</div>
+            <h2 class="section-title">INVESTIMENTO</h2>
+            <p class="section-subtitle">Escolha o formato e comece a transformação</p>
+        </div>
+
+        <div class="comparison">
+            <div class="comparison-card">
+                <div style="position: absolute; top: 1rem; left: 1rem; background: rgba(212,168,83,0.15); color: var(--gold); padding: 0.25rem 0.7rem; border: 1px solid var(--gold-dark); border-radius: 50px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;">5 vagas/mês</div>
+                <div class="format-icon">💻</div>
+                <div class="format-label">Online</div>
+                <h3>MENTORIA ONLINE</h3>
+                <p class="desc">12 semanas de acompanhamento individual com encontros semanais, CRM implementado e equipe treinada remotamente.</p>
+                <ul>
+                    <li>12 encontros individuais (1h30)</li>
+                    <li>CRM configurado e operando</li>
+                    <li>Playbook + scripts completos</li>
+                    <li>Suporte WhatsApp por 12 semanas</li>
+                    <li>Templates e materiais vitalícios</li>
+                    <li>Plano de escala 90 dias</li>
+                </ul>
+                <div class="price-block">
+                    <div class="price-label">Investimento</div>
+                    <div class="price" style="color: var(--blue);">R$ 12.000</div>
+                    <div class="price-installment">ou 3x de R$ 4.297</div>
+                    <div class="price-cash">À vista: R$ 9.997 (17% off)</div>
+                    <a href="https://wa.me/5548999597067?text=Ol%C3%A1%20Roberto%2C%20tenho%20interesse%20na%20Mentoria%20ONLINE.%20Quero%20agendar%20uma%20call%20de%20diagn%C3%B3stico." target="_blank" rel="noopener" class="btn-primary" style="margin-top: 1.5rem; width: 100%; justify-content: center; padding: 0.85rem 1rem; font-size: 0.85rem;">
+                        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        Aplicar pra essa vaga
+                    </a>
+                </div>
+            </div>
+
+            <div class="comparison-card featured">
+                <div class="badge-corner">Premium</div>
+                <div style="position: absolute; top: 1rem; left: 1rem; background: rgba(212,168,83,0.2); color: var(--gold); padding: 0.25rem 0.7rem; border: 1px solid var(--gold); border-radius: 50px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;">Só 2 vagas/mês</div>
+                <div class="format-icon">🏢</div>
+                <div class="format-label">Presencial</div>
+                <h3>MENTORIA PRESENCIAL</h3>
+                <p class="desc">2 dias de imersão no seu negócio + 8 semanas de acompanhamento. Implementação acelerada com treinamento da equipe no local.</p>
+                <ul>
+                    <li>2 dias presenciais (16h total)</li>
+                    <li>8 calls de follow-up (1h cada)</li>
+                    <li>CRM implementado no local</li>
+                    <li>Equipe treinada presencialmente</li>
+                    <li>Suporte WhatsApp por 90 dias</li>
+                    <li>Templates e materiais vitalícios</li>
+                    <li>Deslocamento e hospedagem inclusos*</li>
+                </ul>
+                <div class="price-block">
+                    <div class="price-label">Investimento</div>
+                    <div class="price" style="color: var(--gold);">R$ 30.000</div>
+                    <div class="price-installment">ou 2x de R$ 16.000</div>
+                    <div class="price-cash">À vista: R$ 27.000 (10% off)</div>
+                    <a href="https://wa.me/5548999597067?text=Ol%C3%A1%20Roberto%2C%20tenho%20interesse%20na%20Mentoria%20PRESENCIAL.%20Quero%20agendar%20uma%20call%20de%20diagn%C3%B3stico." target="_blank" rel="noopener" class="btn-primary" style="margin-top: 1.5rem; width: 100%; justify-content: center; padding: 0.85rem 1rem; font-size: 0.85rem;">
+                        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        Aplicar pra essa vaga
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.75rem; margin-top: 1.5rem;">*Deslocamento e hospedagem inclusos para capitais e regiões metropolitanas. Demais localidades sob consulta.</p>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="cta-section">
+        <h2>SEU NEGÓCIO MERECE <span style="color: var(--gold);">UM SISTEMA QUE FUNCIONA</span></h2>
+        <p>Você já tem o produto. Já tem a capacidade. O que falta é o processo, o posicionamento e a estrutura pra transformar isso em faturamento previsível. A mentoria constrói isso junto com você.</p>
+
+        <div style="margin-top: 2.5rem;">
+            <a href="https://wa.me/5548999597067?text=Ol%C3%A1%20Roberto%2C%20vim%20da%20p%C3%A1gina%20da%20Mentoria%20Exclusiva%20e%20quero%20agendar%20uma%20call%20de%20diagn%C3%B3stico." target="_blank" rel="noopener" class="btn-primary">
+                <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Agendar call de diagnóstico
+            </a>
+            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 1rem; text-transform: uppercase; letter-spacing: 2px;">Garantia de 14 dias — 100% do seu dinheiro de volta</p>
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <span class="tag tag-gold" style="font-size: 0.8rem; padding: 0.4rem 1rem;">Exclusivo 1:1</span>
+            <span class="tag tag-blue" style="font-size: 0.8rem; padding: 0.4rem 1rem;">Online ou Presencial</span>
+            <span class="tag tag-green" style="font-size: 0.8rem; padding: 0.4rem 1rem;">CRM Operando</span>
+            <span class="tag tag-purple" style="font-size: 0.8rem; padding: 0.4rem 1rem;">Resultado Mensurável</span>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="text-align: center; padding: 2rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.75rem;">
+        <p>Roberto Araújo — Mentoria Exclusiva</p>
+        <p style="margin-top: 0.5rem; color: var(--gold-dark);">@orobertoaraujo</p>
+    </footer>
+
+    <script>
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            const wasActive = item.classList.contains('active');
+            document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+            if (!wasActive) item.classList.add('active');
+        }
+
+        document.querySelectorAll('.nav a').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const top = section.offsetTop - 100;
+                if (window.scrollY >= top) current = section.getAttribute('id');
+            });
+            navLinks.forEach(link => {
+                link.style.color = link.getAttribute('href') === '#' + current ? 'var(--gold)' : '';
+                link.style.background = link.getAttribute('href') === '#' + current ? 'rgba(212,168,83,0.1)' : '';
+            });
+        });
+    </script>
+
+</body>
+</html>

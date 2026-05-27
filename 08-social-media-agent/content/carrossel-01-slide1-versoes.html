@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Slide 1 — 2 versões pra escolher</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#0a0a0a; padding:40px 20px; font-family:'Inter',sans-serif; }
+    h1 { color:#fff; text-align:center; font-family:'Fraunces',serif; font-size:30px; margin-bottom:8px; }
+    .sub { color:#777; text-align:center; font-size:13px; margin-bottom:50px; letter-spacing:2px; text-transform:uppercase; }
+    .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:50px; max-width:1400px; margin:0 auto; }
+    @media (max-width:980px) { .grid { grid-template-columns:1fr; } }
+    .wrap { text-align:center; }
+    .label { font-family:'Montserrat'; font-size:12px; font-weight:700; color:#888; text-transform:uppercase; letter-spacing:3px; margin-bottom:16px; }
+    .desc { color:#666; font-size:12px; margin-top:12px; line-height:1.5; max-width:480px; margin-left:auto; margin-right:auto; }
+    .slide { width:100%; max-width:600px; aspect-ratio:1; margin:0 auto; overflow:hidden; position:relative; box-shadow:0 12px 40px rgba(0,0,0,0.6); }
+  </style>
+</head>
+<body>
+
+<h1>Slide 1 — 2 direções visuais</h1>
+<div class="sub">— Carrossel #1 • "Você não tem falta de cliente" —</div>
+
+<div class="grid">
+
+  <!-- ============ VERSÃO A — Cream editorial (estilo DICA/CASE REAL) ============ -->
+  <div class="wrap">
+    <div class="label">Versão A — Cream Editorial</div>
+    <div class="slide" style="background:#f5f1e8; display:flex; flex-direction:column;">
+      <!-- Topo: foto editorial da Roberta — confiante com macbook -->
+      <div style="height:52%; background:url('file:///Users/robertoaraujo/agente de instagram/instagram-agent/fotos/roberta-confiante.jpg') center 22%/cover; position:relative;">
+        <div style="position:absolute; top:32px; left:36px; padding:10px 22px; background:#8b6f3d; color:#f5f1e8; font-family:'Montserrat'; font-size:11px; letter-spacing:5px; font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,0.3);">CARROSSEL #01</div>
+        <div style="position:absolute; top:38px; right:40px; font-family:'Montserrat'; font-size:14px; color:#fff; letter-spacing:3px; font-weight:700; opacity:0.95; text-shadow:0 2px 8px rgba(0,0,0,0.5);">@propagarsaude_</div>
+      </div>
+      <!-- Baixo: headline cream -->
+      <div style="flex:1; padding:42px 56px; display:flex; flex-direction:column; justify-content:center; position:relative;">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px;">
+          <div style="width:40px; height:2px; background:#b8945a;"></div>
+          <div style="font-family:'Manrope'; font-size:11px; letter-spacing:5px; color:#7a7266; font-weight:700;">PARE TUDO</div>
+        </div>
+        <h2 style="font-family:'Fraunces',serif; font-size:38px; color:#1a1a1a; line-height:1.18; font-weight:700;">
+          Você não tem<br>falta de cliente.<br>
+          <em style="color:#8b6f3d; font-style:italic; font-weight:700;">Tem falta de visibilidade.</em>
+        </h2>
+        <div style="position:absolute; bottom:32px; right:40px; font-family:'Cormorant Garamond',serif; font-style:italic; color:#7a7266; font-size:14px; letter-spacing:3px;">— arrasta →</div>
+      </div>
+    </div>
+    <div class="desc"><strong style="color:#fff">Estilo DICA / CASE REAL</strong> — cream papel, foto editorial Roberta no topo (autoridade visível), serif Fraunces preto + acento dourado patinado. Combina com posts mais "calmos" da grade.</div>
+  </div>
+
+  <!-- ============ VERSÃO B — Split foto + dark (estilo DOR) ============ -->
+  <div class="wrap">
+    <div class="label">Versão B — Split Editorial</div>
+    <div class="slide" style="display:flex;">
+      <!-- Foto à esquerda -->
+      <div style="width:46%; background:url('file:///Users/robertoaraujo/agente de instagram/instagram-agent/fotos/roberta-autoridade.jpg') center 18%/cover; position:relative;">
+        <div style="position:absolute; bottom:36px; left:32px; font-family:'Montserrat'; font-size:11px; color:#fff; letter-spacing:4px; font-weight:700; opacity:0.9;">@propagarsaude_</div>
+      </div>
+      <!-- Texto à direita -->
+      <div style="width:54%; background:#141414; display:flex; flex-direction:column; justify-content:center; padding:54px 44px; position:relative;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:28px;">
+          <div style="width:32px; height:2px; background:#D4A843;"></div>
+          <div style="font-family:'Montserrat'; font-size:10px; letter-spacing:4px; color:#D4A843; font-weight:700;">CARROSSEL #01</div>
+        </div>
+        <h2 style="font-family:'Playfair Display',serif; font-size:38px; color:#fff; line-height:1.2; font-weight:400;">
+          Você não tem<br>falta de cliente.<br>
+          <em style="color:#D4A843; font-style:italic; font-weight:700;">Tem falta de<br>visibilidade.</em>
+        </h2>
+        <div style="margin-top:28px; padding-left:18px; border-left:2px solid #b8945a;">
+          <p style="font-family:'Inter'; font-size:13px; color:#aaa; line-height:1.6;">Existe uma diferença gigante.<br>E ela tá te custando agenda.</p>
+        </div>
+        <div style="position:absolute; bottom:28px; right:36px; font-family:'Cormorant Garamond',serif; font-style:italic; color:#D4A843; font-size:13px; letter-spacing:3px;">— arrasta →</div>
+      </div>
+    </div>
+    <div class="desc"><strong style="color:#fff">Estilo DOR (atual)</strong> — split com foto Roberta autoridade + lado dark com Playfair branca + dourado vibrante. Mais punch visual, melhor pra hooks polêmicos.</div>
+  </div>
+
+</div>
+
+<div style="max-width:900px; margin:60px auto 0; padding:32px; background:rgba(212,168,67,0.06); border:1px solid rgba(212,168,67,0.25); border-radius:8px; color:#bbb; font-size:13px; line-height:1.7;">
+  <strong style="color:#D4A843; font-family:'Fraunces',serif; font-size:16px; display:block; margin-bottom:12px;">Diferenças principais</strong>
+  <strong style="color:#fff">Versão A (Cream):</strong> mais "feed Vogue", combina com posts educativos de respiro, dourado patinado/seco, Fraunces (serif moderna). Funciona bem em sequência de carrossel longa.<br><br>
+  <strong style="color:#fff">Versão B (Split):</strong> mais "alta voltagem", melhor pra hooks que precisam parar scroll forte, mas pode cansar se usar nos 8 slides seguidos.<br><br>
+  <strong style="color:#D4A843">Recomendação:</strong> usar <strong>Versão A</strong> nos slides 1, 4, 7, 8 (educativos/encerramento) e <strong>Versão B</strong> nos slides 2, 3, 5, 6 (agitação/mecanismo). Mistura cria ritmo visual no carrossel.
+</div>
+
+</body>
+</html>

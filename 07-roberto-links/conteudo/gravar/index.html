@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como Gravar 10 Reels em 2 Horas</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='%23111'/><text x='50' y='70' font-size='56' text-anchor='middle' fill='%235bcc75' font-weight='bold' font-family='system-ui'>R</text></svg>">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #050505;
+    color: #fff;
+    padding: 40px 16px 60px;
+    min-height: 100vh;
+  }
+  .wrapper { max-width: 780px; margin: 0 auto; }
+
+  .back-nav {
+    display: inline-block;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+  }
+  .back-nav:hover { color: #5bcc75; }
+
+  .header { margin-bottom: 40px; }
+  .header-tag {
+    display: inline-block;
+    background: rgba(91,204,117,0.15);
+    color: #5bcc75;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 4px 14px;
+    border-radius: 50px;
+    letter-spacing: 2px;
+    border: 1px solid rgba(91,204,117,0.3);
+  }
+  .header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 6vw, 3rem);
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-top: 12px;
+  }
+  .header h1 span { color: #5bcc75; }
+  .header p {
+    color: #999;
+    font-size: 0.95rem;
+    margin-top: 12px;
+    line-height: 1.6;
+  }
+
+  .section {
+    margin-bottom: 30px;
+    background: linear-gradient(180deg, #1a1a1a 0%, #111 100%);
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    padding: 24px 26px;
+    border-left: 4px solid #5bcc75;
+  }
+
+  .section-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.8rem;
+    color: #5bcc75;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    letter-spacing: 1.5px;
+    margin-bottom: 14px;
+  }
+
+  .section p {
+    color: #ddd;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+
+  .section strong { color: #5bcc75; }
+
+  .section ul { padding-left: 20px; margin: 10px 0; }
+  .section li {
+    color: #ddd;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .section li strong { color: #5bcc75; }
+
+  .checklist {
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 14px 0;
+  }
+  .checklist-title {
+    font-size: 0.7rem;
+    color: #5bcc75;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 0.9rem;
+    color: #ddd;
+    line-height: 1.5;
+  }
+  .checklist-item::before {
+    content: '☐';
+    color: #5bcc75;
+    font-weight: 700;
+    font-size: 1.1rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 26px;
+    margin-top: 14px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(91,204,117,0.3);
+  }
+  .time-block { margin-bottom: 16px; position: relative; }
+  .time-block::before {
+    content: '';
+    position: absolute;
+    left: -25px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #5bcc75;
+    border: 3px solid #050505;
+  }
+  .time-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    color: #5bcc75;
+    letter-spacing: 1.5px;
+    margin-bottom: 2px;
+  }
+  .time-what {
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .time-desc {
+    color: #aaa;
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+
+  .cta-box {
+    margin-top: 30px;
+    padding: 24px;
+    background: linear-gradient(135deg, rgba(91,204,117,0.1) 0%, rgba(91,204,117,0.02) 100%);
+    border: 2px solid rgba(91,204,117,0.3);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .cta-box h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: #5bcc75;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  .cta-box p {
+    color: #ccc;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .cta-box a {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #5bcc75;
+    color: #050505;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.85rem;
+    border-radius: 50px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+<a href="/conteudo" class="back-nav">← Voltar</a>
+
+<div class="header">
+  <span class="header-tag">Guia prático</span>
+  <h1>COMO GRAVAR <span>10 REELS</span><br>EM 2 HORAS</h1>
+  <p>Protocolo de gravação em banco. Sem drama, sem pirar. Foco em produzir, não em estar no ponto.</p>
+</div>
+
+<!-- 01 -->
+<div class="section">
+  <div class="section-number">01 · ANTES DE GRAVAR</div>
+  <div class="section-title">PREPARAÇÃO (30 min — dia anterior)</div>
+  <p>Gravar sem preparo é ficar travado na câmera. Gasta 30 min na noite anterior pra não travar amanhã.</p>
+
+  <div class="checklist">
+    <div class="checklist-title">Checklist de preparação</div>
+    <div class="checklist-item">Escolhe os <strong>10 reels</strong> que vai gravar (da tua página /conteudo/reels)</div>
+    <div class="checklist-item">Lê cada um <strong>2 vezes em voz alta</strong> — não pra decorar, pra pegar o ritmo</div>
+    <div class="checklist-item">Marca <strong>1 palavra-chave por reels</strong> que tu precisa lembrar (não o roteiro todo)</div>
+    <div class="checklist-item">Deixa o celular <strong>com bateria cheia</strong> e espaço livre (pelo menos 10GB)</div>
+    <div class="checklist-item">Separa a roupa e testa <strong>iluminação no local</strong></div>
+  </div>
+
+  <p><strong>Regra de ouro:</strong> tu não precisa decorar. Precisa saber A IDEIA e 1 FRASE-ÂNCORA por reels. O resto tu improvisa no teu tom natural.</p>
+</div>
+
+<!-- 02 -->
+<div class="section">
+  <div class="section-number">02 · SETUP TÉCNICO</div>
+  <div class="section-title">CÂMERA, LUZ, SOM, ROUPA</div>
+
+  <ul>
+    <li><strong>Câmera:</strong> celular em modo Reels (9:16), <strong>câmera principal (traseira)</strong> pra qualidade. Tripé ou apoio fixo — câmera na altura do olho</li>
+    <li><strong>Iluminação:</strong> janela do lado OU ring light de frente. Nunca luz em cima — cria sombra embaixo do olho</li>
+    <li><strong>Áudio:</strong> microfone de lapela bluetooth (tem por R$80-150 no ML) OU fica perto do celular (máx 60cm). Sem microfone = vídeo médio</li>
+    <li><strong>Fundo:</strong> neutro, sem bagunça. Parede lisa, estante organizada, ou espaço profissional. Evita quarto com cama</li>
+    <li><strong>Roupa:</strong> a MESMA em todos os 10 reels do dia. <strong>Terno escuro + camiseta preta</strong> bate com o visual da Mentoria. Identidade visual = autoridade</li>
+  </ul>
+
+  <p><strong>Truque:</strong> se gravar tudo com a mesma roupa, mesmo enquadramento, mesma luz — parece SÉRIE profissional. Se muda a cada dia, parece amador.</p>
+</div>
+
+<!-- 03 -->
+<div class="section">
+  <div class="section-number">03 · O DIA DA GRAVAÇÃO</div>
+  <div class="section-title">FLUXO DE 2 HORAS — PASSO A PASSO</div>
+
+  <div class="timeline">
+
+    <div class="time-block">
+      <div class="time-label">MIN 0-10 · SETUP</div>
+      <div class="time-what">Monta tripé, posiciona luz, testa áudio e enquadramento</div>
+      <div class="time-desc">Grava 10s de teste, confere qualidade do som e da imagem. Se tiver corte de luz no meio, é aqui que tu descobre — não no reels 7.</div>
+    </div>
+
+    <div class="time-block">
+      <div class="time-label">MIN 10-20 · AQUECIMENTO</div>
+      <div class="time-what">Fala sobre qualquer coisa por 5 min direto pra câmera (nada será publicado)</div>
+      <div class="time-desc">Solta a voz. Desenrola a cara. A primeira vez na câmera sempre sai mecânica. Esse aquecimento é o que separa gravação média de gravação boa.</div>
+    </div>
+
+    <div class="time-block">
+      <div class="time-label">MIN 20-80 · BLOCO 1 (5 reels)</div>
+      <div class="time-what">Grava os 5 primeiros reels, SEM editar, SEM refazer</div>
+      <div class="time-desc">Se errar, conta 1 segundo em silêncio e refaz a frase. Na edição tu corta. Não para pra conferir cada um — só confia e segue.</div>
+    </div>
+
+    <div class="time-block">
+      <div class="time-label">MIN 80-90 · RESPIRA</div>
+      <div class="time-what">Bebe água, caminha 3 minutos, tira o peso</div>
+      <div class="time-desc">Meia duzia de reels gravados já é energia queimada. Pequena pausa recupera o tom natural pro segundo bloco.</div>
+    </div>
+
+    <div class="time-block">
+      <div class="time-label">MIN 90-120 · BLOCO 2 (5 reels)</div>
+      <div class="time-what">Grava os 5 finais</div>
+      <div class="time-desc">Energia diferente que o bloco 1 — e é BOM. Diversifica o tom dos reels, não fica tudo "igual". Continue sem refazer obsessivamente.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 04 -->
+<div class="section">
+  <div class="section-number">04 · REGRAS DE GRAVAÇÃO</div>
+  <div class="section-title">7 REGRAS QUE SALVAM</div>
+
+  <ul>
+    <li><strong>Não releia o roteiro inteiro antes de gravar.</strong> Lê o hook e a ideia geral. Improvisa o resto. Natural &gt; decorado</li>
+    <li><strong>Erra? Pausa 1s em silêncio e refaz a frase.</strong> Não recomeça o vídeo todo. Na edição, corte do silêncio</li>
+    <li><strong>Olho NA LENTE.</strong> Não na tela. A lente é onde o espectador mora</li>
+    <li><strong>Começa ALTO.</strong> Energia no gancho faz o scroll parar. Cai pra natural na retain</li>
+    <li><strong>Pausa depois da frase-chave.</strong> 1 segundo de silêncio vende mais que 10 palavras</li>
+    <li><strong>Termina e FICA parado por 2 segundos.</strong> Não move, não sorri, não "tá bom, tchau". Corta na edição depois</li>
+    <li><strong>Grava vertical (9:16) em alta resolução (1080p).</strong> Horizontal é suicídio em Reels/TikTok</li>
+  </ul>
+</div>
+
+<!-- 05 -->
+<div class="section">
+  <div class="section-number">05 · PÓS-GRAVAÇÃO</div>
+  <div class="section-title">EDIÇÃO E PUBLICAÇÃO (1h)</div>
+
+  <p>Gravou? Edita HOJE MESMO. Não deixa pra semana que vem — a energia se dissipa.</p>
+
+  <ul>
+    <li><strong>Edita no CapCut ou InShot</strong> (celular mesmo). Não precisa Adobe. Corta só: silêncios, "ééé", refeitas</li>
+    <li><strong>Adiciona legenda</strong> — 85% assiste sem som. CapCut faz auto-legenda em 30s por vídeo</li>
+    <li><strong>Destaque a palavra-chave dourada</strong> em amarelo/dourado na legenda (a palavra que tava em <strong>negrito</strong> no roteiro)</li>
+    <li><strong>Capa:</strong> primeira frame ou quadro dourado (se tu já fez os covers em /conteudo/capas). Simplifica e padroniza</li>
+    <li><strong>Zero música.</strong> Ou música muito baixa, só pra ambientação. Nada de trending audio — tu não é dançarino</li>
+    <li><strong>Hashtag:</strong> no máximo 3. #empresario #negocios #marketing. Mais que isso fica cara de tentativa</li>
+  </ul>
+
+  <p><strong>Distribuição:</strong> o MESMO arquivo sobe em <strong>3 plataformas</strong> — Instagram Reels, TikTok e YouTube Shorts. Zero edição adicional. Criou 1 vez, posta 3 vezes.</p>
+</div>
+
+<!-- 06 -->
+<div class="section">
+  <div class="section-number">06 · DIAS SEGUINTES</div>
+  <div class="section-title">CADÊNCIA DE PUBLICAÇÃO</div>
+
+  <p>Com 10 reels gravados, tu tem <strong>3 dias e meio de conteúdo</strong> (se postar 3 por dia). Chutando a rotina:</p>
+
+  <ul>
+    <li><strong>08h30</strong> — primeiro reels do dia (alto engajamento matinal)</li>
+    <li><strong>13h00</strong> — segundo (pausa almoço, muita gente rolando feed)</li>
+    <li><strong>19h30</strong> — terceiro (pico de audiência noturna)</li>
+  </ul>
+
+  <p>Usa a fila de agendamento do próprio Instagram (Suite da Meta) ou Buffer/Later. Agenda no domingo. <strong>Semana toda automática.</strong></p>
+
+  <p><strong>Depois de 10 dias (30+ reels postados):</strong> abre as métricas. Quais 3 bombaram? Grava MAIS daquele estilo no próximo banco. Abandona o que não engajou — mesmo que tu goste.</p>
+</div>
+
+<!-- CTA -->
+<div class="cta-box">
+  <h3>VOLTA PRO BANCO E ESCOLHE OS 10</h3>
+  <p>Marca os 10 primeiros que tu quer gravar amanhã. Mistura as categorias — nem só educativo, nem só história.</p>
+  <a href="/conteudo/reels">Ver os 40 reels →</a>
+</div>
+
+</div>
+
+</body>
+</html>

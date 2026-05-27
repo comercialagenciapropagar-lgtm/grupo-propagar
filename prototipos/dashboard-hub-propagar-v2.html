@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Hub Propagar — Dashboard reformado v2 (mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f6f3ec;
+    --cream-2: #efeadd;
+    --ink: #0f1d3a;
+    --ink-soft: #3a4761;
+    --muted: #8a92a8;
+    --line: #d6cdb8;
+    --line-soft: rgba(42, 82, 153, 0.12);
+    --propagar: #2a5299;
+    --propagar-bright: #5b8dc7;
+    --propagar-soft: rgba(42, 82, 153, 0.08);
+    --copper: #c87f5a;
+    --red: #c4544a;
+    --amber: #d49443;
+    --green: #5a9e6c;
+    --white: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: "Inter", -apple-system, system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .page { max-width: 1280px; margin: 0 auto; padding: 0 32px 80px; position: relative; }
+
+  /* Watermark Flecha gigante */
+  .watermark {
+    position: fixed; bottom: -120px; right: -100px; opacity: 0.04;
+    z-index: 0; pointer-events: none;
+  }
+
+  /* ============ HEADER ============ */
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+    margin-bottom: 24px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .flecha svg { display: block; }
+  .brand .name {
+    font-family: "Playfair Display", serif; font-style: italic; font-weight: 500;
+    font-size: 22px; color: var(--ink); letter-spacing: -0.01em;
+  }
+  .brand .name .dot { color: var(--propagar); }
+  .header-tools { display: flex; align-items: center; gap: 16px; }
+  .cmdk {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--white); border: 1px solid var(--line);
+    padding: 8px 14px; border-radius: 8px; font-size: 13px; color: var(--ink-soft);
+    cursor: pointer; min-width: 280px;
+  }
+  .cmdk kbd {
+    background: var(--cream-2); border: 1px solid var(--line);
+    padding: 1px 6px; border-radius: 4px; font-family: inherit;
+    font-size: 11px; color: var(--ink-soft); margin-left: auto;
+  }
+  .notif {
+    position: relative; width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--line); border-radius: 8px; background: var(--white);
+    cursor: pointer;
+  }
+  .notif::after {
+    content: "3"; position: absolute; top: -4px; right: -4px;
+    background: var(--copper); color: var(--white); font-size: 10px;
+    font-weight: 700; padding: 1px 5px; border-radius: 999px;
+    border: 2px solid var(--cream);
+  }
+  .avatar {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--propagar);
+    color: var(--white); display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px; cursor: pointer;
+  }
+
+  /* ============ HEADLINE ============ */
+  .headline-row {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 24px; margin-bottom: 6px; flex-wrap: wrap;
+  }
+  .headline {
+    font-family: "Playfair Display", serif; font-style: italic; font-weight: 500;
+    font-size: 36px; color: var(--ink); letter-spacing: -0.01em; line-height: 1.1;
+  }
+  .headline em { color: var(--propagar); font-style: italic; }
+  .today {
+    font-size: 12px; color: var(--muted); letter-spacing: 0.08em;
+    text-transform: uppercase; font-weight: 600;
+  }
+
+  /* ============ SECTION TITLE com Flecha ============ */
+  .section-title {
+    display: flex; align-items: center; gap: 10px;
+    margin: 36px 0 14px;
+  }
+  .section-title .arrow { opacity: 0.45; }
+  .section-title h2 {
+    font-family: "Playfair Display", serif; font-style: italic; font-weight: 500;
+    font-size: 18px; color: var(--ink); letter-spacing: -0.005em;
+  }
+  .section-title .count {
+    font-size: 11px; color: var(--muted); margin-left: auto;
+    letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+  }
+
+  /* ============ HERO ROW: INBOX + PULSO ============ */
+  .hero-row {
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px;
+    margin-top: 4px;
+  }
+  @media (max-width: 900px) { .hero-row { grid-template-columns: 1fr; } }
+
+  /* INBOX */
+  .inbox {
+    background: var(--white); border: 1px solid var(--line-soft);
+    border-radius: 10px; overflow: hidden;
+  }
+  .inbox-head {
+    padding: 14px 20px; border-bottom: 1px solid var(--line-soft);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .inbox-head .label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.16em;
+    font-weight: 700; color: var(--propagar);
+  }
+  .inbox-head .actions { font-size: 12px; color: var(--muted); }
+
+  .inbox-item {
+    padding: 16px 20px; border-bottom: 1px solid var(--line-soft);
+    display: flex; gap: 14px; align-items: flex-start;
+    transition: background 100ms;
+  }
+  .inbox-item:hover { background: var(--cream); }
+  .inbox-item:last-child { border-bottom: 0; }
+  .sev {
+    flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%;
+    margin-top: 7px;
+  }
+  .sev.red { background: var(--red); }
+  .sev.amber { background: var(--amber); }
+  .sev.copper { background: var(--copper); }
+  .inbox-item .body { flex: 1; min-width: 0; }
+  .inbox-item .title {
+    font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 2px;
+  }
+  .inbox-item .sub { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .inbox-item .acts {
+    display: flex; gap: 6px; margin-top: 8px;
+  }
+  .btn {
+    background: var(--white); border: 1px solid var(--line);
+    padding: 4px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 600;
+    color: var(--ink-soft); cursor: pointer;
+  }
+  .btn:hover { background: var(--cream-2); }
+  .btn.primary { background: var(--propagar); color: var(--white); border-color: var(--propagar); }
+  .btn.primary:hover { background: var(--ink); border-color: var(--ink); }
+
+  /* PULSO */
+  .pulso {
+    background: var(--white); border: 1px solid var(--line-soft);
+    border-radius: 10px; padding: 24px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .pulso .lbl {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.16em;
+    font-weight: 700; color: var(--propagar); margin-bottom: 8px;
+  }
+  .pulso .num {
+    font-family: "Playfair Display", serif; font-style: italic; font-weight: 500;
+    font-size: 52px; color: var(--ink); line-height: 1; margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .pulso .delta { font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+  .pulso .delta .up { color: var(--green); font-weight: 700; }
+  .pulso .meta-line {
+    font-size: 12px; color: var(--muted); margin-bottom: 16px;
+  }
+  .pulso .forecast {
+    background: var(--propagar-soft); border-radius: 6px;
+    padding: 12px 14px; border-left: 3px solid var(--propagar);
+  }
+  .pulso .forecast .ftitle {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em;
+    font-weight: 700; color: var(--propagar); margin-bottom: 3px;
+  }
+  .pulso .forecast .fnum {
+    font-family: "Playfair Display", serif; font-style: italic; font-weight: 500;
+    font-size: 22px; color: var(--ink);
+  }
+  .pulso .forecast .fgap { font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; }
+  .pulso svg.spark { margin-top: 14px; display: block; }
+
+  /* ============ KPI STRIP ============ */
+  .kpis {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 900px) { .kpis { grid-template-columns: 1fr 1fr; } }
+  .kpi {
+    background: var(--white); border: 1px solid var(--line-soft);
+    border-radius: 10px; padding: 16px 18px;
+  }
+  .kpi .lbl {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em;
+    font-weight: 700; color: var(--muted); margin-bottom: 6px;
+  }
+  .kpi .num {
+    font-family: "Playfair Display", serif; font-style: italic; font-weight: 500;
+    font-size: 30px; color: var(--ink); line-height: 1;
+  }
+  .kpi .num.copper { color: var(--copper); }
+  .kpi .num.red { color: var(--red); }
+  .kpi .delta { font-size: 11.5px; margin-top: 4px; color: var(--muted); }
+  .kpi .delta .up { color: var(--green); font-weight: 700; }
+  .kpi .delta .down { color: var(--red); font-weight: 700; }
+  .kpi .delta .flat { color: var(--muted); font-weight: 700; }
+
+  /* HEALTH BAR */
+  .health-bar {
+    display: flex; height: 10px; border-radius: 999px; overflow: hidden;
+    margin-top: 4px; background: var(--cream-2);
+  }
+  .health-bar .seg { height: 100%; }
+  .health-bar .seg.green { background: var(--green); }
+  .health-bar .seg.amber { background: var(--amber); }
+  .health-bar .seg.red { background: var(--red); }
+  .health-legend {
+    display: flex; gap: 12px; font-size: 10.5px; color: var(--muted);
+    margin-top: 6px;
+  }
+  .health-legend span::before {
+    content: ""; display: inline-block; width: 7px; height: 7px;
+    border-radius: 50%; margin-right: 5px; vertical-align: middle;
+  }
+  .health-legend .g::before { background: var(--green); }
+  .health-legend .a::before { background: var(--amber); }
+  .health-legend .r::before { background: var(--red); }
+
+  /* ============ LOJAS GRID ============ */
+  .stores {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    margin-top: 14px;
+  }
+  @media (max-width: 900px) { .stores { grid-template-columns: 1fr 1fr; } }
+  .store {
+    background: var(--white); border: 1px solid var(--line-soft);
+    border-radius: 10px; padding: 16px 18px;
+    position: relative; cursor: pointer; transition: border-color 100ms;
+  }
+  .store:hover { border-color: var(--propagar-bright); }
+  .store .pulse {
+    position: absolute; top: 14px; right: 14px;
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .store .pulse.ok { background: var(--green); }
+  .store .pulse.warn { background: var(--amber); }
+  .store .pulse.bad { background: var(--red); }
+  .store h3 {
+    font-family: "Playfair Display", serif; font-style: italic; font-weight: 500;
+    font-size: 17px; color: var(--ink); margin-bottom: 4px; padding-right: 20px;
+  }
+  .store .gestor { font-size: 11px; color: var(--muted); margin-bottom: 12px; letter-spacing: 0.04em; }
+  .store .metrics {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  }
+  .store .metric .l {
+    font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--muted); font-weight: 700;
+  }
+  .store .metric .v {
+    font-family: "Playfair Display", serif; font-style: italic;
+    font-size: 17px; color: var(--ink); font-weight: 500; margin-top: 1px;
+  }
+
+  /* ============ CHARTS ROW ============ */
+  .charts {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    margin-top: 14px;
+  }
+  @media (max-width: 900px) { .charts { grid-template-columns: 1fr; } }
+  .chart {
+    background: var(--white); border: 1px solid var(--line-soft);
+    border-radius: 10px; padding: 18px;
+  }
+  .chart .lbl {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em;
+    font-weight: 700; color: var(--propagar); margin-bottom: 6px;
+  }
+  .chart .num {
+    font-family: "Playfair Display", serif; font-style: italic;
+    font-size: 22px; color: var(--ink); font-weight: 500; margin-bottom: 12px;
+  }
+  .chart svg { display: block; width: 100%; }
+
+  /* ============ FOOTER ============ */
+  .footer {
+    margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: var(--muted); letter-spacing: 0.05em;
+  }
+  .footer .right { font-style: italic; font-family: "Playfair Display", serif; }
+</style>
+</head>
+<body>
+
+<!-- Watermark Flecha -->
+<svg class="watermark" width="600" height="600" viewBox="0 0 100 100">
+  <polygon points="8,28 38,50 8,72" fill="#2a5299" opacity="0.55"/>
+  <polygon points="34,22 66,50 34,78" fill="#2a5299" opacity="0.8"/>
+  <polygon points="62,14 94,50 62,86" fill="#2a5299"/>
+</svg>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="brand">
+      <span class="flecha">
+        <svg width="26" height="26" viewBox="0 0 100 100">
+          <polygon points="8,28 38,50 8,72" fill="#2a5299" opacity="0.55"/>
+          <polygon points="34,22 66,50 34,78" fill="#2a5299" opacity="0.8"/>
+          <polygon points="62,14 94,50 62,86" fill="#2a5299"/>
+        </svg>
+      </span>
+      <span class="name">Hub<span class="dot">·</span>Propagar</span>
+    </div>
+    <div class="header-tools">
+      <div class="cmdk">
+        <span>🔍</span>
+        <span>Buscar ou ir pra...</span>
+        <kbd>⌘ K</kbd>
+      </div>
+      <div class="notif">🔔</div>
+      <div class="avatar">R</div>
+    </div>
+  </div>
+
+  <!-- HEADLINE -->
+  <div class="headline-row">
+    <div>
+      <div class="today">Segunda · 25 de maio · 2026</div>
+      <h1 class="headline" style="margin-top:8px">Bom dia, Roberto. <em>3 itens</em> precisam de você hoje.</h1>
+    </div>
+  </div>
+
+  <!-- FILA DO DIA + PULSO -->
+  <div class="hero-row">
+
+    <!-- INBOX -->
+    <div class="inbox">
+      <div class="inbox-head">
+        <span class="label">Fila do dia</span>
+        <span class="actions">↑↓ navegar · D dispensar · R resolver</span>
+      </div>
+
+      <div class="inbox-item">
+        <div class="sev red"></div>
+        <div class="body">
+          <div class="title">Caixa Norte — análise de abril/26 atrasada</div>
+          <div class="sub">Vence há 5 dias. Responsável: Daniel (gestor financeiro). Impacto: ranking de parceiros não recalculado.</div>
+          <div class="acts">
+            <button class="btn primary">Resolver</button>
+            <button class="btn">Atribuir</button>
+            <button class="btn">Snooze 1 dia</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="inbox-item">
+        <div class="sev amber"></div>
+        <div class="body">
+          <div class="title">ALB iPhone — campanha caiu 47% em mensagens (7 dias)</div>
+          <div class="sub">Loja gerenciada por Darlan. Última conversa registrada: ontem 16h32. Cliente declarou que vai cancelar.</div>
+          <div class="acts">
+            <button class="btn primary">Abrir dossiê</button>
+            <button class="btn">Atribuir</button>
+            <button class="btn">Snooze</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="inbox-item">
+        <div class="sev copper"></div>
+        <div class="body">
+          <div class="title">Mega Calçados — contrato #023 vence em 4 dias</div>
+          <div class="sub">MRR R$ 3.200. Sem proposta de renovação aberta. Gerente: Diego.</div>
+          <div class="acts">
+            <button class="btn primary">Renovar</button>
+            <button class="btn">Ver contrato</button>
+            <button class="btn">Snooze</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PULSO DO MÊS -->
+    <div class="pulso">
+      <div>
+        <div class="lbl">Receita · maio/26</div>
+        <div class="num">R$ 187.420</div>
+        <div class="delta"><span class="up">▲ +12%</span> vs abril (R$ 167.340)</div>
+        <div class="meta-line">Meta do mês: R$ 220.000 · 85% atingido</div>
+      </div>
+      <svg class="spark" viewBox="0 0 320 60" preserveAspectRatio="none" style="width:100%;height:40px">
+        <polyline fill="none" stroke="#5b8dc7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          points="0,42 25,38 50,40 75,32 100,30 125,28 150,24 175,28 200,22 225,18 250,20 275,16 300,12 320,10" />
+        <polyline fill="rgba(91,141,199,0.12)" stroke="none"
+          points="0,42 25,38 50,40 75,32 100,30 125,28 150,24 175,28 200,22 225,18 250,20 275,16 300,12 320,10 320,60 0,60" />
+      </svg>
+      <div class="forecast">
+        <div class="ftitle">Previsão fim do mês</div>
+        <div class="fnum">R$ 215.480</div>
+        <div class="fgap">Gap pra meta: <strong>R$ 4.520</strong> · ainda dá pra fechar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI STRIP -->
+  <div class="section-title">
+    <span class="arrow">
+      <svg width="14" height="14" viewBox="0 0 100 100">
+        <polygon points="8,28 38,50 8,72" fill="#2a5299" opacity="0.55"/>
+        <polygon points="34,22 66,50 34,78" fill="#2a5299" opacity="0.8"/>
+        <polygon points="62,14 94,50 62,86" fill="#2a5299"/>
+      </svg>
+    </span>
+    <h2>Pulso da operação</h2>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi">
+      <div class="lbl">Novos clientes</div>
+      <div class="num">7</div>
+      <div class="delta"><span class="up">▲ +2</span> vs abril · 0 cancelamentos</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Churn 12m</div>
+      <div class="num copper">4.2%</div>
+      <div class="delta"><span class="up">▼ −0.3pp</span> melhorou desde mar</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">CAC médio carteira</div>
+      <div class="num">R$ 187</div>
+      <div class="delta"><span class="up">▼ −8%</span> vs abril</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Saúde da carteira</div>
+      <div class="health-bar">
+        <div class="seg green" style="width:62%"></div>
+        <div class="seg amber" style="width:23%"></div>
+        <div class="seg red" style="width:15%"></div>
+      </div>
+      <div class="health-legend">
+        <span class="g">62% saudáveis</span>
+        <span class="a">23% neutros</span>
+        <span class="r">15% em risco</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOJAS -->
+  <div class="section-title">
+    <span class="arrow">
+      <svg width="14" height="14" viewBox="0 0 100 100">
+        <polygon points="8,28 38,50 8,72" fill="#2a5299" opacity="0.55"/>
+        <polygon points="34,22 66,50 34,78" fill="#2a5299" opacity="0.8"/>
+        <polygon points="62,14 94,50 62,86" fill="#2a5299"/>
+      </svg>
+    </span>
+    <h2>Lojas em foco</h2>
+    <span class="count">28 ativas · ver todas →</span>
+  </div>
+
+  <div class="stores">
+    <div class="store">
+      <div class="pulse ok"></div>
+      <h3>Phone Manaus</h3>
+      <div class="gestor">Gestor: Jaqueline · Gerente: Marco</div>
+      <div class="metrics">
+        <div class="metric"><div class="l">IVM</div><div class="v">R$ 4.2k</div></div>
+        <div class="metric"><div class="l">Vendas</div><div class="v">147</div></div>
+        <div class="metric"><div class="l">CAC</div><div class="v">R$ 28</div></div>
+      </div>
+    </div>
+
+    <div class="store">
+      <div class="pulse bad"></div>
+      <h3>ALB iPhone</h3>
+      <div class="gestor">Gestor: Diego · Gerente: Darlan</div>
+      <div class="metrics">
+        <div class="metric"><div class="l">IVM</div><div class="v">R$ 3.1k</div></div>
+        <div class="metric"><div class="l">Vendas</div><div class="v">82</div></div>
+        <div class="metric"><div class="l">CAC</div><div class="v">R$ 38</div></div>
+      </div>
+    </div>
+
+    <div class="store">
+      <div class="pulse warn"></div>
+      <h3>Jota Iphonaria</h3>
+      <div class="gestor">Gestor: Optix · Gerente: Darlan</div>
+      <div class="metrics">
+        <div class="metric"><div class="l">IVM</div><div class="v">R$ 2.8k</div></div>
+        <div class="metric"><div class="l">Vendas</div><div class="v">114</div></div>
+        <div class="metric"><div class="l">CAC</div><div class="v">R$ 24</div></div>
+      </div>
+    </div>
+
+    <div class="store">
+      <div class="pulse ok"></div>
+      <h3>Boutique 14</h3>
+      <div class="gestor">Gestor: Jaqueline · Gerente: Marco</div>
+      <div class="metrics">
+        <div class="metric"><div class="l">IVM</div><div class="v">R$ 5.1k</div></div>
+        <div class="metric"><div class="l">Vendas</div><div class="v">203</div></div>
+        <div class="metric"><div class="l">CAC</div><div class="v">R$ 25</div></div>
+      </div>
+    </div>
+
+    <div class="store">
+      <div class="pulse ok"></div>
+      <h3>Dra. Fernanda</h3>
+      <div class="gestor">Gestor: Diego · Gerente: Optix</div>
+      <div class="metrics">
+        <div class="metric"><div class="l">IVM</div><div class="v">R$ 1.8k</div></div>
+        <div class="metric"><div class="l">Vendas</div><div class="v">42</div></div>
+        <div class="metric"><div class="l">CAC</div><div class="v">R$ 43</div></div>
+      </div>
+    </div>
+
+    <div class="store">
+      <div class="pulse warn"></div>
+      <h3>Mega Calçados</h3>
+      <div class="gestor">Gestor: Optix · Gerente: Diego</div>
+      <div class="metrics">
+        <div class="metric"><div class="l">IVM</div><div class="v">R$ 3.6k</div></div>
+        <div class="metric"><div class="l">Vendas</div><div class="v">128</div></div>
+        <div class="metric"><div class="l">CAC</div><div class="v">R$ 28</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="section-title">
+    <span class="arrow">
+      <svg width="14" height="14" viewBox="0 0 100 100">
+        <polygon points="8,28 38,50 8,72" fill="#2a5299" opacity="0.55"/>
+        <polygon points="34,22 66,50 34,78" fill="#2a5299" opacity="0.8"/>
+        <polygon points="62,14 94,50 62,86" fill="#2a5299"/>
+      </svg>
+    </span>
+    <h2>12 meses</h2>
+    <span class="count">tendência longa</span>
+  </div>
+
+  <div class="charts">
+    <div class="chart">
+      <div class="lbl">Receita mensal</div>
+      <div class="num">R$ 187.420</div>
+      <svg viewBox="0 0 300 80" preserveAspectRatio="none" style="height:80px">
+        <polyline fill="none" stroke="#2a5299" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          points="0,60 25,55 50,52 75,48 100,50 125,42 150,44 175,38 200,32 225,36 250,28 275,22 300,18"/>
+        <polyline fill="rgba(42,82,153,0.12)" stroke="none"
+          points="0,60 25,55 50,52 75,48 100,50 125,42 150,44 175,38 200,32 225,36 250,28 275,22 300,18 300,80 0,80"/>
+      </svg>
+    </div>
+    <div class="chart">
+      <div class="lbl">Churn 12m</div>
+      <div class="num">4.2%</div>
+      <svg viewBox="0 0 300 80" preserveAspectRatio="none" style="height:80px">
+        <polyline fill="none" stroke="#c87f5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          points="0,30 25,42 50,38 75,48 100,40 125,52 150,44 175,38 200,42 225,36 250,32 275,28 300,30"/>
+      </svg>
+    </div>
+    <div class="chart">
+      <div class="lbl">Novos clientes</div>
+      <div class="num">7</div>
+      <svg viewBox="0 0 300 80" preserveAspectRatio="none" style="height:80px">
+        <g fill="#5b8dc7">
+          <rect x="0"   y="50" width="18" height="22"/>
+          <rect x="25"  y="42" width="18" height="30"/>
+          <rect x="50"  y="46" width="18" height="26"/>
+          <rect x="75"  y="38" width="18" height="34"/>
+          <rect x="100" y="40" width="18" height="32"/>
+          <rect x="125" y="32" width="18" height="40"/>
+          <rect x="150" y="36" width="18" height="36"/>
+          <rect x="175" y="28" width="18" height="44"/>
+          <rect x="200" y="34" width="18" height="38"/>
+          <rect x="225" y="22" width="18" height="50"/>
+          <rect x="250" y="30" width="18" height="42"/>
+          <rect x="275" y="16" width="18" height="56"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>Hub Propagar · gestão interna</span>
+    <span class="right">Propagar · desde 2018</span>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mapa Operação Kommo — Propagar (Empréstimo + Cobrança Diária)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050810;
+    --bg-1: #0a0f1c;
+    --bg-2: #101728;
+    --bg-3: #162035;
+    --bg-4: #1e2b44;
+    --blue: #2a5299;
+    --blue-deep: #1a3268;
+    --blue-bright: #5b8dc7;
+    --blue-glow: rgba(42,82,153,0.35);
+    --text: #f2f5fa;
+    --text-2: #cdd3de;
+    --muted: #7e8698;
+    --muted-2: #4a5068;
+    --border: rgba(91,141,199,0.28);
+    --border-soft: rgba(255,255,255,0.06);
+    --green: #34d399;
+    --red: #f87171;
+    --orange: #fb923c;
+    --yellow: #facc15;
+  }
+  * { margin:0; padding:0; box-sizing: border-box; }
+  html, body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height:100vh; -webkit-font-smoothing: antialiased; }
+  body { padding: 40px 24px 80px; background:
+    radial-gradient(circle at 50% 0%, rgba(42,82,153,0.18) 0%, transparent 45%),
+    var(--bg);
+  }
+  .container { max-width: 1240px; margin: 0 auto; }
+
+  .h-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--blue-bright); margin-bottom: 12px; }
+  h1 { font-family: 'Playfair Display', Georgia, serif; font-size: 42px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 14px; }
+  h1 em { font-style: italic; color: var(--blue-bright); }
+  .h-sub { font-size: 15px; color: var(--muted); max-width: 860px; line-height: 1.6; }
+
+  .version-pill { display:inline-block; margin-bottom: 14px; font-family:'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue-bright); background: rgba(91,141,199,0.12); border:1px solid var(--border); padding: 5px 12px; border-radius: 999px; }
+
+  .section-head { display:flex; align-items:baseline; gap:14px; margin: 64px 0 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border-soft); }
+  .section-head .num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted-2); letter-spacing: 0.2em; }
+  .section-head h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+  .section-head h2 em { font-style: italic; color: var(--blue-bright); }
+  .section-sub { margin-top: -8px; margin-bottom: 20px; font-size: 13px; color: var(--muted); }
+
+  /* HIERARCHY */
+  .tree { display: flex; flex-direction: column; align-items: center; gap: 28px; padding: 30px 0; position: relative; }
+  .tree::before {
+    content: ''; position: absolute; top: 0; bottom: 0; left: 50%;
+    width: 1px; background: linear-gradient(180deg, transparent, var(--border), transparent);
+  }
+  .node {
+    background: linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 22px;
+    min-width: 240px;
+    text-align: center;
+    position: relative; z-index: 2;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  .node.root { padding: 20px 32px; border-color: var(--blue-bright); box-shadow: 0 0 48px var(--blue-glow); }
+  .node .role { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px; }
+  .node .name { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+  .node .name em { font-style: italic; color: var(--blue-bright); }
+  .node .meta { font-size: 11px; color: var(--muted); margin-top: 8px; letter-spacing: 0.05em; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 100%; max-width: 780px; }
+  .supervisor { border-color: rgba(91,141,199,0.4); }
+  .supervisor .role { color: var(--blue-bright); }
+
+  /* operators pool */
+  .ops-pool {
+    width: 100%; max-width: 980px;
+    background: linear-gradient(135deg, rgba(42,82,153,0.08), rgba(26,50,104,0.04));
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px 26px;
+  }
+  .ops-pool .pool-label { font-family:'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--blue-bright); margin-bottom: 12px; text-align:center; }
+  .ops-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .op-chip {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    background: var(--bg-3); border: 1px solid var(--border-soft);
+    border-radius: 8px; padding: 8px 10px; color: var(--text-2); text-align: center;
+  }
+  .ops-pool .pool-desc { margin-top: 14px; text-align:center; font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* seats table */
+  .seats { margin-top: 10px; width: 100%; border-collapse: collapse; background: var(--bg-2); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+  .seats th, .seats td { padding: 12px 16px; text-align: left; font-size: 13px; }
+  .seats th { background: var(--bg-3); font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue-bright); border-bottom: 1px solid var(--border); }
+  .seats td { border-bottom: 1px solid var(--border-soft); color: var(--text-2); }
+  .seats tr:last-child td { border-bottom: 0; font-weight: 700; color: var(--text); background: rgba(91,141,199,0.08); }
+  .seats code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--blue-bright); }
+
+  /* pipelines side-by-side */
+  .pipelines { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+  .pipe-card {
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px;
+  }
+  .pipe-card h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 18px; margin-bottom: 4px; }
+  .pipe-card .pipe-tag { font-size: 10px; color: var(--blue-bright); letter-spacing: 0.2em; text-transform: uppercase; font-weight: 800; margin-bottom: 14px; font-family: 'JetBrains Mono', monospace; }
+  .stage-list { display: flex; flex-direction: column; gap: 6px; }
+  .stage-row {
+    display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: center;
+    padding: 8px 10px; background: var(--bg-3); border: 1px solid var(--border-soft); border-radius: 8px;
+  }
+  .stage-row .n { font-family:'JetBrains Mono', monospace; font-size: 10px; color: var(--blue-bright); font-weight:700; }
+  .stage-row .title { font-size: 12px; color: var(--text-2); }
+  .stage-row.won { border-color: rgba(52,211,153,0.35); }
+  .stage-row.won .n { color: var(--green); }
+  .stage-row.lost { border-color: rgba(248,113,113,0.35); }
+  .stage-row.lost .n { color: var(--red); }
+  .stage-row.warn { border-color: rgba(251,146,60,0.35); }
+  .stage-row.warn .n { color: var(--orange); }
+
+  .arrow-link { margin: 10px 0; text-align:center; font-family:'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+
+  /* fields grid */
+  .fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 10px; }
+  .field-group {
+    background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px;
+  }
+  .field-group h4 { font-size: 12px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue-bright); margin-bottom: 10px; }
+  .field-group ul { list-style: none; }
+  .field-group li { font-size: 12px; color: var(--text-2); padding: 5px 0; border-bottom: 1px solid var(--border-soft); }
+  .field-group li:last-child { border-bottom: 0; }
+  .field-group li code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--blue-bright); background: var(--bg-3); padding: 1px 5px; border-radius: 4px; }
+
+  /* automations */
+  .autos { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .auto {
+    background: linear-gradient(180deg, rgba(52,211,153,0.05) 0%, var(--bg-1) 100%);
+    border: 1px solid rgba(52,211,153,0.25);
+    border-left: 3px solid var(--green);
+    border-radius: 12px;
+    padding: 14px 18px;
+  }
+  .auto .n { font-family:'JetBrains Mono', monospace; font-size: 10px; color: var(--green); font-weight:800; letter-spacing: 0.2em; }
+  .auto h4 { font-size: 13px; font-weight: 700; margin: 4px 0 6px; }
+  .auto p { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+  /* decision box */
+  .decisions { background: linear-gradient(180deg, rgba(251,146,60,0.06) 0%, var(--bg-1) 100%); border: 1px solid rgba(251,146,60,0.3); border-left: 3px solid var(--orange); border-radius: 12px; padding: 20px 24px; }
+  .decisions h4 { font-family: 'Playfair Display', Georgia, serif; font-size: 16px; margin-bottom: 10px; color: var(--orange); }
+  .decisions ul { list-style: none; }
+  .decisions li { font-size: 13px; color: var(--text-2); padding: 6px 0 6px 20px; position: relative; }
+  .decisions li::before { content: '☐'; position: absolute; left: 0; color: var(--orange); }
+
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border-soft); text-align: center; font-size: 11px; color: var(--muted-2); letter-spacing: 0.1em; }
+
+  @media (max-width: 840px) {
+    h1 { font-size: 30px; }
+    .row { grid-template-columns: 1fr; }
+    .pipelines { grid-template-columns: 1fr; }
+    .ops-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="version-pill">v2 · abril 2026 · substitui protótipo de vendas</div>
+    <div class="h-eyebrow">Mapa · Operação Kommo</div>
+    <h1>Kommo Propagar. <em>Empréstimo</em> com <em>cobrança diária</em>.</h1>
+    <p class="h-sub">
+      Estrutura real: 18 pessoas, 2 pipelines (originação + cobrança), 18 seats individuais,
+      campos custom orientados a carteira de crédito. Esta versão substitui o desenho de funil de vendas
+      anterior, que não se encaixa na operação real.
+    </p>
+
+    <!-- SEÇÃO 1: HIERARQUIA -->
+    <div class="section-head">
+      <span class="num">01</span>
+      <h2>Estrutura <em>humana</em></h2>
+    </div>
+    <p class="section-sub">18 pessoas · 1 gerente · 2 supervisores · 15 operadores de campo [AJUSTAR se a composição real for outra]</p>
+
+    <div class="tree">
+      <div class="node root">
+        <div class="role">Gerente</div>
+        <div class="name">Roberto <em>Araújo</em></div>
+        <div class="meta">meta de carteira · P&amp;L · política de crédito</div>
+      </div>
+      <div class="row">
+        <div class="node supervisor">
+          <div class="role">Supervisor · Team A</div>
+          <div class="name">Coordena <em>~7</em> operadores</div>
+          <div class="meta">daily · auditoria de rota · PAR do time</div>
+        </div>
+        <div class="node supervisor">
+          <div class="role">Supervisor · Team B</div>
+          <div class="name">Coordena <em>~8</em> operadores</div>
+          <div class="meta">daily · auditoria de rota · PAR do time</div>
+        </div>
+      </div>
+      <div class="ops-pool">
+        <div class="pool-label">Operadores de campo · 15 users</div>
+        <div class="ops-grid">
+          <div class="op-chip">OP-01</div><div class="op-chip">OP-02</div><div class="op-chip">OP-03</div><div class="op-chip">OP-04</div><div class="op-chip">OP-05</div>
+          <div class="op-chip">OP-06</div><div class="op-chip">OP-07</div><div class="op-chip">OP-08</div><div class="op-chip">OP-09</div><div class="op-chip">OP-10</div>
+          <div class="op-chip">OP-11</div><div class="op-chip">OP-12</div><div class="op-chip">OP-13</div><div class="op-chip">OP-14</div><div class="op-chip">OP-15</div>
+        </div>
+        <div class="pool-desc">
+          Cada operador tem <b>carteira territorial</b> (bairros/CEPs). Responsável por captação,
+          análise inicial e cobrança diária da própria carteira. Vê apenas seus clientes no Kommo.
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 2: SEATS -->
+    <div class="section-head">
+      <span class="num">02</span>
+      <h2>Seats <em>individuais</em> no Kommo</h2>
+    </div>
+    <p class="section-sub">Login compartilhado é inviável aqui — em cobrança, prova de contato individual é requisito jurídico (LGPD + disputa de dívida).</p>
+
+    <table class="seats">
+      <thead>
+        <tr><th>Login</th><th>Dono</th><th>Permissão</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>roberto@propagar.com.br</code></td><td>Gerente</td><td>Admin geral</td></tr>
+        <tr><td><code>sup-a@propagar.com.br</code></td><td>Supervisor A</td><td>Gerente do Team A</td></tr>
+        <tr><td><code>sup-b@propagar.com.br</code></td><td>Supervisor B</td><td>Gerente do Team B</td></tr>
+        <tr><td><code>op-01 … op-15@propagar.com.br</code></td><td>15 operadores</td><td>User restrito à própria carteira</td></tr>
+        <tr><td colspan="2">Total</td><td>18 seats</td></tr>
+      </tbody>
+    </table>
+
+    <!-- SEÇÃO 3: PIPELINES -->
+    <div class="section-head">
+      <span class="num">03</span>
+      <h2>Pipelines — <em>2 funis macro</em></h2>
+    </div>
+    <p class="section-sub">Originação e cobrança são ciclos distintos — um pipeline só mistura relatórios e permissões.</p>
+
+    <div class="pipelines">
+      <div class="pipe-card">
+        <div class="pipe-tag">Pipeline 1 · Originação</div>
+        <h3>Lead → empréstimo liberado</h3>
+        <div class="stage-list" style="margin-top:14px;">
+          <div class="stage-row"><div class="n">01</div><div class="title">Novo lead</div></div>
+          <div class="stage-row"><div class="n">02</div><div class="title">Contato inicial</div></div>
+          <div class="stage-row"><div class="n">03</div><div class="title">Em análise (docs + score)</div></div>
+          <div class="stage-row"><div class="n">04</div><div class="title">Aprovado · aguarda liberação</div></div>
+          <div class="stage-row won"><div class="n">05 ✓</div><div class="title">Liberado → move p/ Cobrança</div></div>
+          <div class="stage-row lost"><div class="n">06 ✕</div><div class="title">Recusado (motivo obrigatório)</div></div>
+        </div>
+      </div>
+      <div class="pipe-card">
+        <div class="pipe-tag">Pipeline 2 · Cobrança diária</div>
+        <h3>Cliente ativo → quitado / perda</h3>
+        <div class="stage-list" style="margin-top:14px;">
+          <div class="stage-row won"><div class="n">01</div><div class="title">Em dia</div></div>
+          <div class="stage-row warn"><div class="n">02</div><div class="title">Atrasado 1–3 dias</div></div>
+          <div class="stage-row warn"><div class="n">03</div><div class="title">Atrasado 4–7 dias</div></div>
+          <div class="stage-row"><div class="n">04</div><div class="title">Atrasado 8–15 dias (notifica sup.)</div></div>
+          <div class="stage-row"><div class="n">05</div><div class="title">Renegociação</div></div>
+          <div class="stage-row lost"><div class="n">06 ✕</div><div class="title">Escalação jurídica / perda</div></div>
+          <div class="stage-row won"><div class="n">07 ✓</div><div class="title">Quitado</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="arrow-link">↳ automação ao atingir "Liberado" cria card automaticamente no pipeline de Cobrança</div>
+
+    <!-- SEÇÃO 4: CAMPOS CUSTOM -->
+    <div class="section-head">
+      <span class="num">04</span>
+      <h2>Campos custom <em>obrigatórios</em></h2>
+    </div>
+    <p class="section-sub">Por lead — agrupados por função. Tudo que não está aqui é opcional.</p>
+
+    <div class="fields">
+      <div class="field-group">
+        <h4>Identificação</h4>
+        <ul>
+          <li><code>CPF</code> (único)</li>
+          <li><code>Nome completo</code></li>
+          <li><code>Telefone principal</code> (WhatsApp)</li>
+          <li><code>Endereço completo</code></li>
+          <li><code>Referência 1</code> (nome + tel)</li>
+          <li><code>Referência 2</code> (nome + tel)</li>
+          <li><code>Foto do cliente</code></li>
+          <li><code>Foto do documento</code></li>
+          <li><code>Comprovante de residência</code></li>
+        </ul>
+      </div>
+      <div class="field-group">
+        <h4>Empréstimo</h4>
+        <ul>
+          <li><code>Valor emprestado</code> (R$)</li>
+          <li><code>Taxa de juros</code> (%)</li>
+          <li><code>Prazo</code> (dias)</li>
+          <li><code>Parcela diária</code> (R$)</li>
+          <li><code>Data de liberação</code></li>
+          <li><code>Data de quitação prevista</code></li>
+          <li><code>Saldo devedor atual</code></li>
+          <li><code>Parcelas pagas / totais</code></li>
+        </ul>
+      </div>
+      <div class="field-group">
+        <h4>Cobrança</h4>
+        <ul>
+          <li><code>Operador responsável</code> (user)</li>
+          <li><code>Dias em atraso</code></li>
+          <li><code>Valor em atraso</code> (R$)</li>
+          <li><code>Última cobrança</code> (data + canal)</li>
+          <li><code>Motivo de atraso</code> (dropdown)</li>
+          <li><code>Histórico de renegociações</code></li>
+        </ul>
+      </div>
+      <div class="field-group">
+        <h4>Classificação</h4>
+        <ul>
+          <li><code>Score interno</code> (A/B/C/D)</li>
+          <li><code>Origem</code> (indicação/porta/tráfego/recorrente)</li>
+          <li><code>N° de empréstimos anteriores</code></li>
+          <li><code>Risco atual</code> (baixo/médio/alto)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 5: AUTOMAÇÕES -->
+    <div class="section-head">
+      <span class="num">05</span>
+      <h2>Automações <em>críticas</em></h2>
+    </div>
+    <p class="section-sub">Sem isso, a operação vira planilha. Estas 6 automações são mínimo viável.</p>
+
+    <div class="autos">
+      <div class="auto">
+        <div class="n">AUTO 01</div>
+        <h4>Atualização diária do saldo</h4>
+        <p>Cron às 06h reduz <code>Saldo devedor</code> pelo valor recebido. Marca parcela paga no dia anterior.</p>
+      </div>
+      <div class="auto">
+        <div class="n">AUTO 02</div>
+        <h4>Escalonamento automático de atraso</h4>
+        <p>Card se move entre etapas (1→2→3→4) baseado em <code>Dias em atraso</code>, sem intervenção manual.</p>
+      </div>
+      <div class="auto">
+        <div class="n">AUTO 03</div>
+        <h4>Notificação ao supervisor</h4>
+        <p>Atraso ≥ 8 dias dispara notificação pro supervisor do operador. Card muda de cor no dashboard.</p>
+      </div>
+      <div class="auto">
+        <div class="n">AUTO 04</div>
+        <h4>Bloqueio de CPF inadimplente</h4>
+        <p>Novo lead com CPF já ativo em Cobrança com atraso > 3 dias: bloqueia criação e alerta gerente.</p>
+      </div>
+      <div class="auto">
+        <div class="n">AUTO 05</div>
+        <h4>Tarefa diária de cobrança</h4>
+        <p>Cada cliente "Em dia" gera tarefa "Cobrar hoje" pro operador às 07h. Checklist auditável.</p>
+      </div>
+      <div class="auto">
+        <div class="n">AUTO 06</div>
+        <h4>Checkpoint de rota (foto + geo)</h4>
+        <p>Marcar visita exige foto e localização. Prova jurídica + auditoria de rota pelo supervisor.</p>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 5.5: INTEGRAÇÃO WHATSAPP COEXISTENCE -->
+    <div class="section-head">
+      <span class="num">5.5</span>
+      <h2>WhatsApp · modo <em>Coexistence</em></h2>
+    </div>
+    <p class="section-sub">17 números seguem no celular dos operadores E espelham no Kommo simultaneamente. Lançado pela Meta em 2025, disponível no Brasil.</p>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px;">
+      <div style="background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 20px;">
+        <div style="font-family:'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue-bright); font-weight: 800; margin-bottom: 10px;">Arquitetura</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-2); line-height: 1.8; white-space: pre; background: var(--bg-3); padding: 14px; border-radius: 8px; border: 1px solid var(--border-soft);">
+[cliente] → [número do operador]
+                   │
+       ┌───────────┴───────────┐
+       ▼                       ▼
+[app no celular]       [Cloud API → Kommo]
+ operador usa          gerente supervisiona
+ normalmente           histórico centralizado
+
+    ↕ mensagens espelham ↕
+        </div>
+      </div>
+      <div style="background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 20px;">
+        <div style="font-family:'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); font-weight: 800; margin-bottom: 10px;">O que resolve</div>
+        <ul style="list-style: none; margin-bottom: 18px;">
+          <li style="font-size: 12px; color: var(--text-2); padding: 4px 0 4px 20px; position: relative;"><span style="position:absolute; left:0; color: var(--green);">✓</span>Histórico centralizado no Kommo</li>
+          <li style="font-size: 12px; color: var(--text-2); padding: 4px 0 4px 20px; position: relative;"><span style="position:absolute; left:0; color: var(--green);">✓</span>Gerente supervisiona todas as conversas</li>
+          <li style="font-size: 12px; color: var(--text-2); padding: 4px 0 4px 20px; position: relative;"><span style="position:absolute; left:0; color: var(--green);">✓</span>App continua no celular (zero mudança de hábito)</li>
+          <li style="font-size: 12px; color: var(--text-2); padding: 4px 0 4px 20px; position: relative;"><span style="position:absolute; left:0; color: var(--green);">✓</span>Operador sai: número e histórico ficam</li>
+        </ul>
+        <div style="font-family:'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); font-weight: 800; margin-bottom: 10px;">O que NÃO resolve</div>
+        <ul style="list-style: none;">
+          <li style="font-size: 12px; color: var(--text-2); padding: 4px 0 4px 20px; position: relative;"><span style="position:absolute; left:0; color: var(--red);">✗</span>Ban por comportamento (volume / repetição)</li>
+          <li style="font-size: 12px; color: var(--text-2); padding: 4px 0 4px 20px; position: relative;"><span style="position:absolute; left:0; color: var(--red);">✗</span>Proteção anti-ban é comportamental, não técnica</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 16px; color: var(--text); margin: 24px 0 8px;">Pré-requisitos de ativação</h3>
+    <table class="seats">
+      <thead>
+        <tr><th>Requisito</th><th>Status esperado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Número no Business App há ≥ 7 dias com atividade</td><td>✓ Já têm</td></tr>
+        <tr><td>WhatsApp Business App versão ≥ 2.24.17</td><td>Verificar nos 17 celulares</td></tr>
+        <tr><td>Meta Business Account verificada no <b>CNPJ Propagar</b></td><td><b>Crítico · fazer antes</b></td></tr>
+        <tr><td>17 números registrados nesse CNPJ</td><td>Transferência em curso</td></tr>
+        <tr><td>BSP que suporte Coexistence + Kommo</td><td>Poli Digital / Chatsac / 360Dialog</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 16px; color: var(--text); margin: 24px 0 8px;">Custo mensal estimado</h3>
+    <table class="seats">
+      <thead>
+        <tr><th>Item</th><th>Valor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Kommo Advanced (18 seats)</td><td>~R$ 2.700</td></tr>
+        <tr><td>BSP Coexistence (17 números)</td><td>~R$ 1.700</td></tr>
+        <tr><td>Meta fees (só envios via API)</td><td>~R$ 300</td></tr>
+        <tr><td>Total</td><td><b>~R$ 4.700/mês</b></td></tr>
+      </tbody>
+    </table>
+
+    <!-- SEÇÃO 6: DECISÕES PENDENTES -->
+    <div class="section-head">
+      <span class="num">06</span>
+      <h2>Decisões <em>pendentes</em></h2>
+    </div>
+    <p class="section-sub">Fechar antes de sair criando coisa no Kommo. Qualquer destes itens altera estrutura de campos ou permissões.</p>
+
+    <div class="decisions">
+      <h4>Check com o gerente</h4>
+      <ul>
+        <li>Composição exata dos 17 — são todos operadores híbridos? Ou tem captadores/analistas dedicados?</li>
+        <li>Alçada de aprovação — supervisor libera até R$X, gerente libera acima de Y</li>
+        <li>Política de renegociação — máximo de vezes, desconto máximo, quem aprova</li>
+        <li>Integração de pagamento — PIX Cobrança, boleto, ou recebimento manual em dinheiro?</li>
+        <li>Fonte da verdade — Kommo sozinho, ou sistema próprio + Kommo como atendimento?</li>
+        <li>Backup periódico — extração semanal pra planilha/banco próprio (recomendo)</li>
+      </ul>
+    </div>
+
+    <footer>
+      Propagar · operação empréstimo + cobrança diária · mapa v2 · abril 2026
+    </footer>
+
+  </div>
+</body>
+</html>

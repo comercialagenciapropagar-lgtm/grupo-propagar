@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Hub Propagar — Trading Floor v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060914;
+    --bg-2: #0c1224;
+    --panel: #111a30;
+    --panel-2: #182240;
+    --line: rgba(91, 141, 199, 0.18);
+    --line-strong: rgba(91, 141, 199, 0.45);
+    --text: #e4ecfa;
+    --text-soft: #a4b1cc;
+    --muted: #6c7896;
+    --propagar: #2a5299;
+    --propagar-bright: #5b8dc7;
+    --cyan: #00d9ff;
+    --green: #00e676;
+    --green-soft: rgba(0, 230, 118, 0.15);
+    --red: #ff3b5c;
+    --red-soft: rgba(255, 59, 92, 0.15);
+    --amber: #ffb547;
+    --gold: #d4af6a;
+    --mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", -apple-system, system-ui, sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at top, rgba(42, 82, 153, 0.15), transparent 70%),
+      radial-gradient(ellipse at bottom right, rgba(0, 217, 255, 0.06), transparent 60%);
+    background-attachment: fixed;
+  }
+  .page { max-width: 1320px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ============ TICKER TAPE ============ */
+  .ticker-wrap {
+    background: linear-gradient(90deg, rgba(0,0,0,0.6), rgba(42,82,153,0.2), rgba(0,0,0,0.6));
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden; padding: 12px 0; margin: 0 -24px 24px;
+    position: relative;
+  }
+  .ticker-wrap::before, .ticker-wrap::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2;
+  }
+  .ticker-wrap::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+  .ticker-wrap::after { right: 0; background: linear-gradient(-90deg, var(--bg), transparent); }
+  .ticker {
+    display: flex; gap: 40px; animation: tickerScroll 70s linear infinite;
+    white-space: nowrap; padding-left: 40px;
+  }
+  @keyframes tickerScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .tk {
+    display: flex; align-items: center; gap: 10px; font-family: var(--mono);
+    font-size: 14px; font-weight: 500;
+  }
+  .tk .sym { color: var(--text); font-weight: 700; }
+  .tk .val { color: var(--text-soft); }
+  .tk .chg.up { color: var(--green); }
+  .tk .chg.down { color: var(--red); }
+  .tk .chg::before { font-family: sans-serif; }
+  .tk .chg.up::before { content: "▲ "; }
+  .tk .chg.down::before { content: "▼ "; }
+
+  /* ============ HEADER ============ */
+  .top {
+    padding: 20px 0 0; display: flex; justify-content: space-between; align-items: center;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand .name {
+    font-weight: 800; font-size: 17px; letter-spacing: -0.01em; color: var(--text);
+  }
+  .brand .name .dot { color: var(--propagar-bright); margin: 0 4px; }
+  .brand .badge {
+    background: var(--green-soft); color: var(--green); font-family: var(--mono);
+    font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: 700;
+    border: 1px solid rgba(0,230,118,0.3); margin-left: 12px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .top-tools { display: flex; gap: 10px; align-items: center; }
+  .cmdk {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--line);
+    padding: 8px 12px; border-radius: 6px; font-size: 12px; color: var(--text-soft);
+    cursor: pointer; min-width: 240px;
+  }
+  .cmdk kbd {
+    background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 3px;
+    font-family: var(--mono); font-size: 10px; color: var(--text-soft);
+    margin-left: auto; border: 1px solid var(--line);
+  }
+  .icon-btn {
+    width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 6px;
+    cursor: pointer; position: relative;
+  }
+  .icon-btn .dot-notif {
+    position: absolute; top: 6px; right: 6px; width: 7px; height: 7px;
+    border-radius: 50%; background: var(--red);
+    box-shadow: 0 0 8px var(--red);
+  }
+  .avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--propagar), var(--cyan));
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px; cursor: pointer;
+  }
+
+  /* ============ HERO ROW ============ */
+  .hero {
+    margin-top: 24px; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 12px;
+  }
+  @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } }
+
+  .big {
+    background: linear-gradient(140deg, rgba(42,82,153,0.20), rgba(0,217,255,0.05) 70%, transparent);
+    border: 1px solid var(--line-strong); border-radius: 12px; padding: 24px;
+    position: relative; overflow: hidden;
+  }
+  .big::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at right top, rgba(0,217,255,0.1), transparent 60%);
+    pointer-events: none;
+  }
+  .big .lbl {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+    color: var(--propagar-bright); font-weight: 700; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .big .val {
+    font-family: var(--mono); font-size: 56px; font-weight: 700; color: var(--text);
+    line-height: 1; letter-spacing: -0.02em;
+  }
+  .big .delta {
+    display: flex; align-items: center; gap: 12px; margin-top: 10px;
+  }
+  .big .delta .pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px; border-radius: 5px; font-family: var(--mono);
+    font-size: 12px; font-weight: 700;
+  }
+  .big .delta .pill.up { background: var(--green-soft); color: var(--green); border: 1px solid rgba(0,230,118,0.3); }
+  .big .delta .pill.down { background: var(--red-soft); color: var(--red); border: 1px solid rgba(255,59,92,0.3); }
+  .big .delta .sub { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+  .big svg.line { position: absolute; bottom: 0; left: 0; right: 0; width: 100%; height: 100px; }
+
+  .stat {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px;
+    position: relative; overflow: hidden;
+  }
+  .stat .lbl {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+    color: var(--muted); font-weight: 700; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .stat .val {
+    font-family: var(--mono); font-size: 30px; font-weight: 700; color: var(--text);
+    line-height: 1; letter-spacing: -0.02em;
+  }
+  .stat .val.green { color: var(--green); text-shadow: 0 0 14px rgba(0,230,118,0.4); }
+  .stat .val.red { color: var(--red); text-shadow: 0 0 14px rgba(255,59,92,0.4); }
+  .stat .val.amber { color: var(--amber); }
+  .stat .delta {
+    font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+    margin-top: 6px; display: flex; align-items: center; gap: 6px;
+  }
+  .stat .delta .up { color: var(--green); font-weight: 700; }
+  .stat .delta .down { color: var(--red); font-weight: 700; }
+  .stat svg.spark {
+    position: absolute; bottom: 0; right: 0; width: 70px; height: 40px; opacity: 0.7;
+  }
+
+  /* ============ SECTION HEAD ============ */
+  .section {
+    display: flex; align-items: center; gap: 12px; margin: 32px 0 14px;
+  }
+  .section .arrow { opacity: 0.55; }
+  .section h2 {
+    font-family: "Playfair Display", serif; font-style: italic; font-weight: 500;
+    font-size: 20px; color: var(--text); letter-spacing: -0.005em;
+  }
+  .section .badge-live {
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em;
+    background: var(--green-soft); color: var(--green); padding: 3px 7px;
+    border-radius: 4px; font-weight: 700; border: 1px solid rgba(0,230,118,0.25);
+    text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .section .badge-live::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green); box-shadow: 0 0 6px var(--green);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity: 0.4; } }
+  .section .right { margin-left: auto; font-size: 11px; color: var(--muted); font-family: var(--mono); }
+
+  /* ============ MOVERS ============ */
+  .movers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 900px) { .movers { grid-template-columns: 1fr; } }
+  .mover-card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    overflow: hidden;
+  }
+  .mover-head {
+    padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+  }
+  .mover-head h3 {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--text-soft); font-weight: 700;
+  }
+  .mover-head .pill {
+    font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 4px;
+    font-weight: 700; letter-spacing: 0.08em;
+  }
+  .mover-head .pill.up { background: var(--green-soft); color: var(--green); }
+  .mover-head .pill.down { background: var(--red-soft); color: var(--red); }
+  .mover-row {
+    padding: 12px 18px; display: grid; grid-template-columns: auto 1fr auto auto;
+    align-items: center; gap: 14px; border-bottom: 1px solid var(--line);
+  }
+  .mover-row:last-child { border-bottom: 0; }
+  .mover-row:hover { background: rgba(255,255,255,0.02); }
+  .mover-row .sym {
+    font-family: var(--mono); font-weight: 700; font-size: 13px; color: var(--text);
+    background: rgba(91,141,199,0.12); padding: 4px 8px; border-radius: 4px;
+    min-width: 70px; text-align: center;
+  }
+  .mover-row .name { font-size: 13px; color: var(--text); }
+  .mover-row .name .gestor { font-size: 10.5px; color: var(--muted); display: block; margin-top: 1px; }
+  .mover-row .num { font-family: var(--mono); font-size: 13px; color: var(--text-soft); font-weight: 600; }
+  .mover-row .chg { font-family: var(--mono); font-size: 13px; font-weight: 700; min-width: 60px; text-align: right; }
+  .mover-row .chg.up { color: var(--green); }
+  .mover-row .chg.down { color: var(--red); }
+
+  /* ============ HEATMAP ============ */
+  .heat {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px;
+  }
+  .heat-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 14px;
+  }
+  .heat-cell {
+    aspect-ratio: 1.5/1; border-radius: 6px; padding: 8px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    font-family: var(--mono); cursor: pointer; transition: transform 100ms;
+    border: 1px solid transparent;
+  }
+  .heat-cell:hover { transform: scale(1.04); border-color: var(--text); }
+  .heat-cell .n { font-size: 10px; color: var(--text); font-weight: 600; opacity: 0.9; line-height: 1.1; }
+  .heat-cell .c { font-size: 13px; font-weight: 700; }
+  /* Cores por performance */
+  .h-1 { background: rgba(0,230,118,0.85); color: #003820; }
+  .h-2 { background: rgba(0,230,118,0.60); color: #001f12; }
+  .h-3 { background: rgba(0,230,118,0.35); color: #003820; }
+  .h-4 { background: rgba(120,130,160,0.20); color: var(--text); }
+  .h-5 { background: rgba(255,59,92,0.35); color: #fff; }
+  .h-6 { background: rgba(255,59,92,0.60); color: #fff; }
+  .h-7 { background: rgba(255,59,92,0.85); color: #fff; }
+  .heat-legend {
+    display: flex; align-items: center; gap: 8px; font-family: var(--mono);
+    font-size: 10px; color: var(--muted); margin-top: 14px;
+  }
+  .heat-legend .ramp { display: flex; gap: 3px; }
+  .heat-legend .ramp i {
+    width: 14px; height: 14px; border-radius: 3px; display: block;
+  }
+
+  /* ============ CHART BIG ============ */
+  .chart-big {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 20px; margin-top: 14px;
+  }
+  .chart-big-head {
+    display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px;
+  }
+  .chart-big-head .left .lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--muted); text-transform: uppercase; }
+  .chart-big-head .left .val { font-family: var(--mono); font-size: 28px; font-weight: 700; color: var(--text); margin-top: 4px; }
+  .chart-big-head .tabs { display: flex; gap: 6px; }
+  .chart-big-head .tab { padding: 5px 10px; border-radius: 5px; font-family: var(--mono); font-size: 11px; color: var(--text-soft); border: 1px solid var(--line); cursor: pointer; }
+  .chart-big-head .tab.active { background: var(--propagar); color: #fff; border-color: var(--propagar); }
+  .chart-big svg { display: block; width: 100%; height: 200px; }
+
+  /* ============ FOOTER ============ */
+  .footer {
+    margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; font-size: 11px; color: var(--muted);
+    font-family: var(--mono); letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- TOP -->
+  <div class="top">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 100 100">
+        <polygon points="8,28 38,50 8,72" fill="#5b8dc7" opacity="0.55"/>
+        <polygon points="34,22 66,50 34,78" fill="#5b8dc7" opacity="0.8"/>
+        <polygon points="62,14 94,50 62,86" fill="#5b8dc7"/>
+      </svg>
+      <span class="name">HUB<span class="dot">·</span>PROPAGAR</span>
+      <span class="badge">● LIVE · MAIO/26</span>
+    </div>
+    <div class="top-tools">
+      <div class="cmdk">
+        <span>🔍</span>
+        <span>Buscar loja, lead, contrato...</span>
+        <kbd>⌘K</kbd>
+      </div>
+      <div class="icon-btn">🔔<span class="dot-notif"></span></div>
+      <div class="avatar">R</div>
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <div class="tk"><span class="sym">$PHONEMAO</span><span class="val">147 vendas</span><span class="chg up">+12.4%</span></div>
+      <div class="tk"><span class="sym">$ALBIPH</span><span class="val">82 vendas</span><span class="chg down">−47.2%</span></div>
+      <div class="tk"><span class="sym">$JOTAIPH</span><span class="val">114 vendas</span><span class="chg up">+3.8%</span></div>
+      <div class="tk"><span class="sym">$BOUT14</span><span class="val">203 vendas</span><span class="chg up">+18.6%</span></div>
+      <div class="tk"><span class="sym">$DRAFER</span><span class="val">42 vendas</span><span class="chg up">+8.1%</span></div>
+      <div class="tk"><span class="sym">$MEGACAL</span><span class="val">128 vendas</span><span class="chg down">−12.3%</span></div>
+      <div class="tk"><span class="sym">$OPTIX</span><span class="val">96 vendas</span><span class="chg up">+5.2%</span></div>
+      <div class="tk"><span class="sym">$LAUNCH</span><span class="val">71 vendas</span><span class="chg down">−3.4%</span></div>
+      <div class="tk"><span class="sym">$RIOLUZ</span><span class="val">58 vendas</span><span class="chg up">+22.7%</span></div>
+      <div class="tk"><span class="sym">$IMOBIBA</span><span class="val">35 vendas</span><span class="chg up">+9.4%</span></div>
+      <!-- duplicar para loop -->
+      <div class="tk"><span class="sym">$PHONEMAO</span><span class="val">147 vendas</span><span class="chg up">+12.4%</span></div>
+      <div class="tk"><span class="sym">$ALBIPH</span><span class="val">82 vendas</span><span class="chg down">−47.2%</span></div>
+      <div class="tk"><span class="sym">$JOTAIPH</span><span class="val">114 vendas</span><span class="chg up">+3.8%</span></div>
+      <div class="tk"><span class="sym">$BOUT14</span><span class="val">203 vendas</span><span class="chg up">+18.6%</span></div>
+      <div class="tk"><span class="sym">$DRAFER</span><span class="val">42 vendas</span><span class="chg up">+8.1%</span></div>
+      <div class="tk"><span class="sym">$MEGACAL</span><span class="val">128 vendas</span><span class="chg down">−12.3%</span></div>
+      <div class="tk"><span class="sym">$OPTIX</span><span class="val">96 vendas</span><span class="chg up">+5.2%</span></div>
+      <div class="tk"><span class="sym">$LAUNCH</span><span class="val">71 vendas</span><span class="chg down">−3.4%</span></div>
+      <div class="tk"><span class="sym">$RIOLUZ</span><span class="val">58 vendas</span><span class="chg up">+22.7%</span></div>
+      <div class="tk"><span class="sym">$IMOBIBA</span><span class="val">35 vendas</span><span class="chg up">+9.4%</span></div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <!-- BIG MRR -->
+    <div class="big">
+      <div class="lbl">★ Receita do Mês · MAY 2026</div>
+      <div class="val">R$ 187.420</div>
+      <div class="delta">
+        <span class="pill up">▲ +12.0%</span>
+        <span class="sub">vs ABR · meta 85% · gap R$ 4.5k</span>
+      </div>
+      <svg class="line" viewBox="0 0 800 100" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#00d9ff" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#00d9ff" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <polyline fill="none" stroke="#00d9ff" stroke-width="2.5" stroke-linecap="round"
+          points="0,72 60,68 120,60 180,64 240,52 300,56 360,42 420,46 480,34 540,28 600,30 660,22 720,18 800,14"/>
+        <polyline fill="url(#g1)" stroke="none"
+          points="0,72 60,68 120,60 180,64 240,52 300,56 360,42 420,46 480,34 540,28 600,30 660,22 720,18 800,14 800,100 0,100"/>
+      </svg>
+    </div>
+
+    <div class="stat">
+      <div class="lbl">Clientes ativos</div>
+      <div class="val green">47</div>
+      <div class="delta"><span class="up">▲ +2</span> vs abril · 0 cancel.</div>
+      <svg class="spark" viewBox="0 0 100 40" preserveAspectRatio="none">
+        <polyline fill="none" stroke="#00e676" stroke-width="2"
+          points="0,30 15,28 30,25 45,26 60,20 75,18 90,15 100,12"/>
+      </svg>
+    </div>
+
+    <div class="stat">
+      <div class="lbl">Em risco · churn</div>
+      <div class="val red">7</div>
+      <div class="delta"><span class="down">▲ +3</span> R$ 28k em jogo</div>
+      <svg class="spark" viewBox="0 0 100 40" preserveAspectRatio="none">
+        <polyline fill="none" stroke="#ff3b5c" stroke-width="2"
+          points="0,30 15,28 30,26 45,24 60,22 75,18 90,14 100,12"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- KPI ROW -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px">
+    <div class="stat">
+      <div class="lbl">Caixa do mês</div>
+      <div class="val green">+R$ 41.8k</div>
+      <div class="delta">após pagamentos previstos</div>
+    </div>
+    <div class="stat">
+      <div class="lbl">CAC médio</div>
+      <div class="val">R$ 187</div>
+      <div class="delta"><span class="up">▼ −8%</span> vs abril</div>
+    </div>
+    <div class="stat">
+      <div class="lbl">Casos abertos</div>
+      <div class="val amber">12</div>
+      <div class="delta">5 sem resposta > 48h</div>
+    </div>
+    <div class="stat">
+      <div class="lbl">Churn 12m</div>
+      <div class="val">4.2%</div>
+      <div class="delta"><span class="up">▼ −0.3pp</span> melhorando</div>
+    </div>
+  </div>
+
+  <!-- MOVERS DO DIA -->
+  <div class="section">
+    <span class="arrow">
+      <svg width="16" height="16" viewBox="0 0 100 100">
+        <polygon points="8,28 38,50 8,72" fill="#5b8dc7" opacity="0.55"/>
+        <polygon points="34,22 66,50 34,78" fill="#5b8dc7" opacity="0.8"/>
+        <polygon points="62,14 94,50 62,86" fill="#5b8dc7"/>
+      </svg>
+    </span>
+    <h2>Maiores variações <em>· 7 dias</em></h2>
+    <span class="badge-live">live</span>
+    <span class="right">atualizado há 2min</span>
+  </div>
+
+  <div class="movers">
+    <!-- TOP ALTAS -->
+    <div class="mover-card">
+      <div class="mover-head">
+        <h3>↑ Top altas</h3>
+        <span class="pill up">Bull</span>
+      </div>
+      <div class="mover-row">
+        <div class="sym">RIOLUZ</div>
+        <div class="name">Rio Luz Iluminação<span class="gestor">Gestor: Diego · Gerente: Optix</span></div>
+        <div class="num">58 vendas</div>
+        <div class="chg up">+22.7%</div>
+      </div>
+      <div class="mover-row">
+        <div class="sym">BOUT14</div>
+        <div class="name">Boutique 14 lojas<span class="gestor">Gestor: Jaqueline · Gerente: Marco</span></div>
+        <div class="num">203 vendas</div>
+        <div class="chg up">+18.6%</div>
+      </div>
+      <div class="mover-row">
+        <div class="sym">PHONEMAO</div>
+        <div class="name">Phone Manaus<span class="gestor">Gestor: Jaqueline · Gerente: Marco</span></div>
+        <div class="num">147 vendas</div>
+        <div class="chg up">+12.4%</div>
+      </div>
+      <div class="mover-row">
+        <div class="sym">IMOBIBA</div>
+        <div class="name">Imobi Bahia<span class="gestor">Gestor: Darlan · Gerente: Darlan</span></div>
+        <div class="num">35 vendas</div>
+        <div class="chg up">+9.4%</div>
+      </div>
+    </div>
+
+    <!-- TOP BAIXAS -->
+    <div class="mover-card">
+      <div class="mover-head">
+        <h3>↓ Top baixas</h3>
+        <span class="pill down">Bear</span>
+      </div>
+      <div class="mover-row">
+        <div class="sym">ALBIPH</div>
+        <div class="name">ALB iPhone<span class="gestor">Gestor: Diego · Gerente: Darlan · Declarou saída</span></div>
+        <div class="num">82 vendas</div>
+        <div class="chg down">−47.2%</div>
+      </div>
+      <div class="mover-row">
+        <div class="sym">MEGACAL</div>
+        <div class="name">Mega Calçados<span class="gestor">Gestor: Optix · Gerente: Diego</span></div>
+        <div class="num">128 vendas</div>
+        <div class="chg down">−12.3%</div>
+      </div>
+      <div class="mover-row">
+        <div class="sym">LAUNCH</div>
+        <div class="name">Launch Bauru<span class="gestor">Gestor: Optix · Gerente: Darlan</span></div>
+        <div class="num">71 vendas</div>
+        <div class="chg down">−3.4%</div>
+      </div>
+      <div class="mover-row">
+        <div class="sym">DRAFER</div>
+        <div class="name">Dra. Fernanda<span class="gestor">Gestor: Diego · Gerente: Optix</span></div>
+        <div class="num">42 vendas</div>
+        <div class="chg up">+8.1%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEATMAP -->
+  <div class="section">
+    <span class="arrow">
+      <svg width="16" height="16" viewBox="0 0 100 100">
+        <polygon points="8,28 38,50 8,72" fill="#5b8dc7" opacity="0.55"/>
+        <polygon points="34,22 66,50 34,78" fill="#5b8dc7" opacity="0.8"/>
+        <polygon points="62,14 94,50 62,86" fill="#5b8dc7"/>
+      </svg>
+    </span>
+    <h2>Mapa da carteira <em>· performance 7d</em></h2>
+    <span class="right">28 lojas ativas</span>
+  </div>
+
+  <div class="heat">
+    <div class="heat-grid">
+      <div class="heat-cell h-1"><div class="n">Rio Luz</div><div class="c">+22.7%</div></div>
+      <div class="heat-cell h-1"><div class="n">Boutique 14</div><div class="c">+18.6%</div></div>
+      <div class="heat-cell h-2"><div class="n">Phone Manaus</div><div class="c">+12.4%</div></div>
+      <div class="heat-cell h-2"><div class="n">Imobi Bahia</div><div class="c">+9.4%</div></div>
+      <div class="heat-cell h-2"><div class="n">Dra Fernanda</div><div class="c">+8.1%</div></div>
+      <div class="heat-cell h-3"><div class="n">Optix Óticas</div><div class="c">+5.2%</div></div>
+      <div class="heat-cell h-3"><div class="n">Jota iPhonaria</div><div class="c">+3.8%</div></div>
+      <div class="heat-cell h-4"><div class="n">TPV Rest.</div><div class="c">+1.2%</div></div>
+      <div class="heat-cell h-4"><div class="n">Casa Mineira</div><div class="c">0.0%</div></div>
+      <div class="heat-cell h-4"><div class="n">Aliança Mod.</div><div class="c">−0.8%</div></div>
+      <div class="heat-cell h-5"><div class="n">Sertão Mob.</div><div class="c">−2.1%</div></div>
+      <div class="heat-cell h-5"><div class="n">Launch Bauru</div><div class="c">−3.4%</div></div>
+      <div class="heat-cell h-5"><div class="n">Mega Calçados</div><div class="c">−12.3%</div></div>
+      <div class="heat-cell h-7"><div class="n">ALB iPhone</div><div class="c">−47.2%</div></div>
+    </div>
+    <div class="heat-legend">
+      <span>Pior</span>
+      <span class="ramp">
+        <i style="background:rgba(255,59,92,0.85)"></i>
+        <i style="background:rgba(255,59,92,0.60)"></i>
+        <i style="background:rgba(255,59,92,0.35)"></i>
+        <i style="background:rgba(120,130,160,0.20)"></i>
+        <i style="background:rgba(0,230,118,0.35)"></i>
+        <i style="background:rgba(0,230,118,0.60)"></i>
+        <i style="background:rgba(0,230,118,0.85)"></i>
+      </span>
+      <span>Melhor</span>
+      <span style="margin-left:auto">passe o mouse pra detalhes da loja</span>
+    </div>
+  </div>
+
+  <!-- CHART BIG -->
+  <div class="chart-big">
+    <div class="chart-big-head">
+      <div class="left">
+        <div class="lbl">Receita Mensal · 12 meses</div>
+        <div class="val">R$ 187.420 <span style="color:var(--green);font-size:14px;margin-left:8px">▲ +12.0% MoM</span></div>
+      </div>
+      <div class="tabs">
+        <span class="tab">7D</span>
+        <span class="tab">30D</span>
+        <span class="tab active">12M</span>
+        <span class="tab">YTD</span>
+        <span class="tab">ALL</span>
+      </div>
+    </div>
+    <svg viewBox="0 0 800 200" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="g2" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stop-color="#5b8dc7" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#5b8dc7" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- grid -->
+      <g stroke="rgba(91,141,199,0.08)" stroke-width="1">
+        <line x1="0" y1="40" x2="800" y2="40"/>
+        <line x1="0" y1="80" x2="800" y2="80"/>
+        <line x1="0" y1="120" x2="800" y2="120"/>
+        <line x1="0" y1="160" x2="800" y2="160"/>
+      </g>
+      <!-- line -->
+      <polyline fill="url(#g2)" stroke="none"
+        points="0,150 65,140 130,135 195,125 260,130 325,110 390,115 455,95 520,85 585,90 650,70 715,55 800,42 800,200 0,200"/>
+      <polyline fill="none" stroke="#5b8dc7" stroke-width="2.5" stroke-linecap="round"
+        points="0,150 65,140 130,135 195,125 260,130 325,110 390,115 455,95 520,85 585,90 650,70 715,55 800,42"/>
+      <!-- dots -->
+      <g fill="#5b8dc7">
+        <circle cx="800" cy="42" r="4"/>
+      </g>
+      <!-- labels eixo -->
+      <g fill="#6c7896" font-family="JetBrains Mono" font-size="10">
+        <text x="0" y="195">jun</text>
+        <text x="130" y="195">ago</text>
+        <text x="260" y="195">out</text>
+        <text x="390" y="195">dez</text>
+        <text x="520" y="195">fev</text>
+        <text x="650" y="195">abr</text>
+        <text x="765" y="195">mai</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>HUB·PROPAGAR · GESTÃO INTERNA</span>
+    <span>● MARKET OPEN · MAIO/26 · DESDE 2018</span>
+  </div>
+
+</div>
+</body>
+</html>

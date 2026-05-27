@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Hub Propagar — Ocorrências reformuladas (mockup)</title>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --card: #131826;
+    --card-hover: #1a2030;
+    --border: #232b3d;
+    --gold: #d4af6a;
+    --blue: #5b8dc7;
+    --blue-dark: #2a5299;
+    --text: #e8ecf3;
+    --muted: #8a93a6;
+    --danger: #ef4444;
+    --warning: #f97316;
+    --success: #22c55e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #050811;
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    padding: 40px 20px 80px;
+    line-height: 1.5;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    font-weight: 700;
+    margin-top: 60px;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: "Playfair Display", "Times New Roman", serif;
+    font-style: italic;
+    font-size: 30px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .section-sub { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+
+  /* ============ TELA: APP DARK (dentro do hub) ============ */
+  .app {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .app h1 {
+    font-size: 22px;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .app .sub { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+
+  /* KPIs */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }
+  .kpi {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px;
+  }
+  .kpi .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 6px; font-weight: 700; }
+  .kpi .val { font-size: 28px; font-weight: 700; }
+  .kpi .val.warn { color: var(--warning); }
+  .kpi .val.danger { color: var(--danger); }
+  .kpi .val.ok { color: var(--success); }
+  .kpi .val.blue { color: var(--blue); }
+  .kpi .hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* Tabela de risco */
+  table.risk { width: 100%; border-collapse: collapse; }
+  table.risk th, table.risk td {
+    padding: 14px 12px; text-align: left; font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  table.risk th {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--muted); font-weight: 700;
+  }
+  table.risk tr:hover td { background: var(--card-hover); }
+  .pill {
+    display: inline-block; padding: 3px 9px; border-radius: 999px;
+    font-size: 11px; font-weight: 700;
+  }
+  .pill.churn-alto { background: rgba(239,68,68,0.12); color: var(--danger); }
+  .pill.churn-medio { background: rgba(249,115,22,0.12); color: var(--warning); }
+  .pill.churn-baixo { background: rgba(34,197,94,0.12); color: var(--success); }
+  .pill.churn-vaisair { background: var(--danger); color: #fff; }
+  .pill.status-aberto { background: rgba(91,141,199,0.15); color: var(--blue); }
+  .pill.status-apurando { background: rgba(249,115,22,0.12); color: var(--warning); }
+  .pill.status-resolvido { background: rgba(34,197,94,0.12); color: var(--success); }
+
+  /* ============ TELA: CASO ABERTO ============ */
+  .case-head {
+    display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px;
+    padding-bottom: 20px; margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .case-head h2 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
+  .case-head .meta { font-size: 12px; color: var(--muted); }
+  .case-head .meta span { margin-right: 14px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px; }
+  .panel {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px;
+  }
+  .panel.cliente-says { border-left: 3px solid var(--warning); }
+  .panel.we-found { border-left: 3px solid var(--blue); }
+  .panel h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 10px; font-weight: 700; }
+  .panel p { font-size: 13.5px; color: var(--text); line-height: 1.55; }
+
+  .timeline { position: relative; padding-left: 26px; margin-top: 18px; }
+  .timeline::before {
+    content: ""; position: absolute; left: 9px; top: 6px; bottom: 6px;
+    width: 2px; background: var(--border);
+  }
+  .tl-item { position: relative; padding-bottom: 18px; }
+  .tl-item::before {
+    content: ""; position: absolute; left: -22px; top: 4px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--blue); border: 2px solid var(--bg);
+  }
+  .tl-item.danger::before { background: var(--danger); }
+  .tl-item.ok::before { background: var(--success); }
+  .tl-item .when { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+  .tl-item .what { font-size: 13.5px; line-height: 1.5; }
+  .tl-item .who { font-size: 11px; color: var(--gold); margin-top: 3px; }
+
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .btn { padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; border: 0; cursor: pointer; }
+  .btn.primary { background: var(--gold); color: #000; }
+  .btn.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn.danger-out { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+
+  /* ============ TELA: DOSSIÊ CREAM (exportável) ============ */
+  .dossie-wrap { background: #050811; padding: 30px; border-radius: 16px; }
+  .dossie {
+    background: #faf6ec;
+    color: #2a2620;
+    padding: 64px 70px;
+    border-radius: 4px;
+    font-family: "Inter", -apple-system, system-ui, sans-serif;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+  }
+  .dossie .brand {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em;
+    color: #2a5299; font-weight: 700; margin-bottom: 8px;
+  }
+  .dossie h1 {
+    font-family: "Playfair Display", "Times New Roman", serif;
+    font-style: italic;
+    font-size: 42px;
+    line-height: 1.15;
+    color: #1a1814;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .dossie .subtitle {
+    font-size: 14px; color: #6e6354; margin-bottom: 36px;
+  }
+  .dossie .header-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    padding: 18px 0; border-top: 1px solid #d6cdb8; border-bottom: 1px solid #d6cdb8;
+    margin-bottom: 32px;
+  }
+  .dossie .header-grid .lbl {
+    font-size: 9px; text-transform: uppercase; letter-spacing: 0.16em; color: #9a8d72; margin-bottom: 4px; font-weight: 700;
+  }
+  .dossie .header-grid .val { font-size: 14px; color: #1a1814; font-weight: 600; }
+
+  .dossie h2 {
+    font-family: "Playfair Display", "Times New Roman", serif;
+    font-style: italic;
+    font-size: 24px; color: #1a1814; font-weight: 500;
+    margin-top: 36px; margin-bottom: 6px;
+  }
+  .dossie h2 .num {
+    display: inline-block; font-size: 11px; color: #c39646; letter-spacing: 0.2em;
+    font-family: "Inter", sans-serif; font-style: normal; font-weight: 700;
+    margin-right: 12px; vertical-align: middle;
+  }
+  .dossie .lead { font-size: 13.5px; color: #6e6354; margin-bottom: 18px; }
+
+  .dossie .timeline-cream { position: relative; padding-left: 30px; }
+  .dossie .timeline-cream::before {
+    content: ""; position: absolute; left: 11px; top: 8px; bottom: 8px;
+    width: 1px; background: #d6cdb8;
+  }
+  .dossie .tlc-item { position: relative; padding-bottom: 22px; }
+  .dossie .tlc-item::before {
+    content: ""; position: absolute; left: -23px; top: 6px;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: #2a5299; border: 2px solid #faf6ec; box-shadow: 0 0 0 1px #2a5299;
+  }
+  .dossie .tlc-item.win::before { background: #2a5299; }
+  .dossie .tlc-item.complaint::before { background: #c39646; }
+  .dossie .tlc-item .when {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em;
+    color: #9a8d72; font-weight: 700; margin-bottom: 4px;
+  }
+  .dossie .tlc-item .what { font-size: 14px; color: #1a1814; font-weight: 600; margin-bottom: 4px; }
+  .dossie .tlc-item .detail { font-size: 13px; color: #4a4338; line-height: 1.55; }
+
+  .dossie .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 24px 0; }
+  .dossie .stat { background: rgba(42, 82, 153, 0.05); border-left: 2px solid #2a5299; padding: 14px 18px; }
+  .dossie .stat .stat-num { font-family: "Playfair Display", serif; font-style: italic; font-size: 32px; color: #2a5299; font-weight: 500; line-height: 1; }
+  .dossie .stat .stat-lbl { font-size: 11px; color: #6e6354; margin-top: 4px; }
+
+  .dossie .quote {
+    background: rgba(195, 150, 70, 0.08);
+    border-left: 3px solid #c39646;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-style: italic;
+    font-size: 13.5px;
+    color: #4a4338;
+  }
+  .dossie .quote .who { display: block; font-style: normal; font-size: 11px; color: #9a8d72; margin-top: 6px; letter-spacing: 0.1em; }
+
+  .dossie .footer {
+    margin-top: 48px; padding-top: 22px; border-top: 1px solid #d6cdb8;
+    display: flex; justify-content: space-between; font-size: 11px; color: #9a8d72;
+  }
+
+  .note {
+    background: rgba(212, 175, 106, 0.08);
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #d4c7a5;
+    margin-top: 14px;
+  }
+  .note strong { color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div style="text-align:center;margin-bottom:50px">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.22em;color:var(--gold);font-weight:700;margin-bottom:8px">Mockup — separação de mundos</div>
+    <h1 style="font-family:'Playfair Display',serif;font-style:italic;font-size:38px;color:var(--text);margin-bottom:10px">Dois sistemas, nunca um.</h1>
+    <p style="color:var(--muted);font-size:14px;max-width:680px;margin:0 auto">Dossiê do cliente vive num lugar. Ponto e vigilância da equipe vive em outro. Não compartilham tabela, não compartilham tela, não compartilham PDF.</p>
+  </div>
+
+  <!-- DIAGRAMA SEPARAÇÃO -->
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:30px">
+    <div style="display:grid;grid-template-columns:1fr 80px 1fr;gap:20px;align-items:stretch">
+
+      <!-- MUNDO 1 -->
+      <div style="background:linear-gradient(180deg, rgba(91,141,199,0.10), rgba(91,141,199,0.02));border:1px solid rgba(91,141,199,0.4);border-radius:14px;padding:24px">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.2em;color:var(--blue);font-weight:700;margin-bottom:8px">Mundo do cliente</div>
+        <h3 style="font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:var(--text);margin-bottom:12px">Dossiê</h3>
+        <ul style="list-style:none;font-size:13px;color:#cdd5e3;line-height:1.9">
+          <li>📂 Tabela: <code style="background:rgba(91,141,199,0.15);padding:2px 6px;border-radius:4px;color:var(--blue);font-size:12px">ClientIncident</code></li>
+          <li>🌐 Rota: <code style="background:rgba(91,141,199,0.15);padding:2px 6px;border-radius:4px;color:var(--blue);font-size:12px">/clientes/[id]/dossie</code></li>
+          <li>👁 Quem vê: dono, gerência <strong>e o cliente</strong> (via PDF)</li>
+          <li>📄 Vira PDF apresentável</li>
+          <li>📝 Narrativa, ações, compensações</li>
+          <li style="color:var(--success)">✓ Pode ir pra reunião com cliente</li>
+        </ul>
+      </div>
+
+      <!-- BARRA -->
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+        <div style="font-size:32px">⛔</div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.18em;color:var(--danger);font-weight:700;text-align:center;line-height:1.5">Não<br>compartilham<br>nada</div>
+      </div>
+
+      <!-- MUNDO 2 -->
+      <div style="background:linear-gradient(180deg, rgba(212,175,106,0.10), rgba(212,175,106,0.02));border:1px solid rgba(212,175,106,0.4);border-radius:14px;padding:24px">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.2em;color:var(--gold);font-weight:700;margin-bottom:8px">Mundo interno</div>
+        <h3 style="font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:var(--text);margin-bottom:12px">Auditoria de equipe</h3>
+        <ul style="list-style:none;font-size:13px;color:#cdd5e3;line-height:1.9">
+          <li>📂 Tabela: <code style="background:rgba(212,175,106,0.15);padding:2px 6px;border-radius:4px;color:var(--gold);font-size:12px">InternalAudit</code></li>
+          <li>🌐 Rota: <code style="background:rgba(212,175,106,0.15);padding:2px 6px;border-radius:4px;color:var(--gold);font-size:12px">/rh/apontamentos</code></li>
+          <li>👁 Quem vê: <strong>só dono e líderes</strong></li>
+          <li>📊 Vira score trimestral</li>
+          <li>⚖️ Pontos, validar, tirar ponto</li>
+          <li style="color:var(--danger)">✗ Nunca sai do Hub. Nunca pro cliente.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;background:rgba(212,175,106,0.06);border-left:3px solid var(--gold);padding:14px 18px;border-radius:6px;font-size:13px;color:#d4c7a5">
+      <strong style="color:var(--gold)">Vínculo opcional, uma via só:</strong> um apontamento interno pode marcar "veio do caso X do cliente Y" — pra contextualizar internamente. Mas o dossiê do cliente <strong>nunca</strong> lista apontamentos. A regra é uma seta única: Apontamento → Incidente, jamais o contrário.
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- TELA 1: PAINEL SAÚDE DOS CLIENTES -->
+  <!-- ===================================================== -->
+  <div class="section-label">Tela 1</div>
+  <h2 class="section-title">Saúde dos clientes</h2>
+  <p class="section-sub">Substitui o ranking de "Scores por gerente" como métrica de topo. Foco é cliente, não funcionário.</p>
+
+  <div class="app">
+    <h1>Saúde dos Clientes</h1>
+    <p class="sub">Quem está em risco agora — e há quanto tempo a Propagar não responde.</p>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="lbl">Em risco alto</div>
+        <div class="val danger">7</div>
+        <div class="hint">clientes com 3+ reclamações em 60d</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Declararam saída</div>
+        <div class="val danger">2</div>
+        <div class="hint">ALB IPHONE, OPTIX</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Casos abertos > 48h</div>
+        <div class="val warn">5</div>
+        <div class="hint">sem resposta da equipe</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Tempo médio 1ª resposta</div>
+        <div class="val blue">3h42</div>
+        <div class="hint">SLA Propagar: 4h ✓</div>
+      </div>
+    </div>
+
+    <table class="risk">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Gerente</th>
+          <th>Risco</th>
+          <th>Ocorrências 60d</th>
+          <th>Último caso</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>ALB IPHONE</strong></td>
+          <td>Darlan</td>
+          <td><span class="pill churn-vaisair">Declarou saída</span></td>
+          <td>4</td>
+          <td>Há 2 dias</td>
+          <td><span class="pill status-aberto">Aberto</span></td>
+        </tr>
+        <tr>
+          <td><strong>OPTIX ÓTICAS</strong></td>
+          <td>Diego</td>
+          <td><span class="pill churn-vaisair">Declarou saída</span></td>
+          <td>3</td>
+          <td>Hoje</td>
+          <td><span class="pill status-apurando">Em apuração</span></td>
+        </tr>
+        <tr>
+          <td><strong>RESTAURANTE TPV</strong></td>
+          <td>Gabriel</td>
+          <td><span class="pill churn-alto">Alto</span></td>
+          <td>3</td>
+          <td>Há 5 dias</td>
+          <td><span class="pill status-apurando">Em apuração</span></td>
+        </tr>
+        <tr>
+          <td><strong>IMOBI BAHIA</strong></td>
+          <td>Darlan</td>
+          <td><span class="pill churn-medio">Médio</span></td>
+          <td>2</td>
+          <td>Há 11 dias</td>
+          <td><span class="pill status-resolvido">Resolvido</span></td>
+        </tr>
+        <tr>
+          <td><strong>DRA FERNANDA</strong></td>
+          <td>Diego</td>
+          <td><span class="pill churn-baixo">Baixo</span></td>
+          <td>1</td>
+          <td>Há 18 dias</td>
+          <td><span class="pill status-resolvido">Resolvido</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <strong>Diferença do que existe hoje:</strong> hoje a tela de topo lista <em>funcionários e suas notas</em>. Aqui lista <em>clientes e o risco deles</em>. Você abre o Hub e a primeira pergunta respondida é "quem está prestes a sair?", não "qual gerente perdeu mais ponto?".
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- TELA 2: CASO ABERTO -->
+  <!-- ===================================================== -->
+  <div class="section-label">Tela 2</div>
+  <h2 class="section-title">Caso aberto — ALB IPHONE</h2>
+  <p class="section-sub">Substitui a "ocorrência com botão Tira-ponto". Aqui o foco é apurar e agir, não julgar a equipe.</p>
+
+  <div class="app">
+    <div class="case-head">
+      <div>
+        <h2>Cliente diz que campanha ficou parada 3 dias</h2>
+        <div class="meta">
+          <span>📅 14/05/2026</span>
+          <span>🏢 ALB IPHONE</span>
+          <span>👤 Gerente: Darlan</span>
+          <span>📡 Gestor: Diego</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <span class="pill churn-vaisair">Declarou saída</span>
+        <span class="pill status-apurando">Em apuração</span>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel cliente-says">
+        <h3>O que o cliente diz</h3>
+        <p>"Minha campanha ficou 3 dias parada e ninguém me avisou. Só descobri quando entrei na conta. Isso é um absurdo, vou cancelar."</p>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted)">
+          <strong style="color:var(--text)">Quem reclamou:</strong> Alberto (sócio) ·
+          <strong style="color:var(--text)">Canal:</strong> WhatsApp ·
+          <strong style="color:var(--text)">Severidade percebida:</strong> 5/5
+        </div>
+      </div>
+      <div class="panel we-found">
+        <h3>O que apuramos</h3>
+        <p>Campanha pausou 12/05 por saldo zerado no cartão (Meta). Gestor identificou no mesmo dia, mas não notificou o cliente porque tentou contato com financeiro do cliente — sem retorno. Reativada 14/05 quando cartão foi renovado.</p>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted)">
+          <strong style="color:var(--text)">Procede:</strong> Parcialmente — pausa real, mas causa foi saldo do cliente, não falha técnica
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px">
+      <h3 style="font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);margin-bottom:14px;font-weight:700">Linha do tempo do caso</h3>
+      <div class="timeline">
+        <div class="tl-item danger">
+          <div class="when">12/05 · 09h14</div>
+          <div class="what">Campanha pausada pela Meta por saldo zerado no cartão do cliente.</div>
+          <div class="who">Detectado por: Diego (gestor)</div>
+        </div>
+        <div class="tl-item">
+          <div class="when">12/05 · 10h02</div>
+          <div class="what">Diego ligou pro financeiro do cliente. Sem retorno. Mandou WhatsApp e e-mail.</div>
+          <div class="who">Ação: Diego</div>
+        </div>
+        <div class="tl-item">
+          <div class="when">14/05 · 11h36</div>
+          <div class="what">Cliente reclamou no WhatsApp do gerente. Disse que vai cancelar.</div>
+          <div class="who">Quem registrou: Roberto (dono)</div>
+        </div>
+        <div class="tl-item ok">
+          <div class="when">14/05 · 12h08</div>
+          <div class="what">Darlan respondeu em 32min com explicação + print da tentativa de contato + plano de retomada.</div>
+          <div class="who">Ação: Darlan · Tempo de resposta: 32min</div>
+        </div>
+        <div class="tl-item ok">
+          <div class="when">14/05 · 14h22</div>
+          <div class="what">Cartão renovado pelo cliente. Campanha reativada com R$ 80 extra de verba (compensação).</div>
+          <div class="who">Ação: Diego · Compensação: R$ 80 verba</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary">Marcar como Resolvido</button>
+      <button class="btn secondary">Procede — falha de equipe</button>
+      <button class="btn secondary">Procede — fora do escopo</button>
+      <button class="btn secondary">Não procede</button>
+    </div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px dashed var(--border);font-size:12px;color:var(--muted)">
+      Quer registrar isso também como apontamento interno da equipe? <a href="#" style="color:var(--gold);text-decoration:underline;font-weight:600">Abrir em /rh/apontamentos →</a><br>
+      <span style="font-size:11px">(ação separada — não fica vinculada ao dossiê do cliente)</span>
+    </div>
+
+    <div class="note">
+      <strong>Diferença do que existe hoje:</strong> o botão principal vermelho hoje é "Validar — Tira ponto". Aqui <em>não tem botão de penalizar</em> nesta tela. Pontuação de funcionário vive em outro lugar (<code>/rh/apontamentos</code>) e é uma decisão consciente, não consequência automática de um caso de cliente.
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- TELA 3: DOSSIÊ EXPORTÁVEL -->
+  <!-- ===================================================== -->
+  <div class="section-label">Tela 3</div>
+  <h2 class="section-title">Dossiê do cliente (PDF exportável)</h2>
+  <p class="section-sub">A peça pra você levar pra reunião quando o cliente quer cancelar. Padrão visual Propagar editorial.</p>
+
+  <div class="dossie-wrap">
+    <div class="dossie">
+      <div class="brand">Grupo Propagar · Dossiê de relacionamento</div>
+      <h1>ALB iPhone × Propagar</h1>
+      <div class="subtitle">Histórico completo de parceria — emitido em 25/05/2026</div>
+
+      <div class="header-grid">
+        <div><div class="lbl">Tempo de casa</div><div class="val">14 meses</div></div>
+        <div><div class="lbl">Investido na Propagar</div><div class="val">R$ 87.420</div></div>
+        <div><div class="lbl">Faturamento gerado</div><div class="val">R$ 1.2M</div></div>
+        <div><div class="lbl">Gerente atual</div><div class="val">Darlan</div></div>
+      </div>
+
+      <h2><span class="num">01</span>O que essa parceria entregou</h2>
+      <p class="lead">14 meses operando juntos. Os números falam antes da emoção.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-num">R$ 1.2M</div><div class="stat-lbl">faturamento atribuído</div></div>
+        <div class="stat"><div class="stat-num">13,7×</div><div class="stat-lbl">ROAS médio acumulado</div></div>
+        <div class="stat"><div class="stat-num">2.847</div><div class="stat-lbl">leads qualificados</div></div>
+      </div>
+
+      <h2><span class="num">02</span>Onde houve ruído — e como agimos</h2>
+      <p class="lead">Toda parceria longa tem atrito. O que importa é se a Propagar respondeu ou abandonou.</p>
+
+      <div class="timeline-cream">
+        <div class="tlc-item complaint">
+          <div class="when">14 de maio · 2026</div>
+          <div class="what">Cliente relatou campanha parada por 3 dias</div>
+          <div class="detail">Causa apurada: saldo zerado no cartão do cliente. Diego (gestor) detectou no mesmo dia e tentou contato com o financeiro — sem retorno. Quando o cliente reclamou, Darlan respondeu em <strong>32 minutos</strong> com explicação completa e plano de retomada. Reativação aconteceu em <strong>menos de 3h</strong>, com R$ 80 de verba extra de compensação.</div>
+        </div>
+        <div class="tlc-item win">
+          <div class="when">22 de março · 2026</div>
+          <div class="what">Reestruturação completa de campanhas após queda de ROAS</div>
+          <div class="detail">Diego e Darlan refizeram 4 campanhas em 48h. ROAS subiu de 6,2× pra 14,1× em 3 semanas. Cliente enviou áudio agradecendo (anexo).</div>
+        </div>
+        <div class="tlc-item complaint">
+          <div class="when">08 de fevereiro · 2026</div>
+          <div class="what">Cliente questionou relatório atrasado</div>
+          <div class="detail">Relatório saiu 2 dias depois do prazo combinado. Darlan assumiu a responsabilidade, entregou no dia seguinte com análise extra de criativos. Cliente respondeu "tranquilo, ficou ótimo".</div>
+        </div>
+        <div class="tlc-item win">
+          <div class="when">15 de novembro · 2025</div>
+          <div class="what">Black Friday: melhor mês do cliente desde abertura</div>
+          <div class="detail">R$ 312 mil em vendas atribuídas à campanha Propagar. Cliente postou stories agradecendo a equipe.</div>
+        </div>
+      </div>
+
+      <h2><span class="num">03</span>O que o cliente disse — em palavras dele</h2>
+      <p class="lead">Não é narrativa nossa. São mensagens reais, com data.</p>
+      <div class="quote">
+        "Vocês salvaram minha Black Friday, gente. Sério mesmo, obrigado."
+        <span class="who">Alberto · 28/11/2025 · WhatsApp</span>
+      </div>
+      <div class="quote">
+        "Eu vou cancelar, não dá mais."
+        <span class="who">Alberto · 14/05/2026 · WhatsApp · Reclamação atual</span>
+      </div>
+
+      <h2><span class="num">04</span>O que propomos</h2>
+      <p class="lead">A reunião serve pra isso. Mas a Propagar entra com 3 pontos na mesa:</p>
+      <ul style="font-size:13.5px;color:#4a4338;line-height:1.7;padding-left:20px;margin-top:8px">
+        <li>Alerta automático ao cliente quando saldo do cartão cair (vai virar processo padrão).</li>
+        <li>Reunião quinzenal de status com o sócio (Alberto), não só com o financeiro.</li>
+        <li>3 meses com R$ 200/mês de verba extra como reparação do ruído de maio.</li>
+      </ul>
+
+      <div class="footer">
+        <span>Grupo Propagar · grupopropagar.com.br</span>
+        <span>Documento gerado em 25/05/2026 às 12h59</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:24px">
+    <strong>Diferença do que existe hoje:</strong> hoje, se o cliente quiser cancelar, você tem na mão uma <em>tabela de erros do gerente</em>. Não dá pra mostrar isso pro cliente. Esse dossiê é o que você imprime, leva pra reunião e bota na mesa. Toda história aparece. O ruído de maio não some — mas vem cercado de 14 meses de entrega.
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- TELA 4: MATRIZ DE PERMISSÕES -->
+  <!-- ===================================================== -->
+  <div class="section-label">Tela 4</div>
+  <h2 class="section-title">Quem vê o quê — matriz de acesso</h2>
+  <p class="section-sub">Atual vs proposto. O atual tem vazamento: gerente vê tudo. O proposto trava por carteira.</p>
+
+  <div class="app">
+    <h1>Matriz de acesso</h1>
+    <p class="sub">Auditado em 25/05/2026 · 13+ pontos do código com a regra errada inline (copy/paste).</p>
+
+    <table class="risk">
+      <thead>
+        <tr>
+          <th style="width:18%">Papel</th>
+          <th>Clientes</th>
+          <th>Lojas</th>
+          <th>Demandas</th>
+          <th>Comercial</th>
+          <th>Financeiro</th>
+          <th>Auditoria equipe</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:var(--gold)">Admin (dono)</strong></td>
+          <td>✓ Tudo</td>
+          <td>✓ Tudo</td>
+          <td>✓ Tudo</td>
+          <td>✓ Tudo</td>
+          <td>✓ Tudo</td>
+          <td>✓ Tudo</td>
+        </tr>
+        <tr>
+          <td><strong>Financeiro</strong></td>
+          <td>✓ Tudo</td>
+          <td>✓ Tudo</td>
+          <td>— Não vê</td>
+          <td>— Não vê</td>
+          <td>✓ Tudo</td>
+          <td>— Não vê</td>
+        </tr>
+        <tr style="background:rgba(239,68,68,0.05)">
+          <td>
+            <strong>Gerente</strong><br>
+            <span style="font-size:11px;color:var(--danger)">⚠️ vazamento atual</span>
+          </td>
+          <td>
+            <span style="color:var(--danger);font-size:11px;text-decoration:line-through">Tudo</span><br>
+            <span style="color:var(--success)">→ Só carteira dele</span>
+          </td>
+          <td>
+            <span style="color:var(--danger);font-size:11px;text-decoration:line-through">Tudo</span><br>
+            <span style="color:var(--success)">→ Só carteira dele</span>
+          </td>
+          <td>
+            <span style="color:var(--danger);font-size:11px;text-decoration:line-through">Tudo</span><br>
+            <span style="color:var(--success)">→ Só carteira dele</span>
+          </td>
+          <td>Equipe dele</td>
+          <td>— Não vê</td>
+          <td>Equipe dele</td>
+        </tr>
+        <tr>
+          <td><strong>Gestor de tráfego</strong></td>
+          <td>Só clientes das stores dele</td>
+          <td>Só stores onde gestorId = ele</td>
+          <td>Só suas demandas</td>
+          <td>— Não vê</td>
+          <td>— Não vê</td>
+          <td>— Não vê</td>
+        </tr>
+        <tr>
+          <td><strong>Videomaker / outros</strong></td>
+          <td>— Não vê</td>
+          <td>— Não vê</td>
+          <td>Só suas demandas</td>
+          <td>— Não vê</td>
+          <td>— Não vê</td>
+          <td>— Não vê</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note" style="margin-top:18px">
+      <strong>Como corrigir:</strong> centralizar a regra em <code style="background:rgba(212,175,106,0.15);padding:2px 6px;border-radius:4px;color:var(--gold);font-size:12px">lib/access.ts</code> com 2 funções: <code style="background:rgba(212,175,106,0.15);padding:2px 6px;border-radius:4px;color:var(--gold);font-size:12px">getCarteiraStoreIds(user)</code> e <code style="background:rgba(212,175,106,0.15);padding:2px 6px;border-radius:4px;color:var(--gold);font-size:12px">getCarteiraClienteIds(user)</code>. Trocar as 13+ cópias inline por chamadas dessas funções. <strong>"Gerente" deixa de ser super-poder e vira escopo de carteira.</strong>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin-top:14px">
+      <h3 style="font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);margin-bottom:14px;font-weight:700">Pontos vulneráveis (auditados hoje)</h3>
+      <ul style="list-style:none;font-size:13px;color:#cdd5e3;line-height:2">
+        <li><span style="color:var(--danger);font-weight:700">CRÍTICO</span> · <code style="font-size:11px;background:rgba(255,255,255,0.05);padding:2px 6px;border-radius:4px">/api/stores/picker</code> — sem filtro nenhum, qualquer user vê todas as stores</li>
+        <li><span style="color:var(--danger);font-weight:700">CRÍTICO</span> · <code style="font-size:11px;background:rgba(255,255,255,0.05);padding:2px 6px;border-radius:4px">/api/stores</code> — gerente vê todas via seesAll()</li>
+        <li><span style="color:var(--warning);font-weight:700">ALTO</span> · <code style="font-size:11px;background:rgba(255,255,255,0.05);padding:2px 6px;border-radius:4px">/dashboard/page.tsx</code> — painel executivo vaza pra gerente</li>
+        <li><span style="color:var(--warning);font-weight:700">ALTO</span> · <code style="font-size:11px;background:rgba(255,255,255,0.05);padding:2px 6px;border-radius:4px">/dashboard/lojas, /rankings, /comercial/*, /demandas</code> — mesma regra inline em todas</li>
+        <li><span style="color:var(--warning);font-weight:700">MÉDIO</span> · <code style="font-size:11px;background:rgba(255,255,255,0.05);padding:2px 6px;border-radius:4px">/api/clientes</code> — gerente cai no limbo, vê zero clientes</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- TELA 5: RESUMO DE TUDO -->
+  <!-- ===================================================== -->
+  <div class="section-label">Tela 5</div>
+  <h2 class="section-title">Resumo de tudo — visão do dono</h2>
+  <p class="section-sub">Uma tela só. Você abre, lê em 30 segundos, sabe onde está pegando fogo.</p>
+
+  <div class="app">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+      <h1>Resumo</h1>
+      <div style="font-size:11px;color:var(--muted)">25/05/2026 · 13h04</div>
+    </div>
+    <p class="sub">Tudo que importa numa página. Roberto Araújo · dono</p>
+
+    <!-- LINHA 1: NÚMEROS-CHAVE -->
+    <div class="kpi-row" style="grid-template-columns:repeat(4,1fr)">
+      <div class="kpi">
+        <div class="lbl">MRR ativo</div>
+        <div class="val blue">R$ 184.320</div>
+        <div class="hint">+R$ 4.2k vs mês passado</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Clientes ativos</div>
+        <div class="val blue">47</div>
+        <div class="hint">2 entraram, 1 saiu este mês</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Em risco de churn</div>
+        <div class="val danger">7</div>
+        <div class="hint">R$ 28k de MRR em jogo</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Caixa do mês</div>
+        <div class="val ok">+R$ 41.880</div>
+        <div class="hint">após pagamentos previstos</div>
+      </div>
+    </div>
+
+    <!-- LINHA 2: PEGANDO FOGO -->
+    <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:20px;margin-bottom:18px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px">
+        <h3 style="font-size:13px;text-transform:uppercase;letter-spacing:0.14em;color:var(--danger);font-weight:700">🔥 Pegando fogo agora</h3>
+        <span style="font-size:11px;color:var(--muted)">4 itens · revise hoje</span>
+      </div>
+      <div style="display:grid;gap:10px">
+        <div style="background:var(--card);border-radius:8px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:14px">
+          <div>
+            <div style="font-size:13.5px;font-weight:600;margin-bottom:2px">ALB IPHONE declarou que vai cancelar</div>
+            <div style="font-size:12px;color:var(--muted)">Gerente Darlan · há 2 dias · caso aberto</div>
+          </div>
+          <a href="#" style="font-size:12px;color:var(--gold);text-decoration:none;font-weight:600;white-space:nowrap">Abrir dossiê →</a>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:14px">
+          <div>
+            <div style="font-size:13.5px;font-weight:600;margin-bottom:2px">OPTIX ÓTICAS abriu caso 3 vezes em 30 dias</div>
+            <div style="font-size:12px;color:var(--muted)">Gerente Diego · padrão de recorrência</div>
+          </div>
+          <a href="#" style="font-size:12px;color:var(--gold);text-decoration:none;font-weight:600;white-space:nowrap">Abrir dossiê →</a>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:14px">
+          <div>
+            <div style="font-size:13.5px;font-weight:600;margin-bottom:2px">5 casos sem resposta há mais de 48h</div>
+            <div style="font-size:12px;color:var(--muted)">SLA Propagar (4h) estourado</div>
+          </div>
+          <a href="#" style="font-size:12px;color:var(--gold);text-decoration:none;font-weight:600;white-space:nowrap">Ver lista →</a>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:14px">
+          <div>
+            <div style="font-size:13.5px;font-weight:600;margin-bottom:2px">R$ 18.2k em contas a pagar vencem em 7 dias</div>
+            <div style="font-size:12px;color:var(--muted)">3 pendentes de aprovação</div>
+          </div>
+          <a href="#" style="font-size:12px;color:var(--gold);text-decoration:none;font-weight:600;white-space:nowrap">Aprovar →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINHA 3: 3 COLUNAS -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px">
+
+      <!-- Coluna: Operacional -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px">
+        <h3 style="font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:var(--gold);margin-bottom:12px;font-weight:700">Operacional</h3>
+        <ul style="list-style:none;font-size:13px;line-height:1.9;color:#cdd5e3">
+          <li>📋 <strong>87</strong> demandas abertas</li>
+          <li>⏱ <strong>3h42</strong> tempo médio 1ª resposta</li>
+          <li>📊 <strong>12</strong> relatórios atrasados</li>
+          <li>⏰ <strong>2</strong> campanhas Meta pausadas</li>
+          <li>📞 <strong>4</strong> NPS pendentes esta semana</li>
+        </ul>
+      </div>
+
+      <!-- Coluna: Comercial -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px">
+        <h3 style="font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:var(--gold);margin-bottom:12px;font-weight:700">Comercial</h3>
+        <ul style="list-style:none;font-size:13px;line-height:1.9;color:#cdd5e3">
+          <li>🎯 <strong>14</strong> leads na fila</li>
+          <li>📝 <strong>3</strong> propostas enviadas (semana)</li>
+          <li>🔄 <strong>5</strong> contratos vencendo 60d</li>
+          <li>💰 <strong>R$ 18.4k</strong> meta de novo MRR (mês)</li>
+          <li>📈 <strong>R$ 11.2k</strong> realizado · 61%</li>
+        </ul>
+      </div>
+
+      <!-- Coluna: Equipe -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px">
+        <h3 style="font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:var(--gold);margin-bottom:12px;font-weight:700">Equipe</h3>
+        <ul style="list-style:none;font-size:13px;line-height:1.9;color:#cdd5e3">
+          <li>👥 <strong>11</strong> ativos · 2 em férias</li>
+          <li>⭐ <strong>8.4</strong> NPS médio dos clientes</li>
+          <li>🏆 <strong>Darlan</strong> top gerente do mês</li>
+          <li>📌 <strong>3</strong> apontamentos abertos</li>
+          <li style="color:var(--muted);font-size:11px;font-style:italic;margin-top:4px">/rh/apontamentos (separado do dossiê)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- LINHA 4: TIMELINE DO DIA -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <h3 style="font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:var(--gold);margin-bottom:14px;font-weight:700">Movimento de hoje (cronológico)</h3>
+      <div class="timeline">
+        <div class="tl-item ok">
+          <div class="when">12h08</div>
+          <div class="what">Darlan respondeu reclamação ALB IPHONE em 32min · dentro do SLA</div>
+        </div>
+        <div class="tl-item">
+          <div class="when">10h44</div>
+          <div class="what">Novo lead chegou: RESTAURANTE LUZ DO RIO · atribuído pra Roberta</div>
+        </div>
+        <div class="tl-item danger">
+          <div class="when">09h22</div>
+          <div class="what">OPTIX abriu novo caso · 3º em 30 dias · risco alto</div>
+        </div>
+        <div class="tl-item ok">
+          <div class="when">08h15</div>
+          <div class="what">Contrato renovado: DRA FERNANDA · +12 meses · R$ 2.8k/mês</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:18px">
+      <strong>Lógica do resumo:</strong> ordenado por urgência, não por categoria. Em cima: o que está pegando fogo. No meio: indicadores que você quer ler em 5s. Embaixo: timeline do dia pra você "pegar o ritmo da casa". Tudo respeita o acesso — gerente vê o resumo da carteira dele, gestor o da carteira dele, você vê tudo.
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:60px;padding-top:30px;border-top:1px solid var(--border)">
+    <p style="color:var(--muted);font-size:12px">Posso implementar nessa ordem: (1) corrigir vazamento de acesso · (2) migration ClientIncident/InternalAudit · (3) dossiê PDF · (4) tela "Resumo de tudo".</p>
+  </div>
+
+</div>
+</body>
+</html>

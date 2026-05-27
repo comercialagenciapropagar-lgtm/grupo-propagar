@@ -217,10 +217,62 @@
       animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    .link-card:nth-child(1) { animation-delay: 0.4s; }
-    .link-card:nth-child(2) { animation-delay: 0.48s; }
-    .link-card:nth-child(3) { animation-delay: 0.56s; }
-    .link-card:nth-child(4) { animation-delay: 0.64s; }
+    .link-card:nth-child(1) { animation-delay: 0.38s; }
+    .link-card:nth-child(2) { animation-delay: 0.46s; }
+    .link-card:nth-child(3) { animation-delay: 0.54s; }
+    .link-card:nth-child(4) { animation-delay: 0.62s; }
+    .link-card:nth-child(5) { animation-delay: 0.70s; }
+
+    /* FEATURED CARD - MENTORIA */
+    .link-card.featured {
+      background: linear-gradient(135deg, rgba(212,168,83,0.15) 0%, rgba(212,168,83,0.05) 100%);
+      border: 1px solid rgba(212,168,83,0.4);
+      padding: 18px 20px;
+      margin-bottom: 6px;
+      position: relative;
+    }
+
+    .link-card.featured::after {
+      content: 'DESTAQUE';
+      position: absolute;
+      top: -8px;
+      right: 18px;
+      background: #d4a853;
+      color: #0a0a0a;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .link-card.featured .link-icon {
+      background: rgba(212,168,83,0.2);
+      color: #f0d48a;
+    }
+
+    .link-card.featured .link-label {
+      color: #f0d48a;
+      font-weight: 700;
+    }
+
+    .link-card.featured .link-desc {
+      color: rgba(240,212,138,0.7);
+    }
+
+    .link-card.featured .link-arrow {
+      color: rgba(212,168,83,0.5);
+    }
+
+    .link-card.featured:hover {
+      background: linear-gradient(135deg, rgba(212,168,83,0.22) 0%, rgba(212,168,83,0.08) 100%);
+      border-color: rgba(212,168,83,0.6);
+      box-shadow: 0 8px 32px rgba(212,168,83,0.15), 0 0 0 1px rgba(212,168,83,0.2);
+    }
+
+    .link-card.featured:hover .link-arrow {
+      color: #d4a853;
+    }
 
     .link-card::before {
       content: '';
@@ -406,6 +458,17 @@
 
     <!-- LINKS SEGMENTADOS POR PERSONA -->
     <nav class="links" aria-label="Opções de contato">
+
+      <a class="link-card featured" href="/mentoria">
+        <div class="link-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="link-text">
+          <div class="link-label">Mentoria Exclusiva</div>
+          <div class="link-desc">Individual 1:1 &mdash; online ou presencial</div>
+        </div>
+        <svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+      </a>
 
       <a class="link-card" href="https://wa.me/5548999597067?text=Roberto%2C%20tenho%20um%20neg%C3%B3cio%20local%20e%20quero%20escalar." target="_blank" rel="noopener">
         <div class="link-icon">

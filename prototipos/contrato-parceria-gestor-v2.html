@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Contrato de Parceria — Gestor de Tráfego · Propagar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --propagar-primario: #2a5299;
+    --propagar-bright: #5b8dc7;
+    --propagar-dark: #1a3562;
+    --gold: #c9a961;
+    --fg: #1a1a1a;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --bg: #ffffff;
+    --soft: #f7f9fc;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.55;
+    font-size: 10.5pt;
+  }
+  .page { max-width: 780px; margin: 0 auto; padding: 40px 52px 60px; }
+  .capa {
+    padding: 90px 52px 60px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--propagar-dark) 0%, var(--propagar-primario) 60%, var(--propagar-bright) 100%);
+    color: #fff;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+  }
+  .capa .marca { display: flex; align-items: center; gap: 14px; margin-bottom: 80px; }
+  .flecha { display: inline-flex; gap: 3px; }
+  .flecha span {
+    width: 10px; height: 22px;
+    background: var(--gold);
+    transform: skewY(-15deg);
+    border-radius: 2px;
+  }
+  .flecha span:nth-child(2) { background: #fff; }
+  .flecha span:nth-child(3) { background: var(--propagar-bright); }
+  .marca .nome {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 20pt;
+    letter-spacing: -0.02em;
+  }
+  .capa .tag {
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-size: 9pt;
+    opacity: 0.75;
+    margin-bottom: 22px;
+    font-weight: 600;
+  }
+  .capa h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 48pt;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin: 0 0 24px;
+    font-style: italic;
+  }
+  .capa .sub {
+    font-size: 14pt;
+    opacity: 0.9;
+    max-width: 560px;
+    margin-bottom: 48px;
+    line-height: 1.4;
+  }
+  .capa .highlight {
+    padding: 20px 24px;
+    border-left: 3px solid var(--gold);
+    background: rgba(0,0,0,0.18);
+    max-width: 560px;
+    margin-top: auto;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 13pt;
+    line-height: 1.45;
+  }
+  .capa .highlight strong {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 700;
+  }
+  .capa .versao {
+    margin-top: 24px;
+    font-size: 9pt;
+    opacity: 0.7;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 18pt;
+    letter-spacing: -0.01em;
+    color: var(--propagar-primario);
+    margin: 32px 0 6px;
+    page-break-after: avoid;
+  }
+  .kicker {
+    font-size: 8.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: var(--propagar-bright);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  p { margin: 0 0 10px; }
+  strong { color: var(--propagar-dark); }
+
+  .clausula {
+    margin: 12px 0;
+  }
+  .clausula .num {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--propagar-primario);
+    font-size: 11pt;
+    display: inline;
+  }
+  .clausula .txt { display: inline; }
+  .par {
+    margin: 6px 0 8px 18px;
+    padding-left: 10px;
+    border-left: 2px solid var(--line);
+    font-size: 9.8pt;
+    color: #333;
+  }
+  .par strong { color: var(--propagar-primario); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 20px;
+    font-size: 10pt;
+  }
+  table th {
+    text-align: left;
+    padding: 10px 12px;
+    background: var(--propagar-primario);
+    color: #fff;
+    font-weight: 600;
+    font-size: 9.5pt;
+  }
+  table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  table tr:last-child td { border-bottom: none; }
+  table td strong { color: var(--propagar-dark); }
+
+  ul.obg {
+    margin: 6px 0 10px;
+    padding-left: 20px;
+    font-size: 10pt;
+  }
+  ul.obg li { margin-bottom: 4px; }
+
+  .callout {
+    background: var(--soft);
+    border-left: 3px solid var(--propagar-bright);
+    padding: 14px 18px;
+    margin: 14px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 10pt;
+    page-break-inside: avoid;
+  }
+  .callout.gold { border-left-color: var(--gold); background: #fdf8ee; }
+  .callout .label {
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--propagar-bright);
+    margin-bottom: 5px;
+  }
+  .callout.gold .label { color: #b08835; }
+
+  .assinaturas { margin-top: 50px; page-break-inside: avoid; }
+  .assinaturas .linha { border-bottom: 1px solid #333; margin: 40px 0 6px; }
+  .assinaturas .role {
+    font-size: 8.5pt;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 0.1em;
+  }
+  .assinaturas .nome {
+    text-align: center;
+    font-weight: 700;
+    color: var(--propagar-dark);
+    font-size: 10pt;
+  }
+  .assin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+
+  @media print {
+    html, body { background: #fff; }
+    .page { padding: 30px 48px 40px; }
+    h2 { page-break-after: avoid; }
+    .clausula, .par, .callout { page-break-inside: avoid; }
+    @page { size: A4; margin: 18mm 18mm 20mm; }
+  }
+</style>
+</head>
+<body>
+
+<section class="capa">
+  <div class="marca">
+    <div class="flecha"><span></span><span></span><span></span></div>
+    <div class="nome">Propagar</div>
+  </div>
+  <div class="tag">Contrato de Parceria</div>
+  <h1>Gestão de<br>Tráfego Pago</h1>
+  <div class="sub">
+    Termo que formaliza a parceria entre o <strong>Grupo Propagar</strong> e o profissional que opera mídia paga nas contas da nossa carteira — ancorado no Hub Propagar e no Plano de Carreira.
+  </div>
+  <div class="highlight">
+    <strong>O que você assina aqui</strong><br>
+    Não é um emprego. É uma relação entre adultos, entre pares: regras claras, metas objetivas, bônus atrelado ao que você entrega — e liberdade pra construir o seu próprio caminho dentro da operação.
+  </div>
+  <div class="versao">Versão 3 · Abril/2026 · Mensal</div>
+</section>
+
+<section class="page">
+  <div class="kicker">Instrumento Particular</div>
+  <h2>Qualificação das Partes</h2>
+
+  <p><strong>CONTRATANTE:</strong> GRUPO PROPAGAR, inscrita no CNPJ sob o nº 21.290.653/0001-22, com sede na Av. Darcy Vargas, nº 607, Parque 10 de Novembro, Manaus/AM, CEP 69.055-035, doravante denominada simplesmente <strong>CONTRATANTE</strong>.</p>
+
+  <p><strong>CONTRATADO(A):</strong></p>
+  <p>Nome: {{nome completo}} &nbsp;·&nbsp; CPF: {{cpf}} &nbsp;·&nbsp; CNPJ: {{cnpj}}<br>
+  Endereço: {{logradouro}}, nº {{numero}} &nbsp;·&nbsp; Bairro: {{bairro}} &nbsp;·&nbsp; CEP: {{cep}}<br>
+  Município: {{cidade}} &nbsp;·&nbsp; Estado: {{estado}}<br>
+  E-mail: {{email}} &nbsp;·&nbsp; Telefone: {{telefone}}<br>
+  Doravante denominado(a) simplesmente <strong>CONTRATADO</strong>.</p>
+
+  <p>As partes acima identificadas firmam o presente <strong>Contrato de Parceria — Gestão de Tráfego Pago</strong>, mediante as cláusulas e condições seguintes:</p>
+
+  <h2>Cláusula 1 — Objeto</h2>
+  <div class="clausula">
+    <p><span class="txt">Prestação de serviços de <strong>gestão de tráfego pago</strong> (Meta Ads, Google Ads e demais plataformas de mídia paga, conforme demanda) pelo CONTRATADO, sob coordenação da CONTRATANTE, em contas de clientes da sua carteira — executada <strong>obrigatoriamente através da plataforma Hub Propagar</strong> (hubpropagar.vercel.app), que é o sistema-fonte da operação.</span></p>
+  </div>
+
+  <h2>Cláusula 2 — Remuneração e Plano de Carreira</h2>
+  <div class="clausula">
+    <p>A remuneração do CONTRATADO é composta por <strong>parte fixa mensal</strong> + <strong>bônus trimestral por performance</strong>, conforme o nível de carreira atribuído na assinatura deste contrato e revisado trimestralmente com base nos dados do Hub Propagar.</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Nível</th><th>Fixo mensal</th><th>Carteira</th><th>Meta para bônus trimestral</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Júnior</strong></td>
+        <td>R$ 1.500,00</td>
+        <td>até 15 contas</td>
+        <td>conversão ≥ 8% em <strong>80%+</strong> das contas</td>
+      </tr>
+      <tr>
+        <td><strong>Pleno</strong></td>
+        <td>R$ 2.000,00</td>
+        <td>16 a 25 contas</td>
+        <td>conversão ≥ 8% em <strong>85%+</strong> das contas</td>
+      </tr>
+      <tr>
+        <td><strong>Sênior</strong></td>
+        <td>R$ 2.500,00</td>
+        <td>26+ contas</td>
+        <td>conversão ≥ 8% em <strong>90%+</strong> das contas</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="par"><strong>§ 1º</strong> — A <strong>taxa de conversão</strong> é calculada como <em>vendas ÷ mensagens recebidas</em>, a partir dos dados preenchidos diariamente pelo CONTRATADO no Hub Propagar. A falta de preenchimento diário descaracteriza a medição e <strong>suspende o direito ao bônus</strong> do trimestre.</div>
+  <div class="par"><strong>§ 2º</strong> — O <strong>bônus trimestral</strong>, quando atingida a meta, é calculado conforme regra vigente publicada na aba "Regras" do Hub Propagar, podendo elevar a remuneração média até o teto do nível (Júnior ~R$ 1.800 / Pleno ~R$ 2.700 / Sênior ~R$ 3.500).</div>
+  <div class="par"><strong>§ 3º</strong> — Fechamento no dia 5 do mês subsequente; emissão de <strong>nota fiscal</strong> pelo CONTRATADO até o dia 8; pagamento pela CONTRATANTE até o dia <strong>10</strong>.</div>
+  <div class="par"><strong>§ 4º</strong> — O CONTRATADO é integralmente responsável pelo recolhimento de todos os tributos e encargos incidentes sobre a sua remuneração.</div>
+  <div class="par"><strong>§ 5º</strong> — Em caso de rescisão, término ou não renovação deste contrato em data diversa do fechamento mensal, a parte fixa correspondente ao mês em curso será calculada <em>pro rata die</em>, considerando-se apenas os dias efetivamente transcorridos desde o último fechamento até a data do efetivo encerramento da prestação, inclusive o período de aviso prévio. O bônus trimestral somente é devido se integralmente atingida a meta nos termos desta Cláusula, <strong>não havendo pagamento proporcional de bônus</strong> em caso de encerramento antes do fechamento do respectivo trimestre.</div>
+
+  <div class="callout gold">
+    <div class="label">Revisão de nível</div>
+    A promoção ou rebaixamento acontece <strong>trimestralmente</strong>, com base nos dados do Hub Propagar e em avaliação conjunta. O nível Sênior exige também <strong>mentoria ativa</strong> de ao menos 1 (um) gestor Júnior ou Pleno da carteira.
+  </div>
+
+  <h2>Cláusula 3 — Vigência e Rescisão</h2>
+  <div class="clausula">
+    <p>Este contrato vigora pelo prazo de <strong>30 (trinta) dias corridos</strong>, contados da data da sua assinatura, <strong>renovando-se automaticamente</strong> por iguais e sucessivos períodos de 30 (trinta) dias enquanto houver interesse das partes, independentemente de qualquer formalidade adicional.</p>
+  </div>
+  <div class="par"><strong>§ 1º</strong> — Qualquer das partes poderá rescindir o contrato, motivada ou imotivadamente, mediante <strong>aviso prévio escrito de 7 (sete) dias</strong>, enviado por e-mail ou mensagem registrada em canal oficial entre as partes, não havendo multa ou penalidade pela simples não renovação ou pelo exercício regular do direito de rescisão.</div>
+  <div class="par"><strong>§ 2º</strong> — Durante o período de aviso prévio, o CONTRATADO obriga-se a promover a <strong>transição responsável</strong> da carteira, entregando à CONTRATANTE ou ao gestor substituto, de forma completa e documentada: (a) acessos e senhas de contas de anúncios, páginas, gerenciadores de negócios e ferramentas afins; (b) histórico e contexto estratégico de cada conta; (c) campanhas ativas, estruturas, criativos e relatórios pendentes; (d) quaisquer outros artefatos necessários à continuidade do serviço sem prejuízo ao cliente final.</div>
+  <div class="par"><strong>§ 3º</strong> — Encerrado o contrato por qualquer motivo, o CONTRATADO <strong>perde automaticamente</strong> a carteira de clientes que lhe estava atribuída, sem direito a indenização, sem prejuízo das obrigações de transição, confidencialidade, não concorrência e não aliciamento previstas neste instrumento.</div>
+  <div class="par"><strong>§ 4º</strong> — <strong>Não há multa rescisória</strong>, não havendo igualmente qualquer direito a aviso prévio proporcional, férias, 13º ou verbas de natureza trabalhista, em razão da natureza civil autônoma desta contratação (Cláusula 8).</div>
+
+  <h2>Cláusula 4 — Obrigações do Contratado</h2>
+  <div class="clausula">
+    <p>Constituem deveres essenciais do CONTRATADO, cujo descumprimento recorrente configura <em>descumprimento contratual grave</em> e autoriza a rescisão imediata nos termos da Cláusula 3, independentemente do aviso prévio:</p>
+  </div>
+  <ul class="obg">
+    <li><strong>Uso obrigatório do Hub Propagar</strong> como sistema-fonte: cadastro de contas, input diário de métricas, atualização de campanhas ativas e verba, consolidado mensal.</li>
+    <li><strong>Verificação diária</strong> das campanhas ativas e da verba disponível de <em>todas</em> as contas da sua carteira.</li>
+    <li><strong>Testes e otimização</strong>: trazer ideias de criativo, rodar testes A/B estruturados (obrigatório para Pleno e Sênior) e documentar no Hub.</li>
+    <li><strong>Atendimento ao cliente</strong>: conduzir reuniões mensais de resultado (obrigatórias a partir do nível Pleno) e responder nos prazos combinados.</li>
+    <li><strong>Boas práticas de acesso</strong>: criar a conta de anúncios do cliente, conceder acesso de Administrador ao perfil da agência, validar integração Instagram/WhatsApp Business com a página do Facebook, e <strong>encerrar o compartilhamento de tela</strong> no momento em que o cliente for configurar o meio de pagamento.</li>
+    <li><strong>Mentoria</strong> (apenas Sênior): acompanhar e orientar ao menos 1 (um) gestor Júnior/Pleno da carteira.</li>
+    <li><strong>Notificação imediata</strong> à CONTRATANTE de qualquer irregularidade, bloqueio de conta, fraude ou risco operacional identificado.</li>
+    <li><strong>Emissão de nota fiscal</strong> no prazo, discriminando o serviço como "Gestão de Tráfego Pago".</li>
+  </ul>
+  <div class="par"><strong>§ único</strong> — São de responsabilidade exclusiva do CONTRATADO as despesas com alimentação, deslocamento, hospedagem, equipamentos e demais custos operacionais próprios. A CONTRATANTE <strong>não financia</strong> verba de tráfego — esta corre sempre por conta do cliente final.</div>
+
+  <h2>Cláusula 5 — Agenda de Disponibilidade e Reuniões de Coordenação</h2>
+  <div class="clausula">
+    <p>Para viabilizar a coordenação do projeto e a comunicação entre as partes e com os clientes da carteira, o CONTRATADO, de livre e espontânea vontade, compromete-se a observar a seguinte <strong>agenda de disponibilidade pré-combinada</strong>, aqui reconhecida como conjunto de <strong>compromissos contratuais de presença</strong> — e jamais como jornada de trabalho, horário de expediente ou controle de frequência:</p>
+  </div>
+  <ul class="obg">
+    <li><strong>Alinhamento diário</strong> — de segunda a sexta-feira, das <strong>09h00 às 09h15</strong> (quinze minutos), para sincronização operacional da carteira;</li>
+    <li><strong>Review semanal</strong> — toda <strong>sexta-feira, às 17h00</strong>, para revisão de indicadores e prioridades da semana seguinte;</li>
+    <li><strong>Reunião mensal de resultado</strong> — com cada cliente da carteira, em dia e horário previamente agendados diretamente com o respectivo cliente;</li>
+    <li><strong>Reuniões convocadas pela CONTRATANTE</strong> — em horário variável, sem periodicidade fixa, garantido o intervalo máximo de <strong>15 (quinze) dias</strong> entre uma reunião e outra e a comunicação com antecedência razoável.</li>
+  </ul>
+
+  <div class="par"><strong>§ 1º</strong> — As janelas acima têm natureza estritamente de coordenação de projeto e alinhamento entre partes autônomas, <strong>não representando fixação de jornada, controle de ponto ou subordinação hierárquica</strong>.</div>
+  <div class="par"><strong>§ 2º</strong> — Fora das janelas descritas neste artigo, o CONTRATADO mantém ampla e irrestrita autonomia para: (i) fixar livremente seus próprios horários e locais de execução dos serviços; (ii) fazer-se substituir, por sua conta e risco, por terceiros igualmente capacitados nas atividades rotineiras de operação; (iii) prestar serviços a outros clientes, observadas tão somente as vedações da Cláusula 7.</div>
+
+  <div class="callout gold">
+    <div class="label">Regime de faltas</div>
+    A ausência injustificada em qualquer das janelas das alíneas "a", "b" e "d" ensejará <strong>advertência formal</strong>, lavrada por escrito pela CONTRATANTE e encaminhada por e-mail ou pelo grupo oficial da agência no WhatsApp. A <strong>2ª (segunda) ausência injustificada no mesmo mês civil</strong> configura descumprimento contratual grave e autoriza a <strong>rescisão imediata</strong>, independentemente do aviso prévio. A falta à reunião mensal de resultado (alínea "c"), sem prévia comunicação ao cliente e à CONTRATANTE, equipara-se a duas ausências injustificadas, diante do impacto direto sobre o cliente final.
+  </div>
+
+  <div class="par"><strong>§ 3º</strong> — Considera-se <strong>ausência justificada</strong> aquela comunicada pelo CONTRATADO com antecedência mínima de <strong>2 (duas) horas</strong> em relação ao horário da respectiva janela, <strong>exclusivamente pelo grupo oficial da agência no WhatsApp</strong>, único canal aceito para esse fim. Comunicações por outros canais, ainda que recebidas pela CONTRATANTE, não afastam a configuração da falta.</div>
+  <div class="par"><strong>§ 4º</strong> — As partes reconhecem expressamente que a presente agenda <strong>não implica pessoalidade, habitualidade remunerada por tempo à disposição, onerosidade salarial nem subordinação jurídica</strong>, tratando-se de mero compromisso de presença para coordenação do projeto comum, plenamente compatível com a natureza civil autônoma desta relação (arts. 593 e ss. do Código Civil), não se aplicando, portanto, as hipóteses do art. 3º da CLT.</div>
+
+  <h2>Cláusula 6 — Confidencialidade, LGPD e Propriedade</h2>
+  <div class="clausula">
+    <p>O CONTRATADO compromete-se a preservar em <strong>sigilo absoluto</strong>, durante e após o término deste contrato, todas as informações de clientes, processos internos, números de performance, estratégias, criativos e know-how aos quais tiver acesso.</p>
+  </div>
+  <div class="clausula">
+    <p>Para fins da <strong>LGPD (Lei 13.709/2018)</strong>, o CONTRATADO atua como <em>operador</em> dos dados pessoais de leads e clientes das contas que administra, devendo: (a) usar esses dados exclusivamente para executar este contrato; (b) não compartilhá-los com terceiros; (c) notificar imediatamente a CONTRATANTE em caso de incidente de segurança.</p>
+  </div>
+  <div class="clausula">
+    <p>Todos os <strong>ativos digitais</strong> produzidos no âmbito deste contrato — campanhas, estruturas de conjuntos, criativos, copies, relatórios, planilhas e quaisquer artefatos — pertencem ao <strong>cliente final</strong>, ficando a CONTRATANTE como guardiã enquanto durar a relação comercial. É vedado ao CONTRATADO replicar, reaproveitar ou levar esses ativos para terceiros.</p>
+  </div>
+
+  <h2>Cláusula 7 — Não Concorrência, Não Aliciamento, Sigilo e Multa</h2>
+  <div class="clausula">
+    <p>Durante a vigência deste contrato e pelo prazo de <strong>12 (doze) meses</strong>, contados do seu efetivo término por qualquer motivo, o CONTRATADO fica proibido de:</p>
+  </div>
+  <ul class="obg">
+    <li>Prestar serviços, direta ou indiretamente, por conta própria ou por interposta pessoa física ou jurídica, a clientes que tenham sido atendidos, prospectados ou indicados pela CONTRATANTE;</li>
+    <li>Atender, por conta própria ou por terceiros, cliente do <strong>mesmo segmento</strong> em cidade onde haja conta ativa da CONTRATANTE, ou em cidade limítrofe a esta;</li>
+    <li><strong>Aliciar</strong>, recrutar, contratar ou induzir à saída — direta ou indiretamente — outros gestores, colaboradores, parceiros ou prestadores de serviço da CONTRATANTE.</li>
+  </ul>
+
+  <div class="par"><strong>§ 1º</strong> — Estendem-se às mesmas consequências desta Cláusula: (a) a violação do dever de sigilo e confidencialidade previsto na Cláusula 6; (b) qualquer incidente relacionado a dados pessoais decorrente de dolo, má-fé ou culpa grave do CONTRATADO, nos termos da Lei nº 13.709/2018 (LGPD); (c) a apropriação indébita, retenção, desvio ou replicação não autorizada de ativos digitais, acessos, criativos, bases de dados ou quaisquer artefatos pertencentes ao cliente final ou à CONTRATANTE.</div>
+  <div class="par"><strong>§ 2º</strong> — O descumprimento de qualquer das vedações previstas no <em>caput</em> e no § 1º sujeita o CONTRATADO à <strong>multa não compensatória de R$ 10.000,00 (dez mil reais) por infração</strong>, em valor nominal fixo, independente e destacado da parte fixa mensal prevista na Cláusula 2, corrigida monetariamente pelo IGPM desde a data da assinatura deste contrato até o efetivo pagamento, sem prejuízo da apuração de perdas e danos, tutela específica e demais medidas judiciais cabíveis.</div>
+  <div class="par"><strong>§ 3º</strong> — Cada ato, cliente, colaborador aliciado ou ativo indevidamente apropriado constitui <strong>infração autônoma</strong>, aplicando-se a multa do § 2º tantas vezes quantas forem as infrações verificadas.</div>
+
+  <h2>Cláusula 8 — Natureza Jurídica</h2>
+  <div class="clausula">
+    <p>Este contrato é regido pelos arts. 593 e ss. do Código Civil Brasileiro (Lei 10.406/2002) e <strong>não gera vínculo empregatício</strong> nem subordinação entre as partes — sendo o CONTRATADO integralmente responsável por suas obrigações fiscais, previdenciárias e tributárias, e livre para fixar seus próprios horários, substituir-se por terceiros capacitados e prestar serviços a outros clientes, observadas apenas as vedações da Cláusula 7.</p>
+  </div>
+  <div class="par"><strong>§ único</strong> — As partes reafirmam expressamente que as janelas de reunião previstas na Cláusula 5 constituem <strong>compromissos contratuais de coordenação de projeto</strong>, firmados entre partes autônomas e iguais, e não equivalem à fixação de jornada, controle de frequência ou exercício de poder diretivo de natureza trabalhista. Permanece íntegra, em qualquer hipótese, a autonomia do CONTRATADO para fixar livremente seus horários de execução dos serviços, fazer-se substituir por terceiros capacitados e prestar serviços a outros clientes, observadas tão somente as vedações da Cláusula 7 — afastando-se, por conseguinte, os requisitos cumulativos de pessoalidade, habitualidade, onerosidade salarial e subordinação jurídica previstos no art. 3º da CLT.</div>
+
+  <h2>Cláusula 9 — Foro</h2>
+  <div class="clausula">
+    <p>Fica eleito o foro da <strong>Comarca de Manaus/AM</strong>, com renúncia expressa a qualquer outro por mais privilegiado que seja, para dirimir controvérsias oriundas deste contrato.</p>
+  </div>
+
+  <p style="margin-top: 26px;">E por estarem de pleno acordo, as partes assinam digitalmente este contrato em meio eletrônico, com a mesma validade jurídica de assinatura manuscrita, nos termos da MP 2.200-2/2001 e Lei 14.063/2020.</p>
+
+  <p style="margin-top: 16px;">Manaus/AM, ______ de ______________________ de 2026.</p>
+
+  <div class="assinaturas">
+    <div class="assin-grid">
+      <div>
+        <div class="linha"></div>
+        <div class="nome">GRUPO PROPAGAR</div>
+        <div class="role">CONTRATANTE · CNPJ 21.290.653/0001-22</div>
+      </div>
+      <div>
+        <div class="linha"></div>
+        <div class="nome">{{nome completo}}</div>
+        <div class="role">CONTRATADO · CPF {{cpf}}</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</body>
+</html>

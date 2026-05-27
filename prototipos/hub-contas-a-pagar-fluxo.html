@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Fluxo — Contas a Pagar · Hub Propagar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --propagar-primario: #2a5299;
+    --propagar-bright: #5b8dc7;
+    --propagar-dark: #1a3562;
+    --gold: #c9a961;
+    --fg: #1a1a1a;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --bg: #ffffff;
+    --soft: #f7f9fc;
+    --green: #22c55e;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.55;
+    font-size: 11pt;
+  }
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 48px 52px 60px;
+  }
+  .capa {
+    padding: 72px 52px 56px;
+    background: linear-gradient(135deg, var(--propagar-dark) 0%, var(--propagar-primario) 60%, var(--propagar-bright) 100%);
+    color: #fff;
+    page-break-after: always;
+  }
+  .capa .marca {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 80px;
+  }
+  .flecha {
+    display: inline-flex;
+    gap: 3px;
+  }
+  .flecha span {
+    width: 10px;
+    height: 22px;
+    background: var(--gold);
+    transform: skewY(-15deg);
+    border-radius: 2px;
+  }
+  .flecha span:nth-child(2) { background: #fff; }
+  .flecha span:nth-child(3) { background: var(--propagar-bright); }
+  .marca .nome {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 20pt;
+    letter-spacing: -0.02em;
+  }
+  .capa h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 44pt;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+    font-style: italic;
+  }
+  .capa .sub {
+    font-size: 13pt;
+    opacity: 0.85;
+    max-width: 480px;
+    margin-bottom: 48px;
+  }
+  .capa .meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.3);
+  }
+  .capa .meta div { font-size: 9.5pt; }
+  .capa .meta .k {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.7;
+    font-size: 8pt;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .capa .meta .v {
+    font-weight: 600;
+    font-size: 11pt;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 22pt;
+    letter-spacing: -0.01em;
+    color: var(--propagar-primario);
+    margin: 44px 0 4px;
+    page-break-after: avoid;
+  }
+  h2 + .kicker { margin-top: 0; margin-bottom: 20px; }
+  h3 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 13pt;
+    margin: 28px 0 10px;
+    color: var(--propagar-dark);
+    page-break-after: avoid;
+  }
+  .kicker {
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--propagar-bright);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  p { margin: 0 0 10px; }
+  .lead { font-size: 12pt; color: var(--fg); margin-bottom: 20px; }
+  strong { color: var(--propagar-dark); }
+  code {
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 10pt;
+    background: var(--soft);
+    color: var(--propagar-dark);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+  }
+
+  .callout {
+    background: var(--soft);
+    border-left: 3px solid var(--propagar-bright);
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 10.5pt;
+  }
+  .callout.gold { border-left-color: var(--gold); background: #fdf8ee; }
+  .callout.warn { border-left-color: var(--red); background: #fef2f2; }
+  .callout .label {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--propagar-bright);
+    margin-bottom: 4px;
+  }
+  .callout.gold .label { color: #b08835; }
+  .callout.warn .label { color: var(--red); }
+
+  ol.passos, ul.check {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 18px;
+    counter-reset: passo;
+  }
+  ol.passos li {
+    counter-increment: passo;
+    padding: 14px 16px 14px 56px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    position: relative;
+    background: #fff;
+    page-break-inside: avoid;
+  }
+  ol.passos li::before {
+    content: counter(passo);
+    position: absolute;
+    left: 16px;
+    top: 14px;
+    width: 28px;
+    height: 28px;
+    background: var(--propagar-primario);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 14pt;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: italic;
+  }
+  ol.passos li .titulo {
+    font-weight: 700;
+    font-size: 11pt;
+    color: var(--propagar-dark);
+    margin-bottom: 3px;
+  }
+  ol.passos li p { margin: 0; font-size: 10.5pt; color: var(--muted); }
+
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
+  .pill {
+    padding: 4px 10px;
+    font-size: 9pt;
+    font-weight: 600;
+    border-radius: 99px;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .pill.pago { color: var(--green); border-color: #bbf7d0; background: #f0fdf4; }
+  .pill.pendente { color: var(--yellow); border-color: #fde68a; background: #fffbeb; }
+  .pill.atrasado { color: var(--red); border-color: #fecaca; background: #fef2f2; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 20px;
+    font-size: 10.5pt;
+  }
+  table th {
+    text-align: left;
+    padding: 10px 12px;
+    background: var(--propagar-primario);
+    color: #fff;
+    font-weight: 600;
+    font-size: 10pt;
+    border: none;
+  }
+  table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  table tr:last-child td { border-bottom: none; }
+  table code { font-size: 9.5pt; }
+
+  .divider-grande {
+    margin: 40px 0;
+    text-align: center;
+    color: var(--gold);
+    font-size: 14pt;
+    letter-spacing: 0.5em;
+  }
+
+  .rodape {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 2px solid var(--propagar-primario);
+    font-size: 9.5pt;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .rodape .marca-small {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rodape .flecha span {
+    width: 6px; height: 14px;
+  }
+  .rodape .nome {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--propagar-primario);
+    font-size: 12pt;
+  }
+
+  @page {
+    margin: 0;
+    size: A4;
+  }
+  @media print {
+    body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .capa { page-break-after: always; }
+    h2 { page-break-before: auto; }
+    ol.passos li, table { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CAPA -->
+<section class="capa">
+  <div class="marca">
+    <div class="flecha"><span></span><span></span><span></span></div>
+    <div class="nome">Propagar</div>
+  </div>
+  <h1>Contas<br>a Pagar</h1>
+  <div class="sub">
+    Fluxo operacional do módulo manual do financeiro no Hub Propagar — com anexo de NF/recibo.
+  </div>
+  <div class="meta">
+    <div>
+      <div class="k">Módulo</div>
+      <div class="v">Hub Propagar · Financeiro</div>
+    </div>
+    <div>
+      <div class="k">Acesso</div>
+      <div class="v">Admin + Financeiro</div>
+    </div>
+    <div>
+      <div class="k">Versão · Data</div>
+      <div class="v">v1 · 21.04.2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTEÚDO -->
+<div class="page">
+
+<div class="kicker">Contexto</div>
+<h2>Para que serve</h2>
+<p class="lead">
+  Lugar único pro financeiro <strong>lançar tudo que falta pagar</strong> no mês — funcionários, fornecedores, assinaturas, retirada de sócio, impostos. Cada pagamento carrega <strong>anexo de NF ou recibo</strong> e tem status visual (pago / pendente / atrasado).
+</p>
+
+<div class="callout gold">
+  <div class="label">Importante</div>
+  Essa aba <strong>não substitui</strong> a planilha anual (<code>/dashboard/financeiro</code>). A planilha continua sendo o <em>planejado/orçado</em>; aqui é o <em>realizado</em>, com comprovante.
+</div>
+
+<p>
+  O módulo não toca na <code>/dashboard/folha</code> (cálculo automático de salários e bônus) — ele é <strong>independente</strong>. Enquanto a empresa ainda tá migrando pra todo mundo ter salário fixo padrão, o financeiro controla os pagamentos de funcionários aqui, manual.
+</p>
+
+<h3>Quem vê e edita</h3>
+<table>
+  <tr><th style="width:35%">Papel</th><th>Pode</th></tr>
+  <tr><td><strong>Admin</strong></td><td>Tudo — criar, editar, excluir, marcar pago</td></tr>
+  <tr><td><strong>Financeiro</strong></td><td>Tudo — criar, editar, excluir, marcar pago</td></tr>
+  <tr><td>Gestor · Gerente · Videomaker</td><td>Nada. A aba fica invisível pra eles.</td></tr>
+</table>
+
+<div class="divider-grande">✦ ✦ ✦</div>
+
+<div class="kicker">Como usar</div>
+<h2>Fluxo padrão</h2>
+
+<ol class="passos">
+  <li>
+    <div class="titulo">Acessar a aba</div>
+    <p>No menu lateral → <code>Financeiro</code> → aba <code>Contas a Pagar</code>. A página abre já no <strong>mês atual</strong>. Pra navegar em meses passados ou futuros, troca no seletor do topo.</p>
+  </li>
+  <li>
+    <div class="titulo">Clicar em "Novo pagamento"</div>
+    <p>Botão dourado no canto superior direito. Abre um modal com o formulário.</p>
+  </li>
+  <li>
+    <div class="titulo">Preencher os campos obrigatórios</div>
+    <p>Descrição (ex: <em>"Comissão abril — Jaqueline"</em>), valor, vencimento, categoria, destinatário. Se ainda não pagou, deixa status <strong>Pendente</strong>.</p>
+  </li>
+  <li>
+    <div class="titulo">Anexar NF ou recibo (opcional no lançamento)</div>
+    <p>Clica em <em>"Enviar arquivo"</em> e escolhe um PDF ou imagem (até 10MB). Vai pro Vercel Blob automaticamente. Dá pra anexar depois, ao marcar como pago.</p>
+  </li>
+  <li>
+    <div class="titulo">Salvar</div>
+    <p>O pagamento aparece no quadro da pessoa (se for funcionário) ou no quadro da categoria correspondente.</p>
+  </li>
+  <li>
+    <div class="titulo">Quando pagar, clicar em "Marcar pago"</div>
+    <p>Direto na linha, sem abrir modal. A data de pagamento é preenchida automática com a data de hoje. Se pagou outro dia, edita pra corrigir.</p>
+  </li>
+</ol>
+
+<h3>Os 4 cards de resumo</h3>
+<p>No topo, 4 cards mostram o mês inteiro:</p>
+<ul>
+  <li><strong>Total do mês</strong> — soma de tudo lançado</li>
+  <li><strong>Pago</strong> — valor já quitado (verde)</li>
+  <li><strong>Pendente</strong> — ainda não venceu (amarelo)</li>
+  <li><strong>Atrasado</strong> — passou do vencimento e não foi pago (vermelho) · calculado automático</li>
+</ul>
+
+<div class="divider-grande">✦ ✦ ✦</div>
+
+<div class="kicker">Organização</div>
+<h2>Como os quadros são agrupados</h2>
+
+<h3>Funcionários</h3>
+<p>
+  Pra cada pessoa <strong>um quadro</strong> — igual ao padrão da sua planilha (<em>Jaqueline</em>, <em>Darlan</em>, <em>Fabio</em>). Dentro do quadro, cada linha é uma comissão, repasse ou bônus. O nome do funcionário vem do campo <strong>destinatário</strong> no formulário — digite igual pra agrupar no mesmo quadro.
+</p>
+<div class="callout">
+  <div class="label">Dica</div>
+  Digite exatamente <em>"Jaqueline Silva"</em> em todos os lançamentos dela, não misture "Jaque" × "Jaqueline" — senão abre dois quadros.
+</div>
+
+<h3>Demais categorias</h3>
+<p>Cada categoria vira um quadro só, agrupando tudo que for dela. O quadro só aparece quando tem pelo menos um lançamento.</p>
+
+<table>
+  <tr><th>Categoria</th><th>Quando usar</th></tr>
+  <tr><td><strong>Funcionário</strong></td><td>Comissões, repasses, bonificações pontuais (enquanto não tem folha automática)</td></tr>
+  <tr><td><strong>Fornecedor</strong></td><td>Prestadores de serviço avulsos, freelas, agências parceiras</td></tr>
+  <tr><td><strong>Retirada de Sócio</strong></td><td>Pró-labore do Roberto (ver seção dedicada)</td></tr>
+  <tr><td><strong>Assinatura</strong></td><td>ClickSign, NANTAB, ferramentas SaaS com cobrança recorrente</td></tr>
+  <tr><td><strong>Imposto</strong></td><td>DAS, WID Assessoria, guias</td></tr>
+  <tr><td><strong>Outros</strong></td><td>Qualquer coisa que não cabe acima</td></tr>
+</table>
+
+<h3>Status visual</h3>
+<div class="pills">
+  <span class="pill pago">● Pago</span>
+  <span class="pill pendente">● Pendente</span>
+  <span class="pill atrasado">● Atrasado</span>
+</div>
+<p>
+  Cada linha tem cor de fundo pelo status. <strong>Atrasado</strong> é calculado automaticamente — quando o vencimento é anterior a hoje e o status ainda é <em>Pendente</em>, a linha fica vermelha sem precisar mexer.
+</p>
+
+<div class="divider-grande">✦ ✦ ✦</div>
+
+<div class="kicker">Regra especial</div>
+<h2>Retirada de sócio</h2>
+<p>
+  Toda retirada do Roberto entra com categoria <code>retirada_socio</code> e destinatário <em>"Roberto Araújo"</em>. Anexa o comprovante de transferência/saque e marca como <strong>Pago</strong> na data certa.
+</p>
+<div class="callout gold">
+  <div class="label">Regra dos dois lugares</div>
+  <p><strong>Planilha anual</strong> (<code>/dashboard/financeiro</code>) → linha "Roberto (Pró-labore)" continua existindo como <em>orçado</em> do mês.</p>
+  <p style="margin:0"><strong>Contas a Pagar</strong> → cada retirada real vira um lançamento com categoria <code>retirada_socio</code>, data exata e comprovante.</p>
+</div>
+<p>
+  Isso preserva o controle central (planejamento/fluxo de caixa do ano) sem perder o rastro fiscal do que de fato foi pago.
+</p>
+
+<div class="divider-grande">✦ ✦ ✦</div>
+
+<div class="kicker">Integração</div>
+<h2>Como conversa com o resto do hub</h2>
+
+<table>
+  <tr><th>Outro módulo</th><th>Relação</th></tr>
+  <tr>
+    <td><code>/dashboard/financeiro</code><br>(Planilha anual)</td>
+    <td>É <strong>independente</strong>. A planilha é o orçado/plano do ano inteiro. Contas a Pagar é o realizado do mês, com comprovante. Não duplica nada — cada um tem um papel.</td>
+  </tr>
+  <tr>
+    <td><code>/dashboard/folha</code><br>(Folha automática)</td>
+    <td><strong>Zero relação</strong>. A folha é o cálculo automático de salário + bônus. Como a empresa ainda não fechou salário fixo pra todos, hoje o financeiro usa só o manual daqui. Quando a folha automática entrar em uso pleno, pode coexistir.</td>
+  </tr>
+  <tr>
+    <td><code>/dashboard/financeiro/asaas</code><br>(MRR · receitas)</td>
+    <td><strong>Zero relação</strong>. Aquele é o lado de <em>entradas</em> (receita via Asaas). Esse é o lado de <em>saídas</em>.</td>
+  </tr>
+</table>
+
+<div class="divider-grande">✦ ✦ ✦</div>
+
+<div class="kicker">Operação</div>
+<h2>Dúvidas frequentes</h2>
+
+<h3>Posso editar depois de marcar como pago?</h3>
+<p>Sim, tudo. Clica no ícone do lápis e abre o mesmo formulário do lançamento com os dados preenchidos.</p>
+
+<h3>E se eu marquei como pago por engano?</h3>
+<p>Na linha tem o botão <em>"Desfazer"</em>. Volta pro status pendente e limpa a data de pagamento.</p>
+
+<h3>Anexei o arquivo errado, dá pra trocar?</h3>
+<p>Sim. Edita o pagamento, clica no X vermelho do lado do anexo atual, envia o novo.</p>
+
+<h3>Como vejo pagamentos de meses passados?</h3>
+<p>Troca o mês no seletor do topo. O filtro é por <strong>vencimento</strong>, não por data de pagamento. Se o pagamento vence em maio, ele aparece em maio — mesmo que você só tenha pago em junho.</p>
+
+<h3>Os anexos ficam onde?</h3>
+<p>No Vercel Blob (mesmo lugar dos contratos). Link público, mas só quem tem acesso à aba consegue clicar — porque a URL não é listada em lugar nenhum público. Se precisar segurança adicional, migra pra blob privado numa versão futura.</p>
+
+<h3>Posso excluir um pagamento?</h3>
+<p>Sim, botão da lixeira. <strong>Exclusão é definitiva</strong>. Use com cuidado — não tem undo.</p>
+
+<div class="rodape">
+  <div>
+    <strong>Hub Propagar</strong> · Módulo Financeiro<br>
+    <code>/dashboard/financeiro/contas-a-pagar</code>
+  </div>
+  <div class="marca-small">
+    <div class="flecha"><span></span><span></span><span></span></div>
+    <div class="nome">Propagar</div>
+  </div>
+</div>
+
+</div>
+
+</body>
+</html>

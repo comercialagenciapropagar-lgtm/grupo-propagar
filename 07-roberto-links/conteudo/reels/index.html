@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>40 Reels — Banco de Conteúdo</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='%23111'/><text x='50' y='70' font-size='56' text-anchor='middle' fill='%23d4a853' font-weight='bold' font-family='system-ui'>R</text></svg>">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #050505;
+    color: #fff;
+    padding: 0;
+    min-height: 100vh;
+  }
+  html { scroll-behavior: smooth; }
+
+  .topnav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.96);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(212,168,83,0.2);
+    padding: 10px 16px;
+  }
+  .topnav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .topnav a {
+    color: #888;
+    text-decoration: none;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .topnav a:hover { color: #d4a853; background: rgba(212,168,83,0.08); }
+
+  .back-link {
+    color: #666 !important;
+    font-size: 0.65rem !important;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 40px 20px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(212,168,83,0.15);
+    color: #d4a853;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 4px 14px;
+    border-radius: 50px;
+    letter-spacing: 2px;
+    border: 1px solid rgba(212,168,83,0.3);
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: 3px;
+    line-height: 1;
+    margin-top: 14px;
+  }
+  .hero h1 span { color: #d4a853; }
+  .hero-sub {
+    color: #999;
+    font-size: 0.95rem;
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num {
+    font-family: 'Bebas Neue', sans-serif;
+    color: #d4a853;
+    font-size: 1.5rem;
+    line-height: 1;
+    letter-spacing: 1px;
+  }
+  .hero-stat .lbl {
+    font-size: 0.6rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 3px;
+  }
+
+  .category {
+    max-width: 1200px;
+    margin: 40px auto 16px;
+    padding: 0 16px;
+    scroll-margin-top: 70px;
+  }
+  .category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(212,168,83,0.3);
+    margin-bottom: 18px;
+  }
+  .category-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: #d4a853;
+    letter-spacing: 2px;
+  }
+  .category-count {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .reels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+
+  .reel {
+    background: linear-gradient(180deg, #1a1a1a 0%, #111 100%);
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    padding: 16px 18px;
+    position: relative;
+  }
+  .reel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent, #d4a853);
+    border-radius: 14px 14px 0 0;
+  }
+
+  .reel-cat-edu { --accent: #5bcc75; }
+  .reel-cat-con { --accent: #ef4444; }
+  .reel-cat-sto { --accent: #d4a853; }
+  .reel-cat-doc { --accent: #6a7bff; }
+
+  .reel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .reel-code {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .reel-dur {
+    font-size: 0.6rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .reel-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    color: #fff;
+    letter-spacing: 1px;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+
+  .reel-block {
+    margin-bottom: 8px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.3);
+    border-left: 2px solid var(--accent);
+  }
+  .reel-block-label {
+    font-size: 0.55rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+  .reel-block-text {
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: #ddd;
+  }
+  .reel-block-text strong { color: var(--accent); }
+
+  .footer-note {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, rgba(212,168,83,0.08) 0%, rgba(212,168,83,0.02) 100%);
+    border: 1px solid rgba(212,168,83,0.2);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .footer-note p { color: #ccc; font-size: 0.9rem; line-height: 1.6; }
+  .footer-note strong { color: #d4a853; }
+
+  @media (max-width: 500px) {
+    .topnav a { font-size: 0.62rem; padding: 4px 7px; }
+    .reel-title { font-size: 0.95rem; }
+    .reel-block-text { font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="/conteudo" class="back-link">← VOLTAR</a>
+    <a href="#educativo">Edu (22)</a>
+    <a href="#contrarian">Contra (8)</a>
+    <a href="#storytelling">Story (6)</a>
+    <a href="#documentacao">Doc (4)</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <span class="hero-tag">Banco completo · Batch 1 + 2</span>
+  <h1>40 REELS <span>PRONTOS</span></h1>
+  <p class="hero-sub">Formato Hormozi moderno — 20-35s, Hook-Retain-Reward. Cada um INDEPENDENTE. Distribui em Reels + TikTok + YouTube Shorts.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">40</div><div class="lbl">Reels</div></div>
+    <div class="hero-stat"><div class="num">20-35s</div><div class="lbl">Cada</div></div>
+    <div class="hero-stat"><div class="num">3/dia</div><div class="lbl">Cadência</div></div>
+    <div class="hero-stat"><div class="num">14 dias</div><div class="lbl">De conteúdo</div></div>
+  </div>
+</div>
+
+<!-- ============ EDUCATIVO ============ -->
+<section class="category" id="educativo">
+  <div class="category-header">
+    <div class="category-title">📚 EDUCATIVO</div>
+    <div class="category-count">22 reels · 55% do mix</div>
+  </div>
+
+  <div class="reels-grid">
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-001 · EDU</div><div class="reel-dur">28s</div></div>
+      <div class="reel-title">CLIENTE NÃO COMPRA PRODUTO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Cliente não compra produto. Cliente compra <strong>contexto</strong>. Eu aprendi quebrando em 6 meses.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Meu delivery de feijoada bombava. Clientes classe alta. Abri espaço físico no meu bairro, São Raimundo — periferia de Manaus. Zero clientes.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Cliente rico come comida boa em casa. Mas <strong>não sai de casa pra ir num bairro pobre comer</strong>.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-002 · EDU</div><div class="reel-dur">25s</div></div>
+      <div class="reel-title">BRANDING NÃO É LOGO BONITO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Branding não é logo bonito. <strong>Branding é promessa coerente.</strong></div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Oferta, preço, lugar, linguagem, embalagem — TUDO conta a mesma história. Um item fora do lugar destrói os outros. Virou Ferrari em ponto de ônibus.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Tu pode fazer tudo certo. Se UMA coisa contradiz, tu quebra mesmo assim.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-003 · EDU</div><div class="reel-dur">30s</div></div>
+      <div class="reel-title">QUEBRAR NÃO É COMEÇAR DO ZERO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Quebrar não é começar do zero. É começar do <strong>80%</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Depois que eu quebrei, a tentação era abrir outra coisa, outro nome. Não fiz. Sentei e listei o que aprendi: vender premium, gerir equipe, fazer delivery escalar. Já tinha 80% do que precisava. Faltava só coerência.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Quem joga tudo fora tá queimando anos. <strong>Reposicionar &gt; reempreender.</strong></div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-004 · EDU</div><div class="reel-dur">32s</div></div>
+      <div class="reel-title">SISTEMA QUE FUNCIONA SEM O DONO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Tu muda uma pergunta e muda teu negócio inteiro.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Nos primeiros anos do Propagar eu era gargalo de tudo. Faturei bem. Mas tinha emprego caro. A virada foi trocar "como faço isso mais rápido?" por <strong>"como faço isso sem precisar de mim?"</strong></div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Operacional vs estrategista. A passagem exige trocar a pergunta.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-005 · EDU</div><div class="reel-dur">28s</div></div>
+      <div class="reel-title">CLIENTE QUE PECHINCHA NÃO É CLIENTE</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Cliente que pechincha não é cliente. É <strong>problema</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Quem fecha no preço inteiro, reclama menos, paga em dia, indica. Quem chega pedindo 30% de desconto? Vai reclamar do serviço, atrasar pagamento, dar trabalho triplo.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Preço firme atrai cliente certo. Preço frouxo atrai quem vai te comer por dentro.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-006 · EDU</div><div class="reel-dur">32s</div></div>
+      <div class="reel-title">QUANDO CONTRATAR TEU PRIMEIRO FUNCIONÁRIO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Empresário quer contratar errado. Quer contratar <strong>pra descansar</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Contratar pra descansar é a forma mais rápida de quebrar. Contrata quando: (1) tu rejeita cliente por falta de capacidade, (2) o trabalho tá travando o faturamento, (3) tem processo documentado. Fora disso é luxo.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Contratação certa libera. Contratação errada destrói margem.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-007 · EDU</div><div class="reel-dur">27s</div></div>
+      <div class="reel-title">SE PEDIU PROPOSTA, TU NÃO VENDEU</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Se o cliente pediu "me manda proposta", tu <strong>não vendeu</strong>. Apresentou preço.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Venda acontece na conversa. Proposta só documenta. Se tu depende da proposta pra convencer, tu já perdeu — cliente tá procurando motivo pra não fechar.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Proposta é protocolo. Venda é convicção.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-008 · EDU</div><div class="reel-dur">30s</div></div>
+      <div class="reel-title">AMBIENTE > ESFORÇO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Tu pode trabalhar 14 horas por dia. E <strong>não chegar</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Esforço é ingrediente. Ambiente é receita. Onde tu mora molda quem tu encontra, o que tu escuta. Talento isolado é sempre mais fraco que talento médio cercado dos certos.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Se teu ambiente não amplifica — tu tá sozinho. E sozinho é caro.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-009 · EDU</div><div class="reel-dur">28s</div></div>
+      <div class="reel-title">A CONTA QUE 90% NÃO FAZ</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Tem uma conta que 90% dos empresários não faz. E é <strong>por isso que quebra</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Custo real por cliente. Não o preço. Quanto tu gasta pra CONQUISTAR: tráfego + equipe + tempo de venda + retrabalho. Se não sabe, tá dirigindo de olho fechado.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Quem não conta, paga pra trabalhar. Sem saber.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-010 · EDU</div><div class="reel-dur">26s</div></div>
+      <div class="reel-title">CRM ABANDONADO CUSTA MAIS</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">CRM abandonado custa mais caro que <strong>não ter CRM nenhum</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Tu pagou, treinou, subiu lead — a equipe não mexe. Leads esfriam. Cliente antigo não é lembrado. Follow-up some. Tu acha que é tráfego. Não é. É processo não-ativo.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Não é a ferramenta. É o ritual de usar.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-011 · EDU</div><div class="reel-dur">30s</div></div>
+      <div class="reel-title">ADIAR DECISÃO CUSTA MAIS</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Adiar decisão difícil <strong>custa mais caro</strong> do que tomar ela.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Demitir funcionário. Fechar linha. Mudar de cidade. Todo dia que tu adia, o custo invisível aumenta. Vira doença, dívida, arrependimento. Eu adiei sair de Manaus por anos. Paguei caro no tempo.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Decisão adiada não desaparece. Só fica mais cara.</div></div>
+    </div>
+
+    <!-- BATCH 2 EDU -->
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-021 · EDU</div><div class="reel-dur">30s</div></div>
+      <div class="reel-title">COMO PRECIFICAR SERVIÇO PREMIUM</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Empresário cobra barato por <strong>medo de ser rejeitado</strong>. E depois reclama que tá cansado.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Preço premium resolve 3 coisas: filtra cliente ruim, aumenta a margem, e te obriga a entregar melhor. Quem cobra pouco atende muito, ganha pouco, e não consegue melhorar o produto. Preço alto não espanta cliente bom. Espanta cliente ruim.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Cobrar caro é estratégia. Cobrar barato é sintoma.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-022 · EDU</div><div class="reel-dur">32s</div></div>
+      <div class="reel-title">3 MOTIVOS PELOS QUAIS TUA OFERTA NÃO CONVERTE</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Tua oferta não converte por 3 motivos. <strong>E nenhum é tráfego.</strong></div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Um: promessa fraca. "Vou te ajudar" não vende. "Tu sai com sistema rodando em 90 dias" vende. Dois: falta de prova. Ninguém crê em quem não mostra. Três: sem escassez. Oferta "sempre disponível" vira "comprá-la quando" — e esse quando não chega.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Promessa concreta + prova real + escassez de verdade. Sem os três, é conteúdo.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-023 · EDU</div><div class="reel-dur">28s</div></div>
+      <div class="reel-title">QUANDO DEMITIR UM CLIENTE</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Cliente ruim é mais caro que <strong>não ter cliente</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Demite quando: (1) reclama mais do que paga, (2) desrespeita processo, (3) drena tempo da equipe. Cliente ruim te rouba energia pra atender o cliente bom. E isso custa bem mais do que o faturamento dele.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Demitir cliente ruim é crescer. Mesmo que pareça encolher.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-024 · EDU</div><div class="reel-dur">30s</div></div>
+      <div class="reel-title">PRIMEIRA CONTRATAÇÃO — O PERFIL CERTO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">A primeira contratação <strong>nunca</strong> é pra tua zona de conforto.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Empresário contrata quem faz o que ele gosta — porque sabe avaliar. Errado. Tu contrata quem faz o que tu ODEIA. O que te atrapalha. O que trava o crescimento. Cozinheiro não contrata outro cozinheiro primeiro. Contrata garçom.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Contrata pra liberar tempo. Não pra duplicar tarefa que tu já faz bem.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-025 · EDU</div><div class="reel-dur">34s</div></div>
+      <div class="reel-title">ICP — QUEM É TEU CLIENTE IDEAL</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Se tu vende pra "todo empresário", tu <strong>não vende pra ninguém</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">ICP não é sobre quem tu QUER atender. É sobre quem TE PAGA MELHOR e DÁ MENOS TRABALHO. Pega teus últimos 10 fechamentos: qual tipo, faturamento, segmento, dor? Padrão aparece. Esse é teu ICP. E é só pra ele que tu faz conteúdo.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Quem tenta vender pra 10 perfis diferentes não converte em nenhum.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-026 · EDU</div><div class="reel-dur">32s</div></div>
+      <div class="reel-title">PLAYBOOK DE VENDAS EM 4 ETAPAS</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Se tu não tem <strong>playbook</strong>, cada venda começa do zero. E isso é caro.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">4 etapas: (1) script de abordagem pela dor, não pelo produto. (2) qualificação em 5 perguntas — ou o cliente não entra no pipeline. (3) diagnóstico que entrega valor na primeira call. (4) fechamento sem desconto, com prazo definido. Documentado. Repetível.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Vendedor talentoso sem processo é aposta. Processo sem vendedor é máquina.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-027 · EDU</div><div class="reel-dur">28s</div></div>
+      <div class="reel-title">COMO PARAR DE FAZER TUDO SOZINHO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Empresário que faz tudo sozinho <strong>não é herói</strong>. É gargalo.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Lista teus últimos 10 dias. Marca cada tarefa: só tu faz? ou qualquer um podia fazer? A maioria é "qualquer um podia". Só que tu não documentou, não treinou, não delegou. Aí continua tudo no teu colo. E a empresa para quando tu parar.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Delegar não é perder controle. É escolher o que tu controla.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-028 · EDU</div><div class="reel-dur">26s</div></div>
+      <div class="reel-title">VENDA É TRANSFERÊNCIA DE CONVICÇÃO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Venda é <strong>transferência de convicção</strong>. Se tu não tá convicto, ninguém compra.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Cliente sente quando tu mesmo tá na dúvida sobre teu preço, tua entrega, teu valor. Não adianta script, técnica, objeção. Se tu hesita pra falar o preço, o cliente hesita pra pagar.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Não dá pra transferir o que tu não tem.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-029 · EDU</div><div class="reel-dur">30s</div></div>
+      <div class="reel-title">KPIs QUE REALMENTE IMPORTAM</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Faturamento não é KPI. <strong>É consequência.</strong></div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Métrica que vale: custo por lead, taxa de conversão, ticket médio, churn, tempo médio de fechamento. Esses são os que tu controla HOJE e afetam faturamento AMANHÃ. Ficar olhando faturamento é olhar pro passado. Não muda nada.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Quem mede o que importa, age antes. Quem mede só resultado, reage depois.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-030 · EDU</div><div class="reel-dur">32s</div></div>
+      <div class="reel-title">CALL DE DIAGNÓSTICO — COMO ESTRUTURAR</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">A maioria das calls de diagnóstico <strong>não diagnostica nada</strong>. Só apresenta serviço.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Estrutura certa: (1) 5 min ouvindo o problema real, sem interromper. (2) 10 min fazendo pergunta, não respondendo. (3) 5 min dizendo o que tu identifica — mesmo o que não é o teu serviço. (4) 5 min entregando UMA ação que ele pode fazer AMANHÃ, de graça.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Se o cara sai da call achando que aprendeu sem pagar, ele volta pra pagar.</div></div>
+    </div>
+
+    <div class="reel reel-cat-edu">
+      <div class="reel-head"><div class="reel-code">R-031 · EDU</div><div class="reel-dur">28s</div></div>
+      <div class="reel-title">O NÚMERO QUE SEPARA QUEM LUCRA DE QUEM FATURA</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Faturar 500 mil com 450 de custo é <strong>pior</strong> que faturar 200 com 80.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Todo mundo vive comemorando faturamento e morre na margem. Receita é vaidade. Lucro é sanidade. Quem faz 500 sem estrutura tá só mais exposto. Quem faz 200 com 60% de margem tá no jogo certo.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Faturamento grande sem margem é nome bonito de empresa quebrada.</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ CONTRARIAN ============ -->
+<section class="category" id="contrarian">
+  <div class="category-header">
+    <div class="category-title">🔥 CONTRARIAN</div>
+    <div class="category-count">8 reels · 20% do mix</div>
+  </div>
+
+  <div class="reels-grid">
+
+    <div class="reel reel-cat-con">
+      <div class="reel-head"><div class="reel-code">R-012 · CON</div><div class="reel-dur">22s</div></div>
+      <div class="reel-title">SE DEPENDE DE TI, NÃO É EMPRESA</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Se tua empresa depende de ti pra funcionar, <strong>tu não tem empresa</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Tu tem emprego caro, com aparência de empresa. Se tu viaja 15 dias e para de vender — é emprego. Se cada decisão precisa passar por ti — é emprego.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Empresa é sistema. Sistema funciona sem a tua presença ser obrigatória.</div></div>
+    </div>
+
+    <div class="reel reel-cat-con">
+      <div class="reel-head"><div class="reel-code">R-013 · CON</div><div class="reel-dur">24s</div></div>
+      <div class="reel-title">MENTOR QUE NUNCA OPEROU É PIADA</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Mentor que nunca operou vende <strong>teoria</strong>. Teoria não paga boleto.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Mercado cheio de gente que fez 1 curso, leu 3 livros, virou "mentor". Sem ter quebrado. Sem ter gerido equipe. Sem ter fechado contrato grande. Mentoria de verdade é de quem tá AINDA operando.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Quem ensina sem operar, vende sonho. Quem opera e ensina, vende atalho.</div></div>
+    </div>
+
+    <div class="reel reel-cat-con">
+      <div class="reel-head"><div class="reel-code">R-014 · CON</div><div class="reel-dur">25s</div></div>
+      <div class="reel-title">CALL PRA TICKET BAIXO É PREJUÍZO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Call de 1 hora pra fechar R$3 mil é <strong>prejuízo</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Ticket baixo pede processo assíncrono. Formulário, VSL, página direta. Call só faz sentido se o ticket justifica o custo do teu tempo. Quem chama tudo mundo pra call tá só procurando sensação de trabalho.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Reunião é tática. Não é hábito.</div></div>
+    </div>
+
+    <div class="reel reel-cat-con">
+      <div class="reel-head"><div class="reel-code">R-015 · CON</div><div class="reel-dur">23s</div></div>
+      <div class="reel-title">DESCONTO DESTRÓI TEU NEGÓCIO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Desconto é a forma mais rápida de <strong>destruir teu negócio</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Quando tu dá desconto, tá admitindo que o preço tava errado. E ensinando o cliente que é só esperar. Próximo também vai querer. E o seguinte. Até a margem sumir.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Quer fechar mais? Melhora a oferta. Não baixa o preço.</div></div>
+    </div>
+
+    <!-- BATCH 2 CON -->
+
+    <div class="reel reel-cat-con">
+      <div class="reel-head"><div class="reel-code">R-032 · CON</div><div class="reel-dur">24s</div></div>
+      <div class="reel-title">POSTAR TODO DIA NÃO SALVA CONTEÚDO RUIM</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Postar todo dia <strong>não salva</strong> conteúdo ruim. Só exibe ele mais vezes.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">A maioria acha que consistência é postar. Consistência é postar COM OPINIÃO. Postar coisa genérica todo dia é só ruído — algoritmo penaliza, público pula. 3 reels bons por semana batem 15 reels mornos.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Volume sem substância é barulho. Volume com opinião é autoridade.</div></div>
+    </div>
+
+    <div class="reel reel-cat-con">
+      <div class="reel-head"><div class="reel-code">R-033 · CON</div><div class="reel-dur">22s</div></div>
+      <div class="reel-title">BRANDING ANTES DE VENDAS É LUXO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Branding antes de ter vendas é <strong>luxo</strong>. Ou pior — é fuga.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Empresário sem fluxo de caixa gastando com logo novo, identidade visual, manifesto, paleta de cor — tá fugindo do que importa. Primeiro vende. Depois ajusta a embalagem.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Branding sem venda é hobby caro.</div></div>
+    </div>
+
+    <div class="reel reel-cat-con">
+      <div class="reel-head"><div class="reel-code">R-034 · CON</div><div class="reel-dur">23s</div></div>
+      <div class="reel-title">REUNIÃO É A MAIOR LADRA DE TEMPO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Reunião é a maior <strong>ladra de tempo</strong> que existe na empresa.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">80% do que se discute em reunião podia ser email, mensagem ou áudio. E se a reunião precisa acontecer, precisa ter: pauta escrita, horário de fim marcado, decisão documentada. Sem isso, é bate-papo cara.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Reunião sem decisão é só conversa com agenda.</div></div>
+    </div>
+
+    <div class="reel reel-cat-con">
+      <div class="reel-head"><div class="reel-code">R-035 · CON</div><div class="reel-dur">24s</div></div>
+      <div class="reel-title">CURSO ONLINE NÃO TE ENSINA A VENDER</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Curso online <strong>não te ensina a vender</strong>. Ponto.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Tu aprende vendas na prática. Com cliente real, objeção real, no olho no olho. Assistir aula de vendas é igual assistir aula de natação — tu sai sabendo sobre, mas não sabendo fazer.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Curso vende informação. Vendedor é forjado no desconforto.</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ STORYTELLING ============ -->
+<section class="category" id="storytelling">
+  <div class="category-header">
+    <div class="category-title">📖 STORYTELLING</div>
+    <div class="category-count">6 reels · 15% do mix</div>
+  </div>
+
+  <div class="reels-grid">
+
+    <div class="reel reel-cat-sto">
+      <div class="reel-head"><div class="reel-code">R-016 · STO</div><div class="reel-dur">35s</div></div>
+      <div class="reel-title">SAÍ DE MANAUS COM 7 PESSOAS</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Saí de Manaus com <strong>7 pessoas dependendo de mim</strong>. Esposa, mãe, 5 filhos.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Adiei por anos. Escola dos filhos, família longe, custo dobrado. Mas um dia entendi: ficar era escolher parar. Troquei conforto por potencial. Em 90 dias em Floripa eu aprendi mais do que em 3 anos em Manaus.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Distância virou o imposto invisível do empresário brasileiro.</div></div>
+    </div>
+
+    <div class="reel reel-cat-sto">
+      <div class="reel-head"><div class="reel-code">R-017 · STO</div><div class="reel-dur">32s</div></div>
+      <div class="reel-title">EU ACHAVA QUE ERA POR PREÇO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Eu achava que cliente comprava <strong>por preço</strong>. Até abrir um restaurante e ninguém aparecer.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Feiju Express. Delivery bombava. Mesmo preço, mesma comida, mesmo público. Abri espaço físico no meu bairro. Terceira semana: zero. Mesmo cliente do delivery não ia até lá. Descobri: não era preço. Era contexto. Era onde ele SE VIA consumindo.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Cliente não compra produto. Compra a versão de si mesmo que o produto promete.</div></div>
+    </div>
+
+    <div class="reel reel-cat-sto">
+      <div class="reel-head"><div class="reel-code">R-018 · STO</div><div class="reel-dur">30s</div></div>
+      <div class="reel-title">A NOITE QUE FECHEI MINHA PRIMEIRA EMPRESA</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Eu sentei no salão vazio que <strong>nunca encheu</strong> — e aprendi o que é branding.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Seis meses depois, virei pra equipe e falei "a gente não abre mais". Cartão estourado, aluguel em atraso. E ali, no salão vazio, entendi: o problema nunca foi comida, preço, equipe. Era <strong>falta de coerência entre tudo</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Todo empresário que quebra aprende a mesma coisa. Só que tarde demais.</div></div>
+    </div>
+
+    <!-- BATCH 2 STO -->
+
+    <div class="reel reel-cat-sto">
+      <div class="reel-head"><div class="reel-code">R-036 · STO</div><div class="reel-dur">34s</div></div>
+      <div class="reel-title">MEU PRIMEIRO FUNCIONÁRIO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Contratei meu primeiro funcionário e <strong>quase quebrei</strong> de novo.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Peguei alguém pra me ajudar no que EU gostava. Achei que ia aliviar. Não aliviou. Porque eu não tinha processo. Não tinha padrão. Então cada tarefa virava retrabalho — eu fazia, ele refazia, eu refazia de novo. Aprendi que contratação sem sistema só duplica caos.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Não contrata mão de obra. Contrata processo humano.</div></div>
+    </div>
+
+    <div class="reel reel-cat-sto">
+      <div class="reel-head"><div class="reel-code">R-037 · STO</div><div class="reel-dur">32s</div></div>
+      <div class="reel-title">A REUNIÃO QUE MUDOU MEU NEGÓCIO</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Uma reunião mudou <strong>o jeito que eu faço tudo</strong> hoje.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Mentor me perguntou: "se você parasse de trabalhar por 30 dias, quantos clientes sairiam?". Fui contar. Metade. Literalmente metade ia embora. Ali eu entendi: tinha construído um emprego caro disfarçado de empresa. E comecei a trocar tudo: processo, equipe, sistema.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Pergunta certa muda o rumo. Resposta confortável atrasa.</div></div>
+    </div>
+
+    <div class="reel reel-cat-sto">
+      <div class="reel-head"><div class="reel-code">R-038 · STO</div><div class="reel-dur">35s</div></div>
+      <div class="reel-title">QUANDO QUASE FECHEI O PROPAGAR</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Teve um mês que eu pensei em <strong>fechar o Propagar</strong>. Tava operando no vermelho há 4 meses.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Faturava, mas o custo era maior. Equipe grande, clientes errados, margem apertada. Duas opções: parar ou cortar fundo. Cortei. Demiti 40% da equipe num mês. Demiti cliente errado. Refiz oferta. Doeu. 3 meses depois tinha mais margem do que em todo o ano anterior.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Empresário que não tem coragem de cortar fundo, termina cortado pelo mercado.</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ DOCUMENTAÇÃO ============ -->
+<section class="category" id="documentacao">
+  <div class="category-header">
+    <div class="category-title">📊 DOCUMENTAÇÃO</div>
+    <div class="category-count">4 reels · 10% do mix</div>
+  </div>
+
+  <div class="reels-grid">
+
+    <div class="reel reel-cat-doc">
+      <div class="reel-head"><div class="reel-code">R-019 · DOC</div><div class="reel-dur">28s</div></div>
+      <div class="reel-title">R$15MI GERADOS — 3 COISAS QUE NUNCA MUDAM</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">500+ projetos e R$15 milhões gerados no último semestre — e 3 coisas <strong>nunca mudam</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Um: cliente certo faz margem. Cliente errado destrói operação. Dois: processo documentado vale mais que talento solto. Três: número que tu não mede, tu não controla. Não tem fórmula mágica — tem disciplina em 3 coisas.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">O básico feito bem, mil vezes, vence o sofisticado feito uma vez.</div></div>
+    </div>
+
+    <div class="reel reel-cat-doc">
+      <div class="reel-head"><div class="reel-code">R-020 · DOC</div><div class="reel-dur">26s</div></div>
+      <div class="reel-title">EU REJEITO CLIENTE TODO MÊS</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Todo mês eu rejeito cliente. E <strong>é por isso que faturamos</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">No Propagar tem filtro de entrada. Empresário não pronto — não entra. Não topa implementar — não entra. Quer mágica — não entra. Menos cliente, mais margem, zero dor de cabeça, cases reais.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Quem aceita tudo, entrega pouco. Quem filtra, entrega muito.</div></div>
+    </div>
+
+    <!-- BATCH 2 DOC -->
+
+    <div class="reel reel-cat-doc">
+      <div class="reel-head"><div class="reel-code">R-039 · DOC</div><div class="reel-dur">30s</div></div>
+      <div class="reel-title">POR QUE EU COBRO O QUE COBRO PELA MENTORIA</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Minha mentoria custa R$12 mil online e R$30 mil presencial. Deixa eu te dizer <strong>por quê</strong>.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Não é pelo tempo. É pelo risco. Eu entro no teu negócio, vejo teus números, monto o sistema, treino tua equipe. Em 90 dias tu sai com máquina rodando. A garantia é 14 dias, devolvo 100% sem pergunta. Tu não paga pra "aprender". Paga pra implementar.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Mentoria cara é barata pra quem implementa. Mentoria barata é cara pra quem não implementa.</div></div>
+    </div>
+
+    <div class="reel reel-cat-doc">
+      <div class="reel-head"><div class="reel-code">R-040 · DOC</div><div class="reel-dur">28s</div></div>
+      <div class="reel-title">QUANTO CUSTA RODAR UM HUB DE AGÊNCIAS</div>
+      <div class="reel-block"><div class="reel-block-label">🎯 Hook</div><div class="reel-block-text">Transparência: rodar um hub de agências <strong>não é o que parece</strong> nas redes.</div></div>
+      <div class="reel-block"><div class="reel-block-label">📖 Retain</div><div class="reel-block-text">Folha mensal alta. Ferramentas caras. Clientes que pagam em 30-60 dias — mas despesas caem todo mês 30. Margem que se constrói no detalhe: 1% aqui, 2% ali. A mágica não é faturar muito. É manter disciplina no custo enquanto cresce.</div></div>
+      <div class="reel-block"><div class="reel-block-label">⚡ Reward</div><div class="reel-block-text">Empresa grande por fora é sempre filha de disciplina por dentro.</div></div>
+    </div>
+
+  </div>
+</section>
+
+<div class="footer-note">
+  <p><strong>Grava em banco.</strong> Bate 5-10 reels no mesmo dia, mesma roupa, mesma luz. <strong>Posta 3/dia.</strong> Manhã, tarde, noite. <strong>Distribui no trio:</strong> Reels + TikTok + Shorts, mesmo arquivo. Em 14 dias tem banco de conteúdo que compounds.</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Treinamento — Hub Propagar · A Régua</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --propagar-primario: #2a5299;
+    --propagar-bright: #5b8dc7;
+    --propagar-dark: #1a3562;
+    --gold: #c9a961;
+    --fg: #1a1a1a;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --bg: #ffffff;
+    --soft: #f7f9fc;
+    --green: #22c55e;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.6;
+    font-size: 11pt;
+  }
+  .page { max-width: 780px; margin: 0 auto; padding: 48px 52px 60px; }
+  .capa {
+    padding: 90px 52px 60px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--propagar-dark) 0%, var(--propagar-primario) 60%, var(--propagar-bright) 100%);
+    color: #fff;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+  }
+  .capa .marca { display: flex; align-items: center; gap: 14px; margin-bottom: 80px; }
+  .flecha { display: inline-flex; gap: 3px; }
+  .flecha span {
+    width: 10px; height: 22px;
+    background: var(--gold);
+    transform: skewY(-15deg);
+    border-radius: 2px;
+  }
+  .flecha span:nth-child(2) { background: #fff; }
+  .flecha span:nth-child(3) { background: var(--propagar-bright); }
+  .marca .nome {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 20pt;
+    letter-spacing: -0.02em;
+  }
+  .capa .tag {
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-size: 9pt;
+    opacity: 0.75;
+    margin-bottom: 22px;
+    font-weight: 600;
+  }
+  .capa h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 56pt;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin: 0 0 24px;
+    font-style: italic;
+  }
+  .capa .sub {
+    font-size: 15pt;
+    opacity: 0.9;
+    max-width: 560px;
+    margin-bottom: 48px;
+    line-height: 1.4;
+  }
+  .capa .highlight {
+    padding: 20px 24px;
+    border-left: 3px solid var(--gold);
+    background: rgba(0,0,0,0.18);
+    max-width: 560px;
+    margin-top: auto;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14pt;
+    line-height: 1.45;
+  }
+  .capa .highlight strong {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 24pt;
+    letter-spacing: -0.01em;
+    color: var(--propagar-primario);
+    margin: 48px 0 6px;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 14pt;
+    margin: 32px 0 10px;
+    color: var(--propagar-dark);
+    page-break-after: avoid;
+  }
+  .kicker {
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: var(--propagar-bright);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  p { margin: 0 0 12px; }
+  .lead { font-size: 12.5pt; line-height: 1.55; margin-bottom: 22px; }
+  strong { color: var(--propagar-dark); }
+  em.gold {
+    font-style: normal;
+    font-weight: 700;
+    color: #b08835;
+  }
+  code {
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 10pt;
+    background: var(--soft);
+    color: var(--propagar-dark);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+  }
+
+  .callout {
+    background: var(--soft);
+    border-left: 3px solid var(--propagar-bright);
+    padding: 16px 20px;
+    margin: 18px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 10.5pt;
+    page-break-inside: avoid;
+  }
+  .callout.gold { border-left-color: var(--gold); background: #fdf8ee; }
+  .callout.red { border-left-color: var(--red); background: #fef2f2; }
+  .callout.green { border-left-color: var(--green); background: #f0fdf4; }
+  .callout .label {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--propagar-bright);
+    margin-bottom: 6px;
+  }
+  .callout.gold .label { color: #b08835; }
+  .callout.red .label { color: var(--red); }
+  .callout.green .label { color: #15803d; }
+  .callout p:last-child { margin: 0; }
+
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0 24px;
+  }
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 20px;
+    page-break-inside: avoid;
+  }
+  .card.pos { border-top: 3px solid var(--green); }
+  .card.neg { border-top: 3px solid var(--red); }
+  .card .tit {
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-bottom: 10px;
+  }
+  .card.pos .tit { color: var(--green); }
+  .card.neg .tit { color: var(--red); }
+  .card ul {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 10.5pt;
+  }
+  .card li { margin-bottom: 6px; }
+
+  .lista {
+    list-style: none;
+    padding: 0;
+    margin: 14px 0 22px;
+    counter-reset: item;
+  }
+  .lista li {
+    counter-increment: item;
+    padding: 12px 16px 12px 52px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    position: relative;
+    background: #fff;
+    page-break-inside: avoid;
+  }
+  .lista li::before {
+    content: counter(item);
+    position: absolute;
+    left: 16px;
+    top: 10px;
+    width: 26px;
+    height: 26px;
+    background: var(--propagar-primario);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 13pt;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: italic;
+  }
+  .lista li .titulo {
+    font-weight: 700;
+    font-size: 11pt;
+    color: var(--propagar-dark);
+    margin-bottom: 2px;
+  }
+  .lista li p { margin: 0; font-size: 10pt; color: var(--muted); line-height: 1.5; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 24px;
+    font-size: 10.5pt;
+  }
+  table th {
+    text-align: left;
+    padding: 10px 12px;
+    background: var(--propagar-primario);
+    color: #fff;
+    font-weight: 600;
+    font-size: 10pt;
+  }
+  table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  table tr:last-child td { border-bottom: none; }
+
+  .divider {
+    margin: 44px 0;
+    text-align: center;
+    color: var(--gold);
+    font-size: 13pt;
+    letter-spacing: 0.5em;
+  }
+
+  .manifesto {
+    background: var(--propagar-dark);
+    color: #fff;
+    padding: 48px 52px;
+    margin: 48px -52px 0;
+    position: relative;
+  }
+  .manifesto h2 {
+    color: #fff;
+    margin-top: 0;
+    font-size: 28pt;
+  }
+  .manifesto .kicker {
+    color: var(--gold);
+    opacity: 1;
+  }
+  .manifesto p {
+    font-size: 12pt;
+    line-height: 1.55;
+    max-width: 640px;
+  }
+  .manifesto .pactos {
+    margin-top: 28px;
+    display: grid;
+    gap: 14px;
+  }
+  .manifesto .pacto {
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.07);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    font-size: 11pt;
+  }
+  .manifesto .pacto strong {
+    color: var(--gold);
+  }
+
+  .rodape {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 2px solid var(--propagar-primario);
+    font-size: 9.5pt;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .rodape .marca-small { display: flex; align-items: center; gap: 8px; }
+  .rodape .flecha span { width: 6px; height: 14px; }
+  .rodape .nome {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--propagar-primario);
+    font-size: 12pt;
+  }
+
+  @page { margin: 0; size: A4; }
+  @media print {
+    body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .capa { page-break-after: always; }
+    h2, h3 { page-break-after: avoid; }
+    .lista li, .card, .callout, table { page-break-inside: avoid; }
+    .manifesto { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── CAPA ─── -->
+<section class="capa">
+  <div class="marca">
+    <div class="flecha"><span></span><span></span><span></span></div>
+    <div class="nome">Propagar</div>
+  </div>
+  <div class="tag">Treinamento · Abril 2026</div>
+  <h1>A Régua<br>é o Hub.</h1>
+  <div class="sub">
+    Como o sistema mede cada um, o que recompensa, o que pune — e o compromisso
+    que estamos fechando juntos a partir de agora.
+  </div>
+  <div class="highlight">
+    A empresa está crescendo.<br>
+    <strong>Quem estiver junto sobe junto.<br>Quem estiver parado, fica pra trás</strong> —
+    seja por escolha própria, ou da empresa.
+  </div>
+</section>
+
+<div class="page">
+
+<!-- ─── 1. ABERTURA ─── -->
+<div class="kicker">Abertura</div>
+<h2>O momento em que estamos</h2>
+<p class="lead">
+  A Propagar não é mais a mesma agência de 2 anos atrás. Temos carteira maior, time maior, operação
+  mais complexa. E temos algo que nem toda agência do mercado tem: <strong>um sistema próprio de
+  gestão, ranking e avaliação</strong> — o Hub Propagar.
+</p>
+<p>
+  Esse sistema não é enfeite. Não é um "além das planilhas". É <em class="gold">a régua oficial</em> pela
+  qual cada colaborador vai ser medido, recompensado ou substituído daqui pra frente.
+</p>
+
+<div class="callout gold">
+  <div class="label">Regra de ouro</div>
+  <p>
+    O que não está no Hub <strong>não aconteceu</strong>. Se você não lançou a métrica, você não
+    trabalhou naquele dia. Se não registrou a entrega, ela não existe. Se não respondeu a demanda,
+    ela tá aberta contra você.
+  </p>
+</div>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ─── 2. O QUE O HUB MEDE ─── -->
+<div class="kicker">Visão geral</div>
+<h2>O que o Hub mede de cada um</h2>
+
+<table>
+  <tr><th style="width:30%">Função</th><th>O sistema acompanha</th></tr>
+  <tr>
+    <td><strong>Gestor de Tráfego</strong></td>
+    <td>IVM diário · CAC real · taxa de conversão · atraso de input · churn das lojas · ocorrências da carteira</td>
+  </tr>
+  <tr>
+    <td><strong>Gerente de Relacionamento</strong></td>
+    <td>Atendimento · retenção da carteira · NPS qualitativo via ocorrências · contribuições no FAQ</td>
+  </tr>
+  <tr>
+    <td><strong>Videomaker</strong></td>
+    <td>Vídeos entregues · virais produzidos · prazos de entrega das demandas</td>
+  </tr>
+  <tr>
+    <td><strong>Comercial</strong></td>
+    <td>Leads na carteira · atividades executadas · taxa de fechamento · ticket médio · comissão por cliente</td>
+  </tr>
+  <tr>
+    <td><strong>Todos</strong></td>
+    <td>Participação em desafios · sugestões enviadas · demandas resolvidas no prazo · status mensal</td>
+  </tr>
+</table>
+
+<p>
+  Não é subjetivo. Todo mundo vê o próprio número e vê o dos outros no ranking. Isso é proposital —
+  <strong>meritocracia não funciona em segredo</strong>.
+</p>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ─── 3. RECOMPENSAS vs PUNIÇÕES ─── -->
+<div class="kicker">O acordo</div>
+<h2>Recompensas e consequências</h2>
+
+<div class="grid2">
+  <div class="card pos">
+    <div class="tit">✓ Quem entrega</div>
+    <ul>
+      <li><strong>Pontos no ranking</strong> (Desafios + Sugestões + regras de pontuação)</li>
+      <li><strong>Prêmios</strong> mensais e trimestrais (dinheiro, jantar, viagens — conforme desafio)</li>
+      <li><strong>Bônus na folha</strong> (upsells, onboardings, renovações, vídeos virais)</li>
+      <li><strong>Promoção</strong>: Júnior → Pleno → Sênior (plano de carreira visível no sistema)</li>
+      <li><strong>Prioridade</strong> em novas carteiras, verba de mídia maior, projetos grandes</li>
+      <li><strong>Referência interna</strong> — é pra você que o time olha</li>
+    </ul>
+  </div>
+  <div class="card neg">
+    <div class="tit">✗ Quem não entrega</div>
+    <ul>
+      <li><strong>Ocorrências</strong> registradas ficam no histórico permanente</li>
+      <li><strong>Status mensal "abaixo do básico"</strong> → bloqueio de desafios e prêmios</li>
+      <li><strong>Perda de carteira</strong> — cliente que você não atende passa pra quem atende</li>
+      <li><strong>Sem promoção</strong> enquanto o desempenho estiver abaixo</li>
+      <li><strong>PIP</strong> (plano de recuperação) após 2 meses abaixo</li>
+      <li><strong>Desligamento</strong> após 3 meses consecutivos abaixo do básico, sem melhora</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout red">
+  <div class="label">Sem ambiguidade</div>
+  <p>
+    Não é pessoal. Não é emocional. É <strong>o acordo de troca da empresa</strong>: você entrega o combinado,
+    a empresa entrega salário, estabilidade, crescimento. Se uma parte para, a outra para junto. Isso vale
+    pra todo mundo — inclusive pros sócios, que também respondem aos números do sistema.
+  </p>
+</div>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ─── 4. USO DIÁRIO ─── -->
+<div class="kicker">Uso diário</div>
+<h2>O que você DEVE fazer todo dia útil</h2>
+
+<ol class="lista">
+  <li>
+    <div class="titulo">Lançar DailyMetric (Input Diário)</div>
+    <p>Sem isso, o sistema não sabe o que aconteceu. Atraso de input = ocorrência automática.</p>
+  </li>
+  <li>
+    <div class="titulo">Responder demandas que chegaram pra você</div>
+    <p>No prazo. Demanda vencida aparece na "Cobranças" do admin e vai pra reunião.</p>
+  </li>
+  <li>
+    <div class="titulo">Resolver ocorrências que abrirem contra sua carteira</div>
+    <p>Cliente reclamou, lead sumiu, cobrança esquecida — não ignora. Cada ocorrência em aberto pesa no status mensal.</p>
+  </li>
+  <li>
+    <div class="titulo">Participar dos desafios do mês</div>
+    <p>Desafio rodando é ponto fácil. Não participar é desperdiçar pontuação que o colega vai pegar.</p>
+  </li>
+  <li>
+    <div class="titulo">Mandar pelo menos 1 sugestão/mês</div>
+    <p>Aba <code>Sugestões</code>. Anônima se quiser. Pontos praticamente garantidos se a ideia fizer sentido.</p>
+  </li>
+</ol>
+
+<div class="callout">
+  <div class="label">Onde você consulta seu número</div>
+  <p>
+    <strong>Dashboard</strong> (visão geral) · <strong>Rankings</strong> (sua posição vs. o time) ·
+    <strong>Meu Perfil</strong> (histórico de pontos, ocorrências e status mensal) ·
+    <strong>Carreira</strong> (o que falta pra subir de nível).
+  </p>
+</div>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ─── 5. CRITÉRIOS DE PROMOÇÃO ─── -->
+<div class="kicker">Subir na empresa</div>
+<h2>Como promoção funciona aqui</h2>
+<p>
+  Ninguém vai ser promovido porque é simpático, porque tá há muito tempo na casa, ou porque pediu. Promoção é <strong>consequência matemática</strong>:
+</p>
+
+<table>
+  <tr><th>De → Para</th><th>O que você precisa ter demonstrado</th></tr>
+  <tr>
+    <td><strong>Júnior → Pleno</strong></td>
+    <td>6 meses de status mensal consistentemente "no básico" ou "acima" · zero ocorrências graves · ao menos 1 contribuição relevante (sugestão aprovada, desafio vencido, case publicado)</td>
+  </tr>
+  <tr>
+    <td><strong>Pleno → Sênior</strong></td>
+    <td>12 meses de "acima do básico" · NPS da carteira alto · atua como referência técnica de outros colegas · liderou ao menos 1 iniciativa (processo novo, treinamento, case)</td>
+  </tr>
+  <tr>
+    <td><strong>Sênior → Gerente</strong></td>
+    <td>Entrega sênior + capacidade de <em>sustentar</em> o resultado de outros · demonstra visão de negócio · é procurado por colegas pra decisão técnica</td>
+  </tr>
+</table>
+
+<p>
+  Tudo isso é visível no <code>/dashboard/carreira</code>. Abre lá: <strong>você vai ver exatamente o que falta</strong>
+  pra próxima promoção. Sem surpresa, sem política.
+</p>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ─── 6. SAÍDA ─── -->
+<div class="kicker">Saída da empresa</div>
+<h2>Como desligamento funciona aqui</h2>
+<p>
+  Também não é sobre humor, não é fim de ano, não é surpresa. Segue o mesmo critério <em>reverso</em>:
+</p>
+
+<ol class="lista">
+  <li>
+    <div class="titulo">Mês 1 abaixo do básico</div>
+    <p>Conversa 1-a-1. Alinhamento de expectativa. Plano concreto pra virar o mês 2.</p>
+  </li>
+  <li>
+    <div class="titulo">Mês 2 abaixo do básico</div>
+    <p>Abre <strong>PIP</strong> (plano de recuperação) formal no sistema. Metas claras pro mês 3. Advertência registrada.</p>
+  </li>
+  <li>
+    <div class="titulo">Mês 3 abaixo do básico</div>
+    <p>Desligamento por inadequação ao cargo. Sem drama, sem surpresa — o próprio colaborador viu o status no Hub o tempo todo e teve 2 meses pra virar.</p>
+  </li>
+</ol>
+
+<div class="callout gold">
+  <div class="label">Por que assim</div>
+  <p>
+    Porque é <strong>justo com todo mundo</strong>. Quem entrega merece equipe forte ao lado. Quem não entrega
+    e ninguém cobra, trava o crescimento dos outros e recebe o mesmo salário. Isso mata cultura. Quem
+    colabora com o crescimento, cresce junto. Quem não colabora, <em class="gold">abre espaço</em> pra quem vai colaborar.
+  </p>
+</div>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ─── 7. GAMIFICAÇÃO ─── -->
+<div class="kicker">Gamificação</div>
+<h2>Por que tem ranking, desafios e sugestões</h2>
+<p>
+  Pra tornar o que é <strong>cobrança</strong> em algo que também é <strong>jogo</strong>. Ao invés de viver sob pressão, você tem pontos pra conquistar. Ao invés de só ser medido, você escolhe em que desafio se destacar.
+</p>
+
+<h3>Como ganhar pontos fácil (que ninguém faz)</h3>
+<ul>
+  <li>
+    <strong>Mandar sugestões:</strong> a aba <code>Sugestões</code> credita pontos toda vez que o admin marca como "implementada". Sugestão boa vale 20-50 pontos — mais que ranking mensal de alguns cargos.
+  </li>
+  <li>
+    <strong>Ajudar no FAQ:</strong> colaborar com resposta no FAQ rende ponto. Poucas pessoas usam isso.
+  </li>
+  <li>
+    <strong>Participar dos desafios abertos:</strong> só de submeter algo você já aparece. Muita gente nem olha.
+  </li>
+  <li>
+    <strong>Ficar sem ocorrências:</strong> mês sem ocorrência grave = bônus no status.
+  </li>
+</ul>
+
+<div class="callout green">
+  <div class="label">Dica honesta</div>
+  <p>
+    A maior parte do time joga defensivamente — só lança o mínimo exigido. Quem joga ofensivamente
+    (manda sugestão, participa de desafio, propõe contribuição) <strong>ultrapassa colega que está a mais tempo na casa
+    em 3-4 meses</strong>. O sistema recompensa iniciativa visível, não só tempo de casa.
+  </p>
+</div>
+
+<!-- ─── MANIFESTO FINAL ─── -->
+<div class="manifesto">
+  <div class="kicker">Fechamento</div>
+  <h2>O pacto que fica<br>a partir de hoje</h2>
+
+  <p>
+    Daqui pra frente, não tem mais "eu não sabia". Todo mundo conhece a régua.
+    Todo mundo tem acesso ao próprio número. Todo mundo sabe o caminho pra subir
+    e o caminho pra sair.
+  </p>
+
+  <div class="pactos">
+    <div class="pacto">
+      <strong>Da empresa →</strong> pagamento em dia, estrutura pra entregar, visibilidade total dos critérios, feedback regular, investimento em quem cresce.
+    </div>
+    <div class="pacto">
+      <strong>Do colaborador →</strong> usar o Hub diariamente, atingir o básico todo mês, colaborar com o crescimento do time, trazer ideias, fechar as ocorrências que abrirem contra você.
+    </div>
+    <div class="pacto">
+      <strong>Do grupo →</strong> apoiar quem está crescendo, cobrar quem está travando, não aceitar corpo mole "porque é de casa". A cultura só sobrevive se cada um cobrar do colega também.
+    </div>
+  </div>
+</div>
+
+<div class="rodape">
+  <div>
+    <strong>Propagar · Treinamento Hub</strong><br>
+    Documento interno · versão 1 · 21.04.2026
+  </div>
+  <div class="marca-small">
+    <div class="flecha"><span></span><span></span><span></span></div>
+    <div class="nome">Propagar</div>
+  </div>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central de Conteúdo — Roberto Araújo</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='%23111'/><text x='50' y='70' font-size='56' text-anchor='middle' fill='%23d4a853' font-weight='bold' font-family='system-ui'>R</text></svg>">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #050505;
+    color: #fff;
+    padding: 40px 20px 60px;
+    min-height: 100vh;
+  }
+  .wrapper { max-width: 700px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 40px; }
+  .tag-head {
+    display: inline-block;
+    background: rgba(212,168,83,0.15);
+    color: #d4a853;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 5px 16px;
+    border-radius: 50px;
+    letter-spacing: 2px;
+    border: 1px solid rgba(212,168,83,0.3);
+  }
+  .header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 7vw, 3rem);
+    letter-spacing: 3px;
+    line-height: 1;
+    margin-top: 14px;
+  }
+  .header h1 span { color: #d4a853; }
+  .header p {
+    color: #999;
+    font-size: 0.95rem;
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .card {
+    background: linear-gradient(180deg, #1a1a1a 0%, #111 100%);
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 22px 22px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--accent, #d4a853);
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent, #d4a853);
+    box-shadow: 0 8px 24px rgba(212,168,83,0.1);
+  }
+
+  .card-reels { --accent: #d4a853; }
+  .card-gravar { --accent: #5bcc75; }
+  .card-prompt { --accent: #6a7bff; }
+
+  .card-icon {
+    font-size: 2.2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-body { flex: 1; }
+
+  .card-tag {
+    font-size: 0.6rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 1.5px;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .card-desc {
+    font-size: 0.85rem;
+    color: #aaa;
+    line-height: 1.4;
+  }
+
+  .card-arrow {
+    font-size: 1.4rem;
+    color: var(--accent);
+    opacity: 0.5;
+  }
+
+  .footer-msg {
+    margin-top: 40px;
+    padding: 20px 22px;
+    background: linear-gradient(135deg, rgba(212,168,83,0.08) 0%, rgba(212,168,83,0.02) 100%);
+    border: 1px solid rgba(212,168,83,0.2);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .footer-msg p { color: #ccc; font-size: 0.9rem; line-height: 1.6; }
+  .footer-msg strong { color: #d4a853; }
+
+  .back {
+    display: block;
+    text-align: center;
+    margin-top: 24px;
+    color: #666;
+    font-size: 0.8rem;
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .back:hover { color: #d4a853; }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+<div class="header">
+  <span class="tag-head">Central de Conteúdo</span>
+  <h1>CONTEÚDO <span>ROBERTO</span></h1>
+  <p>Seus reels, teu guia de gravação, e o prompt do Claude — tudo aqui, acessível do celular.</p>
+</div>
+
+<div class="cards">
+
+  <a href="/conteudo/reels" class="card card-reels">
+    <div class="card-icon">🎬</div>
+    <div class="card-body">
+      <div class="card-tag">40 Reels · Hormozi style</div>
+      <div class="card-title">BANCO DE REELS</div>
+      <div class="card-desc">40 roteiros prontos em formato moderno (20-35s). Hook-Retain-Reward. Pra gravar em banco.</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <a href="/conteudo/gravar" class="card card-gravar">
+    <div class="card-icon">🎥</div>
+    <div class="card-body">
+      <div class="card-tag">Guia prático</div>
+      <div class="card-title">COMO GRAVAR 10 EM 2 HORAS</div>
+      <div class="card-desc">Setup, roupa, iluminação, cortes. O passo a passo pra gravar em banco sem pirar.</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <a href="/conteudo/prompt" class="card card-prompt">
+    <div class="card-icon">🤖</div>
+    <div class="card-body">
+      <div class="card-tag">Claude Chief 2.1</div>
+      <div class="card-title">PROMPT PRONTO</div>
+      <div class="card-desc">O prompt atualizado no modo Hormozi. Cola no Projeto do Claude Desktop e gera reels sozinho.</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+</div>
+
+<div class="footer-msg">
+  <p><strong>3 reels por dia</strong>, em 7 dias tu plantou 20 peças de conteúdo no algoritmo. Em 14 dias, 40. É assim que se constrói autoridade moderna.</p>
+</div>
+
+<a href="/" class="back">← Voltar pra bio</a>
+
+</div>
+
+</body>
+</html>
